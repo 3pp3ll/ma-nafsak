@@ -486,10 +486,10 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .tiles .tile:nth-child(9n+3),.tiles .tile:nth-child(9n+5),.tiles .tile:nth-child(9n+7){--tc:#E6B370}
 
 /* v24: soft background by gender (light mode only) */
-:root[data-gender="m"]{--bg:#F4EEF0;--bg-art:radial-gradient(120% 70% at 100% 0%,#D6ECFA 0%,transparent 60%),radial-gradient(120% 70% at 0% 100%,#FDE3D3 0%,transparent 62%),linear-gradient(180deg,#EEF4FA,#FAEDE6)}
-:root[data-gender="f"]{--bg:#F8ECEE;--bg-art:radial-gradient(120% 70% at 100% 0%,#FBDCE7 0%,transparent 60%),radial-gradient(120% 70% at 0% 100%,#FDE3D3 0%,transparent 62%),linear-gradient(180deg,#FBEFF3,#FBEDE6)}
+:root[data-gender="m"]{--bg:#F1E3E0;--bg-art:linear-gradient(180deg,#C9E6FA 0%,#DCEBF6 30%,#F6E2D8 62%,#FAD5C0 100%)}
+:root[data-gender="f"]{--bg:#F7DEE0;--bg-art:linear-gradient(180deg,#F9CFE0 0%,#F9DCE6 30%,#FAE1D6 62%,#FAD3BE 100%)}
 .app{background-image:var(--bg-art,none)}
-.chat-input{background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.chat-input{background:transparent}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg-art:none;--bg:#0F0C29}}
 :root[data-theme="dark"]{--bg-art:none;--bg:#0F0C29}
 </style>
