@@ -343,6 +343,14 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .inline-in{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.9rem}
 .inline-in input{width:90px}
 
+.inst{position:absolute;top:8px;inset-inline:12px;z-index:34;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:10px 12px;box-shadow:0 14px 34px -14px rgba(20,10,60,.45);animation:drop .45s cubic-bezier(.2,1.3,.4,1) both}
+.inst img{width:44px;height:auto;flex:none}
+.inst-t{flex:1;min-width:0;display:grid;line-height:1.4}
+.inst-t b{font-size:.92rem}
+.inst-t small{font-size:.76rem;color:var(--muted)}
+.inst .btn-brand{padding:8px 14px;flex:none}
+.inst-x{border:0;background:transparent;color:var(--muted);font-size:1rem;padding:4px;flex:none}
+@keyframes drop{from{transform:translateY(-120%)}to{transform:none}}
 /* Celebration overlay */
 .celebrate{position:absolute;inset:0;z-index:30;display:grid;place-items:center;align-content:center;gap:12px;background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 .cel-core{position:relative;width:160px;height:160px;display:grid;place-items:center}
@@ -456,8 +464,8 @@ button.row{width:100%;text-align:start;cursor:pointer}
   };
   const icon=(n,c)=>'<svg class="i '+(c||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[n]||'')+'</svg>';
 
-  const INT={study:['الدراسة','book'],work:['الشغل','briefcase'],sport:['الرياضة والصحة','pulse'],football:['الكورة','ball'],stocks:['الأسهم','chart'],self:['تطوير الذات','seedling'],outing:['الطلعات','pin'],ai:['الذكاء الاصطناعي','ai']};
-  const LABEL={study:'دراسة',work:'شغل',sport:'رياضة',football:'كورة',stocks:'أسهم',self:'تطوير ذات',outing:'طلعات',ai:'ذكاء اصطناعي',general:'عام'};
+  const INT={study:['الدراسة','book'],work:['الشغل','briefcase'],sport:['الرياضة والصحة','pulse'],football:['الكورة','ball'],stocks:['الاستثمارات','chart'],self:['تطوير الذات','seedling'],outing:['الطلعات','pin'],ai:['الذكاء الاصطناعي','ai']};
+  const LABEL={study:'دراسة',work:'شغل',sport:'رياضة',football:'كورة',stocks:'استثمار',self:'تطوير ذات',outing:'طلعات',ai:'ذكاء اصطناعي',general:'عام'};
   const CAT_IC=k=>INT[k]?INT[k][1]:'star';
 
   /* ---------- State ---------- */
@@ -510,7 +518,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   }
 
   /* ---------- Copy ---------- */
-  const CATS=[['football',/(فريق|مبارا|الهلال|النصر|الاتحاد|الأهلي|الشباب|هدف|دوري|فاز|شجعت)/],['stocks',/(سهم|أسهم|تداول|محفظ|صفق)/],['study',/(اختبار|درج|شهاد|ذاكر|مذاكر|امتحان|واجب|جامع|حفظت)/],['sport',/(مشي|مشيت|خطو|نادي|تمرين|ركض|سباح|رياض)/],['work',/(شغل|تقرير|مهم|اجتماع|مشروع|مدير|دوام|عميل)/]];
+  const CATS=[['football',/(فريق|مبارا|الهلال|النصر|الاتحاد|الأهلي|الشباب|هدف|دوري|فاز|شجعت)/],['stocks',/(سهم|أسهم|تداول|محفظ|صفق|استثمار|استثمرت|عقار|ذهب|صندوق|ادخار|ادخرت|وفّرت|وفرت)/],['study',/(اختبار|درج|شهاد|ذاكر|مذاكر|امتحان|واجب|جامع|حفظت)/],['sport',/(مشي|مشيت|خطو|نادي|تمرين|ركض|سباح|رياض)/],['work',/(شغل|تقرير|مهم|اجتماع|مشروع|مدير|دوام|عميل)/]];
   const detect=t=>{for(const c of CATS)if(c[1].test(t))return c[0];return 'general'};
   const PRAISE={
     hype:[()=>'كفووو! هذا الشغل اللي يرفع الراس',()=>'يا سلااام! إنجاز يستاهل تصفيق',()=>G('وحش! كمّل على هالمستوى','وحشة! كمّلي على هالمستوى')],
@@ -523,7 +531,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
       work:['شغلك يفرق حتى لو ما أحد قالها لك.',G('سجّل الإنجاز في ملف إنجازاتك، بينفعك وقت التقييم.','سجّلي الإنجاز في ملف إنجازاتك، بينفعك وقت التقييم.')],
       sport:['جسمك يشكرك على هالخطوة.',G('زِد 500 خطوة بكرة، تحدي صغير يكبر معك.','زيدي 500 خطوة بكرة، تحدي صغير يكبر معك.')],
       football:[S.profile.team?('المدرج ما يكمل بدونك، و'+S.profile.team+' يستاهل.'):'المدرج ما يكمل بدونك.',G('شارك الفرحة مع ربعك.','شاركي الفرحة مع صديقاتك.')],
-      stocks:['الالتزام بالخطة أهم من ربح أي صفقة.',G('دوّن سبب كل قرار، الانضباط هو الإنجاز الحقيقي.','دوّني سبب كل قرار، الانضباط هو الإنجاز الحقيقي.')],
+      stocks:['الاستثمار الذكي صبر وخطة، وأنت ماشي صح.',G('دوّن سبب كل قرار، الانضباط هو الإنجاز الحقيقي.','دوّني سبب كل قرار، الانضباط هو الإنجاز الحقيقي.')],
       self:['كل يوم تتعلم فيه شي، أنت أقوى من أمس.',G('خصص 15 دقيقة بكرة لنفس المهارة.','خصصي 15 دقيقة بكرة لنفس المهارة.')],
       ai:['كل تجربة مع الذكاء الاصطناعي تقربك للمستقبل.',G('جرّب أداة جديدة وشارك اللي تعلمته في لقاء.','جرّبي أداة جديدة وشاركي اللي تعلمتيه في لقاء.')],
       outing:['الطلعة الحلوة تشحن الطاقة.',G('جرّب مكان جديد الأسبوع الجاي.','جرّبي مكان جديد الأسبوع الجاي.')],
@@ -627,10 +635,10 @@ button.row{width:100%;text-align:start;cursor:pointer}
   if(window.claude&&window.claude.use)claude.use('sample').then(s=>{sample=s;if(R.tab==='chat'||R.tab==='ai')render()}).catch(()=>{});
   const aiReady=()=>!!sample&&!aiOff;
   function aiFail(e){if(e&&['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code))aiOff=true;if(e&&e.code==='rate_limited')toast('خلصت رسائل الذكاء الاصطناعي لليوم')}
-  const INTEREST_NAMES={study:'الدراسة',work:'الشغل',sport:'الرياضة والصحة',football:'الكورة',self:'تطوير الذات',stocks:'الأسهم',outing:'الطلعات والفعاليات',ai:'الذكاء الاصطناعي'};
+  const INTEREST_NAMES={study:'الدراسة',work:'الشغل',sport:'الرياضة والصحة',football:'الكورة',self:'تطوير الذات',stocks:'الاستثمارات',outing:'الطلعات والفعاليات',ai:'الذكاء الاصطناعي'};
   function profileText(withTime){
     const p=S.profile, st=stats(), d=new Date();
-    const ints=(p.interests||[]).map(i=>INTEREST_NAMES[i]).filter(Boolean).join('، ')||'غير محددة';
+    const ints=(p.interests||[]).map(i=>INTEREST_NAMES[i]).filter(Boolean).concat(p.custom||[]).join('، ')||'غير محددة';
     const recent=S.log.slice(0,8).map(x=>'- '+x.t+' ('+when(x.ts)+')').join('\n')||'- لا يوجد بعد';
     const mem=S.memory.length?S.memory.map(m=>'- '+m).join('\n'):'- لا شيء بعد';
     return 'الاسم: '+p.name+'\nالجنس: '+(p.gender==='f'?'أنثى. خاطبها دائماً بصيغة المؤنث (أنتِ، سوّيتي، كمّلي، تبين).':'ذكر. خاطبه دائماً بصيغة المذكر (أنت، سوّيت، كمّل، تبي).')+
@@ -754,7 +762,8 @@ button.row{width:100%;text-align:start;cursor:pointer}
           '<label class="field"><span>مدينتك</span><select id="pCity">'+cities.map(c=>'<option'+(c===p.city?' selected':'')+'>'+c+'</option>').join('')+'<option value="other"'+(known?'':' selected')+'>مدينة ثانية</option></select></label>'+
           '<label class="field" id="otherWrap"'+(known?' hidden':'')+'><span>اكتب مدينتك</span><input id="pCityO" type="text" maxlength="40" value="'+(known?'':esc(p.city))+'"></label>'+
           '<div class="field"><span>اهتماماتك</span><div class="picks" id="pInts">'+Object.keys(INT).map(k=>'<button type="button" data-i="'+k+'" aria-pressed="'+(p.interests||[]).includes(k)+'">'+icon(INT[k][1])+INT[k][0]+'</button>').join('')+'</div></div>'+
-          '<label class="field"><span>فريقك المفضل (اختياري)</span><input id="pTeam" type="text" maxlength="30" value="'+esc(p.team)+'"></label>'+
+          '<label class="field"><span>اهتمامات ثانية تكتبها بنفسك (افصل بينها بفاصلة)</span><input id="pCustom" type="text" maxlength="160" value="'+esc((p.custom||[]).join('، '))+'" placeholder="مثلاً: التصوير، الطبخ، البرمجة"></label>'+
+        '<label class="field"><span>فريقك المفضل (اختياري)</span><input id="pTeam" type="text" maxlength="30" value="'+esc(p.team)+'"></label>'+
           '<label class="field"><span>هدفك الحالي</span><input id="pGoal" type="text" maxlength="80" value="'+esc(p.goal)+'"></label>'+
           '<label class="field"><span>عرّفني عليك أكثر</span><textarea id="pAbout" rows="3" maxlength="400" placeholder="شغلك، دراستك، وش تحب تسوي، وش يضايقك...">'+esc(p.about)+'</textarea></label>'+
           '<button type="submit" class="btn-brand wide">'+icon('check')+'<span>احفظ ملفي</span></button>'+(S.demo?'<p class="fine">حفظ ملفك لأول مرة يمسح الأمثلة ويبدأ سجلك أنت.</p>':'')+'</form>';},
@@ -951,6 +960,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
         '<label class="field"><span>مدينتك</span><select id="pCity">'+cities.map(c=>'<option'+(c===p.city?' selected':'')+'>'+c+'</option>').join('')+'<option value="other"'+(known?'':' selected')+'>مدينة ثانية</option></select></label>'+
         '<label class="field" id="otherWrap"'+(known?' hidden':'')+'><span>اكتب مدينتك</span><input id="pCityO" type="text" maxlength="40" value="'+(known?'':esc(p.city))+'"></label>'+
         '<div class="field"><span>اهتماماتك</span><div class="picks" id="pInts">'+Object.keys(INT).map(k=>'<button type="button" data-i="'+k+'" aria-pressed="'+(p.interests||[]).includes(k)+'">'+icon(INT[k][1])+INT[k][0]+'</button>').join('')+'</div></div>'+
+        '<label class="field"><span>اهتمامات ثانية تكتبها بنفسك (افصل بينها بفاصلة)</span><input id="pCustom" type="text" maxlength="160" value="'+esc((p.custom||[]).join('، '))+'" placeholder="مثلاً: التصوير، الطبخ، البرمجة"></label>'+
         '<label class="field"><span>فريقك المفضل (اختياري)</span><input id="pTeam" type="text" maxlength="30" value="'+esc(p.team)+'"></label>'+
         '<label class="field"><span>هدفك الحالي</span><input id="pGoal" type="text" maxlength="80" value="'+esc(p.goal)+'"></label>'+
         '<label class="field"><span>عرّفني عليك أكثر</span><textarea id="pAbout" rows="3" maxlength="400" placeholder="شغلك، دراستك، وش تحب تسوي، وش يضايقك...">'+esc(p.about)+'</textarea></label>'+
@@ -1148,6 +1158,56 @@ button.row{width:100%;text-align:start;cursor:pointer}
   }
 
   document.addEventListener('click',e=>{if(e.target.closest('[data-login]'))showWelcome(true,'have')});
+  /* ---- Custom interests: everyone writes their own ---- */
+  function parseCustom(s){return Array.from(new Set(String(s||'').split(/[،,\n]/).map(x=>x.trim()).filter(Boolean).map(x=>x.slice(0,24)))).slice(0,12)}
+  SCREENS.interests._=()=>{const C=S.profile.custom||[];
+    return '<div class="tiles">'+Object.keys(INT).map((k,i)=>tile(INT[k][1],INT[k][0],'interests/topic/'+k,i,(S.profile.interests||[]).includes(k)?' on':'')).join('')+
+      C.map((c,i)=>tile('sparkle',esc(c),'interests/custom/'+i,Object.keys(INT).length+i,' on')).join('')+'</div>'+
+      '<form class="card" id="ciForm"><b>اكتب اهتماماتك</b><p class="fine">أي شي تحبه ومو موجود فوق: تصوير، طبخ، برمجة، خيل... ويصير له قسم خاص فيك، والذكاء الاصطناعي يعرفه.</p><div class="link-row"><input class="inp" id="ciIn" type="text" maxlength="24" placeholder="اهتمام جديد" style="flex:1;min-width:0"><button type="submit" class="btn-brand">'+icon('plus')+'<span>أضف</span></button></div>'+
+      (C.length?'<div class="chips">'+C.map((c,i)=>'<button type="button" class="chip" data-delci="'+i+'" aria-label="احذف '+esc(c)+'">'+esc(c)+' ✕</button>').join('')+'</div>':'')+'</form>'+
+      '<p class="fine">النقطة الملوّنة تعني إنها من اهتماماتك.</p>';};
+  SCREENS.interests.custom=()=>{const C=S.profile.custom||[], c=C[+R.arg];
+    if(c==null)return subhead('اهتمام','sparkle')+'<p class="empty">ما لقيناه.</p>';
+    const items=S.log.filter(x=>x.custom===c);
+    return subhead(esc(c),'sparkle')+'<div class="int-hero">'+icon('sparkle')+'<b>'+esc(c)+'</b><p class="fine">'+G('كل خطوة في اللي تحبه تنحسب، سجّلها وخلني أحتفل معك.','كل خطوة في اللي تحبينه تنحسب، سجّليها وخليني أحتفل معك.')+'</p></div>'+
+      '<form class="card" id="ciLog"><label class="big-l" for="ciLogIn">وش سويت في '+esc(c)+'؟</label><textarea id="ciLogIn" rows="2"></textarea><button type="submit" class="btn-brand wide">'+icon('check')+'<span>احتفل معي</span></button></form>'+
+      '<div class="tiles"><button type="button" class="tile" style="--i:0" data-askci="'+(+R.arg)+'"><span class="ic">'+icon('ai')+'</span><span>اسأل AI</span></button><button type="button" class="tile" style="--i:1" data-delci="'+(+R.arg)+'"><span class="ic">'+icon('back')+'</span><span>احذف الاهتمام</span></button></div>'+
+      '<h3 style="font-size:1rem">إنجازاتك هنا</h3>'+(items.length?'<ul class="list">'+items.slice(0,10).map(x=>'<li class="row"><span class="ric">'+icon('sparkle')+'</span><span class="t">'+esc(x.t)+'</span><span class="w">'+when(x.ts)+'</span></li>').join('')+'</ul>':'<p class="empty">ما فيه إنجازات هنا للحين.</p>');};
+  document.addEventListener('submit',e=>{
+    if(e.target.id==='ciForm'){e.preventDefault();const v=$('#ciIn').value.trim();if(!v)return;S.profile.custom=parseCustom((S.profile.custom||[]).concat(v).join('،'));save();toast('انضاف «'+v+'» لاهتماماتك');chime('pop');render()}
+    if(e.target.id==='ciLog'){e.preventDefault();const v=$('#ciLogIn').value.trim(),c=(S.profile.custom||[])[+R.arg];if(!v||c==null)return;
+      logAchievement(v,'general'); if(S.log[0]&&S.log[0].t===v)S.log[0].custom=c; save(); setTimeout(()=>{if(R.sub==='custom')render()},2200)}
+  });
+  document.addEventListener('click',e=>{
+    const d=e.target.closest('[data-delci]'); if(d){const C=S.profile.custom||[];C.splice(+d.dataset.delci,1);save();go('interests');return}
+    const a=e.target.closest('[data-askci]'); if(a){const c=(S.profile.custom||[])[+a.dataset.askci];go('chat');setTimeout(()=>sendChat('عطني أفكار وتحديات صغيرة في '+c),60)}
+  });
+
+  /* ---- Install banner (GitHub version): shows 3 seconds after opening ---- */
+  (function setupInstall(){
+    if(inClaude)return;
+    const standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+    if(standalone)return;
+    let deferred=null;
+    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});
+    window.addEventListener('appinstalled',()=>{const b=$('#inst');if(b)b.remove();toast('انثبّت التطبيق على جوالك')});
+    if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+    if(Date.now()<(+lsGet('mn-inst-skip')||0))return;
+    const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    setTimeout(()=>{
+      if($('#inst'))return;
+      const el=document.createElement('div'); el.className='inst'; el.id='inst'; el.setAttribute('role','dialog'); el.setAttribute('aria-label','تثبيت التطبيق');
+      el.innerHTML='<img src="mark.png" alt=""><div class="inst-t"><b>ثبّت «مع نفسك» على جوالك</b><small>يفتح مثل التطبيق من الشاشة الرئيسية</small></div><button type="button" class="btn-brand" id="instGo">تثبيت</button><button type="button" class="inst-x" id="instX" aria-label="إغلاق">✕</button>';
+      $('#app').appendChild(el);
+      $('#instX').addEventListener('click',()=>{lsSet('mn-inst-skip',String(Date.now()+3*DAY));el.remove()});
+      $('#instGo').addEventListener('click',async()=>{
+        if(deferred){deferred.prompt();try{const c=await deferred.userChoice;if(c&&c.outcome==='accepted')el.remove()}catch(e){}deferred=null;return}
+        const how=ios?'في Safari: اضغط زر المشاركة (المربع والسهم) تحت، ثم «إضافة إلى الشاشة الرئيسية»، ثم «إضافة».':'من قائمة المتصفح (⋮) اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».';
+        el.querySelector('.inst-t').innerHTML='<b>طريقة التثبيت</b><small>'+how+'</small>'; $('#instGo').remove();
+      });
+    },3000);
+  })();
+
   function extWire(k){
     if(R.tab==='account')maybeByok();
     if(k==='chat/friend'){const f=S.friends.find(x=>x.id===R.arg);if(!f)return;const list=$('#fList');
@@ -1422,7 +1482,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     $('#pForm').addEventListener('submit',e=>{
       e.preventDefault(); const name=$('#pName').value.trim(); if(!name){$('#pName').focus();toast('اكتب اسمك أول');return}
       const city=$('#pCity').value==='other'?($('#pCityO').value.trim()||'مدينتي'):$('#pCity').value, first=S.demo;
-      S.profile={name,gender,city,interests:$$('#pInts [aria-pressed="true"]').map(b=>b.dataset.i),team:$('#pTeam').value.trim(),goal:$('#pGoal').value.trim(),about:$('#pAbout').value.trim()};
+      S.profile={name,gender,city,custom:parseCustom($('#pCustom')?$('#pCustom').value:''),interests:$$('#pInts [aria-pressed="true"]').map(b=>b.dataset.i),team:$('#pTeam').value.trim(),goal:$('#pGoal').value.trim(),about:$('#pAbout').value.trim()};
       S.contact=($('#pContact')?$('#pContact').value.trim():S.contact);
       if(first){S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;offered=false;lastReply=null;
         S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;photoImg=null}

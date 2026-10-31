@@ -22,4 +22,4 @@
 |---|---|
 | `index.html` | التطبيق التجريبي كامل |
 | `logo.png` و `mark.png` | الشعار والعلامة |
-| `manifest.webmanifest` و `icons/` | التثبيت على الشاشة الرئيسية |
+| `manifest.webmanifest` و `icons/` و `sw.js` | التثبيت على الشاشة الرئيسية، وشريط «تثبيت» يطلع بعد 3 ثواني |
