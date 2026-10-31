@@ -404,6 +404,21 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .mc-qr{background:#FFFFFF;border-radius:14px;padding:7px;display:grid;justify-items:center;gap:2px;color:#1E1B38;font-size:.62rem;font-weight:700}
 .mc-qr svg{width:92px;height:92px;display:block}
 .share-row{display:grid;gap:10px}
+/* Identity colours on tiles: purple, blue, gold */
+.tiles .tile:nth-child(3n+1){--tc:#8B5CF6}
+.tiles .tile:nth-child(3n+2){--tc:#3B82F6}
+.tiles .tile:nth-child(3n){--tc:#E6B370}
+.tiles .tile .ic{background:color-mix(in srgb,var(--tc,var(--fx1)) 20%,var(--surface))}
+.tiles .tile .i .ac{fill:var(--tc,var(--fx1))}
+.tiles .tile .i .acs{stroke:var(--tc,var(--fx1))}
+.tiles .tile .i .soft{fill:color-mix(in srgb,var(--tc,var(--fx1)) 30%,transparent)}
+.tiles .tile.on::after{background:var(--tc,var(--fx1));box-shadow:0 0 0 4px color-mix(in srgb,var(--tc,var(--fx1)) 25%,transparent)}
+.terms-body{max-height:60vh;overflow-y:auto;display:grid;gap:10px;font-size:.88rem;line-height:1.8}
+.terms-body h4{margin:6px 0 0;font-size:.95rem}
+.terms-body p{margin:0;color:var(--ink)}
+.notice-card{box-sizing:border-box}
+.notice-card > span{flex:1;min-width:0}
+.notice-card .chip{flex:none;white-space:nowrap}
 /* Celebration overlay */
 .celebrate{position:absolute;inset:0;z-index:30;display:grid;place-items:center;align-content:center;gap:12px;background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 .cel-core{position:relative;width:160px;height:160px;display:grid;place-items:center}
@@ -2854,7 +2869,7 @@ var qrcode = function() {
 
   /* ---------- Persistence (private per viewer; this browser as fallback) ---------- */
   const store={ref:null,ready:false,busy:false,again:false,t:0}; const LS='maanafsak-state-v3';
-  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage}));
+  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
   function save(){if(!store.ready||S.demo)return;clearTimeout(store.t);store.t=setTimeout(flush,700)}
   function flush(){
     const d=snap(); try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}
@@ -3312,6 +3327,7 @@ var qrcode = function() {
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
     (S.demo?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
+    (sbCfg()&&!S.demo&&S.emailVerified===false?'<div class="notice-card">'+icon('send')+'<span><b>فعّل إيميلك</b><br><small style="color:var(--muted)">أرسلنا لك رابط على <span dir="ltr">'+esc(S.contact)+'</span></small></span><button type="button" class="chip" data-resend="'+esc(S.contact)+'">أرسل مرة ثانية</button></div>':'')+
     (S.restoreUntil>Date.now()?'<button type="button" class="notice-card" data-go="account/restore">'+icon('restore')+'<span><b>استعادة الحساب</b><br><small style="color:var(--muted)">لقينا حساب قديم بإيميلك. متاحة '+Math.max(1,Math.ceil((S.restoreUntil-Date.now())/DAY))+' أيام</small></span></button>':'')+
     '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+tile('chart','تحليل استخدامي','account/usage',8)+tile('gear','الإعدادات','account/settings',9)+'</div>'+(S.demo?'':'<button type="button" class="btn-ghost wide" data-logout>'+icon('logout')+'<span>تسجيل خروج</span></button>');};
   Object.assign(SCREENS.account,{
@@ -3334,7 +3350,7 @@ var qrcode = function() {
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
     reports:()=>subhead('تقارير اللقاءات','meet')+(S.reports.length?S.reports.map(r=>'<div class="card"><b>'+esc(r.title)+'</b><p class="result">'+esc(r.text)+'</p><span class="fine">'+when(r.ts)+'</span></div>').join(''):'<p class="empty">أول ما يبدأ لقاء نظمته، ينحفظ تقريره هنا.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat/meetups">'+icon('meet')+'<span>اللقاءات</span></button>',
     restore:()=>subhead('استعادة الحساب','restore')+'<div class="card"><b>رقم حسابك</b><span class="idtag">'+esc(S.uid)+'</span><p class="fine">مرتبط بـ: <span dir="ltr">'+esc(S.contact||'ما أضفت إيميل أو جوال')+'</span></p></div><div class="card"><b>كيف تشتغل؟</b><p class="fine">إذا حذفت التطبيق أو الحساب ورجعت تسجّل بنفس الإيميل أو رقم الجوال، يطلع لك كل حساباتك السابقة وحالة كل واحد، وتختار: تستعيد واحد منها أو تبدأ حساب جديد.</p><button type="button" class="btn-gold wide" id="simReg">'+icon('restore')+'<span>تجربة: سجّلت من جديد</span></button></div><div id="regBox"></div>',
-    settings:()=>subhead('الإعدادات','gear')+'<div class="card"><div class="field"><span>صوت الاحتفال</span><div class="seg" id="sndSeg"><button type="button" role="radio" data-s="1" aria-checked="'+S.sound+'">تشغيل</button><button type="button" role="radio" data-s="0" aria-checked="'+(!S.sound)+'">إيقاف</button></div></div><div class="field"><span>أسلوب التشجيع</span><div class="seg">'+[['hype','حماسي'],['calm','هادي'],['local','باللهجة']].map(s=>'<button type="button" role="radio" data-style="'+s[0]+'" aria-checked="'+(S.style===s[0])+'">'+s[1]+'</button>').join('')+'</div></div><div class="field"><span>الوضع</span><div class="seg" id="modeSeg">'+[['auto','تلقائي'],['light','نهاري'],['dark','ليلي']].map(m=>'<button type="button" role="radio" data-modeui="'+m[0]+'" aria-checked="'+((S.mode||'auto')===m[0])+'">'+m[1]+'</button>').join('')+'</div></div></div><div class="tiles">'+tile('palette','مظهري المتحرك','ai/theme',0)+tile('info','عن التطبيق','account/about',1)+'</div>'+(inClaude?'':'<button type="button" class="btn-ghost wide" data-install>'+icon('plus')+'<span>ثبّت التطبيق على جوالك</span></button>')+(S.demo?'':'<div id="delBox"><button type="button" class="btn-ghost wide" data-delacc style="color:var(--warn)">حذف حسابي</button></div>')
+    settings:()=>subhead('الإعدادات','gear')+'<div class="card"><div class="field"><span>صوت الاحتفال</span><div class="seg" id="sndSeg"><button type="button" role="radio" data-s="1" aria-checked="'+S.sound+'">تشغيل</button><button type="button" role="radio" data-s="0" aria-checked="'+(!S.sound)+'">إيقاف</button></div></div><div class="field"><span>أسلوب التشجيع</span><div class="seg">'+[['hype','حماسي'],['calm','هادي'],['local','باللهجة']].map(s=>'<button type="button" role="radio" data-style="'+s[0]+'" aria-checked="'+(S.style===s[0])+'">'+s[1]+'</button>').join('')+'</div></div><div class="field"><span>الوضع</span><div class="seg" id="modeSeg">'+[['auto','تلقائي'],['light','نهاري'],['dark','ليلي']].map(m=>'<button type="button" role="radio" data-modeui="'+m[0]+'" aria-checked="'+((S.mode||'auto')===m[0])+'">'+m[1]+'</button>').join('')+'</div></div></div><div class="tiles">'+tile('palette','مظهري المتحرك','ai/theme',0)+tile('info','عن التطبيق','account/about',1)+'</div>'+'<div class="card"><div class="flag-row" style="border:0;padding:0"><span>'+icon('send')+'أخبار وعروض على الإيميل</span><button type="button" class="sw" role="switch" data-mk aria-checked="'+!!S.marketing+'" aria-label="أخبار وعروض على الإيميل"></button></div><button type="button" class="btn-ghost wide" data-terms>'+icon('info')+'<span>الشروط والأحكام والخصوصية</span></button></div>'+(inClaude?'':'<button type="button" class="btn-ghost wide" data-install>'+icon('plus')+'<span>ثبّت التطبيق على جوالك</span></button>')+(S.demo?'':'<div id="delBox"><button type="button" class="btn-ghost wide" data-delacc style="color:var(--warn)">حذف حسابي</button></div>')
   });
 
   SCREENS.admin={
@@ -3436,6 +3452,16 @@ var qrcode = function() {
   }
   const encK=s=>btoa(String(s).split('').reverse().join('')).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const decK=s=>{try{s=String(s).replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s).split('').reverse().join('')}catch(e){return ''}};
+  (function readHashMisc(){try{
+    const h=location.hash.slice(1); if(!h)return; const q=new URLSearchParams(h);
+    if(q.get('own')){const k=decK(q.get('own'));if(/^sk-or-/.test(k)){lsSet('mn-or-own',k);setTimeout(()=>toast('انفعّلت باقتك. الذكاء الاصطناعي صار على رصيدك الخاص'),900)}
+      const s=q.get('s');if(s){const v=decK(s);if(v.indexOf('{')===0)lsSet('mn-sb',v)}
+      history.replaceState(null,'',location.pathname+location.search);return}
+    if(q.get('access_token')||q.get('error_description')){
+      if(q.get('access_token'))lsSet('mn-sbtok',q.get('access_token'));
+      history.replaceState(null,'',location.pathname+location.search);
+      setTimeout(()=>{if(q.get('error_description'))toast('رابط التفعيل انتهى. سجّل دخول ونرسل لك رابط جديد');else{if(!S.demo){S.emailVerified=true;save();render()}toast('تفعّل إيميلك، أهلاً فيك')}},1400);
+    }}catch(e){}})();
   (function readExtra(){try{const q=new URLSearchParams(location.hash.slice(1));if(!q.get('k')&&!q.get('try'))return;const l=q.get('l'),s=q.get('s');if(l&&+l>0)lsSet('mn-cap',String(+l));if(s){const v=decK(s);if(v.indexOf('{')===0)lsSet('mn-sb',v)}}catch(e){}})();
   (function readTryLink(){
     const h=location.hash.slice(1); if(!h||(h.indexOf('try=')<0&&h.indexOf('k=')<0))return;
@@ -3512,7 +3538,8 @@ var qrcode = function() {
   function createNew(p,recognized){
     S.profile={name:p.name,gender:p.g,city:p.city,interests:[],team:'',goal:'',about:''}; S.contact=p.contact;
     S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
-    S.uid=newId();S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
+    S.uid=p.uid||newId();S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
+    S.marketing=!!p.mk; S.termsAt=p.terms||Date.now(); S.emailVerified=p.verify?false:(p.verified?true:undefined);
     S.usage={days:{},hours:[],screens:{},ai:0,msgs:0};
     S.restoreUntil=recognized?Date.now()+7*DAY:0; recordAccount(); if(p.pw)setPw(p.pw); setRemember(p.rem!==false);
     lsSet('mn-welcomed','1'); store.ready=true; renderChrome(); flush(); go('home');
@@ -3520,6 +3547,7 @@ var qrcode = function() {
     setTimeout(()=>{
       notify('رقم حسابك '+S.uid+'. كمّل ملفك واهتماماتك من حسابي','idcard');
       if(recognized)notify('حسابك القديم ينتظرك 7 أيام. تقدر تستعيده من حسابي ← استعادة الحساب','restore');
+      if(p.verify)notify('أرسلنا رابط تفعيل لإيميلك '+p.contact+'. افتحه عشان يتفعّل حسابك','send');
       go('account/profile');
     },2300);
   }
@@ -3538,6 +3566,8 @@ var qrcode = function() {
       '<label class="field"><span>مدينتك</span><select class="inp" id="wCity">'+cities.map(c=>'<option>'+c+'</option>').join('')+'</select></label>'+
       '<label class="field"><span>كلمة المرور (6 أحرف أو أكثر)</span><input class="inp key-in" id="wP" type="password" autocomplete="new-password" dir="ltr"></label>'+
       '<label class="remember"><input type="checkbox" id="wRem" checked>تذكرني على هالجهاز</label>'+
+      '<label class="remember"><input type="checkbox" id="wTerms">أوافق على&nbsp;<button type="button" class="chip" data-terms style="padding:1px 8px">الشروط والأحكام</button></label>'+
+      '<label class="remember"><input type="checkbox" id="wMk">أبغى توصلني أخبار وعروض «مع نفسك» على الإيميل (اختياري)</label>'+
       '<p class="fine" id="wMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('check')+'<span>أنشئ حسابي</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div></form>';
     const have=()=>'<form class="card" id="wLogin"><b style="font-size:1.1rem">تسجيل الدخول</b>'+
       '<label class="field"><span>الإيميل أو رقم الجوال</span><input class="inp key-in" id="wLE" type="text" autocomplete="username" dir="ltr"></label>'+
@@ -3570,6 +3600,11 @@ var qrcode = function() {
           el.remove(); store.ready=true; renderChrome(); flush(); go('admin'); toast('أهلاً عبدالله، دخلت كصاحب التطبيق'); return;
         }
         if(eh===ADMIN_EMAIL_HASH){fails++;if(fails>=5){fails=0;lockUntil=Date.now()+30000}msg.style.color='var(--warn)';msg.textContent='كلمة المرور غلط.';$('#wLP').value='';return}
+        if(sbCfg()&&!inClaude&&em.indexOf('@')>0){
+          const r=await sbLogin(em,pw);
+          if(r.ok){const rem=$('#wLRem')?$('#wLRem').checked:true;el.remove();sbAfterLogin(r,em,pw,rem);return}
+          if(r.code==='email_not_confirmed'){msg.style.color='var(--warn)';msg.innerHTML='فعّل إيميلك أول من الرابط اللي وصلك. <button type="button" class="chip" data-resend="'+esc(em)+'">أرسل الرابط مرة ثانية</button>';return}
+        }
         const L=accList(em); let ah=''; try{ah=await pbkdf(pw,ckey(em)+'|acct')}catch(err){}
         const hits=L.filter(a=>a.pw&&a.pw===ah), hit=hits.find(a=>a.status==='يعمل')||hits[hits.length-1];
         if(hit){const rem=$('#wLRem')?$('#wLRem').checked:true;
@@ -3584,6 +3619,17 @@ var qrcode = function() {
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)&&!/^\+?[0-9\s]{9,15}$/.test(contact)){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب إيميل صحيح أو رقم جوال';return}
       const pw=$('#wP').value; if(pw.length<6){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='كلمة المرور 6 أحرف أو أكثر';$('#wP').focus();return}
       pending={name,contact,g,city:$('#wCity').value,pw,rem:$('#wRem').checked};
+      if(!$('#wTerms').checked){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='لازم توافق على الشروط والأحكام عشان تكمّل';return}
+      pending.mk=$('#wMk').checked; pending.terms=Date.now();
+      if(sbCfg()&&!inClaude){
+        if(contact.indexOf('@')<0){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='سجّل بالإيميل عشان يوصلك رابط التفعيل';return}
+        const sbtn=ev.target.querySelector('button[type=submit]'); sbtn.disabled=true; $('#wMsg').style.color='var(--muted)'; $('#wMsg').textContent='يسجّل...';
+        pending.uid=newId();
+        const r=await sbSignup(contact,pw,{name,city:pending.city,gender:g,app_id:pending.uid,marketing:pending.mk});
+        sbtn.disabled=false;
+        if(!r.ok){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent=r.msg;return}
+        pending.verify=true;
+      }
       const prev=accList(contact);
       if(prev.length){
         el.innerHTML='<div class="card"><div style="display:flex;gap:10px;align-items:center"><span class="sh-ic">'+icon('restore')+'</span><b>لقينا حساب سابق مرتبط بـ <span dir="ltr">'+esc(contact)+'</span></b></div><p class="fine">تبي ترجع لحسابك القديم بكل سجله، أو تبدأ حساب جديد؟</p><div class="list">'+
@@ -3857,7 +3903,8 @@ var qrcode = function() {
   async function drawReport(exMe){
     const box=$('#repBox'); if(!box)return; const r=await loadReport(exMe); if(!$('#repBox'))return;
     const lbl=r.days.map(d=>String(+d.slice(8)));
-    box.innerHTML=(r.src==='local'?'<p class="fine" style="color:var(--warn)">'+(sbCfg()?'ما قدر يجيب بيانات المستخدمين، هذي بيانات هالجهاز.':'هذي بيانات هالجهاز بس. اربط Supabase من «مفاتيح الذكاء» عشان يجيك استخدام كل اللي يجربون.')+'</p>':'')+
+    const su=await signupStats(); if(!$('#repBox'))return;
+    box.innerHTML=(su?'<div class="card"><b>التسجيلات</b><div class="kpis"><div class="kpi"><b>'+fmt(su.total)+'</b><span>سجّلوا</span></div><div class="kpi"><b>'+fmt(su.confirmed)+'</b><span>فعّلوا الإيميل</span></div><div class="kpi"><b>'+fmt(su.marketing)+'</b><span>يقبلون الأخبار</span></div></div><p class="fine">هالأسبوع: '+fmt(su.week)+' تسجيل جديد. الإيميلات تلقاها في Supabase ← Table Editor ← profiles.</p></div>':'')+(r.src==='local'?'<p class="fine" style="color:var(--warn)">'+(sbCfg()?'ما قدر يجيب بيانات المستخدمين، هذي بيانات هالجهاز.':'هذي بيانات هالجهاز بس. اربط Supabase من «مفاتيح الذكاء» عشان يجيك استخدام كل اللي يجربون.')+'</p>':'')+
       '<div class="kpis"><div class="kpi"><b>'+r.devices+'</b><span>مستخدم نشط</span></div><div class="kpi"><b>'+fmt(r.msgs)+'</b><span>رسالة سوالف</span></div><div class="kpi"><b>'+r.cost.toFixed(2)+'$</b><span>تكلفة الذكاء</span></div></div>'+
       '<div class="card"><b>المستخدمين النشطين آخر 7 أيام</b>'+colChart(r.perDay,lbl,6,'المستخدمين النشطين يومياً')+'</div>'+
       '<div class="card"><b>الأقسام</b>'+(r.tabs.length?barList(r.tabs):'<p class="empty">ما فيه بيانات.</p>')+'</div>'+
@@ -3879,13 +3926,14 @@ var qrcode = function() {
     '<div class="card"><div class="plat"><span class="sh-ic">'+icon('ai')+'</span><div><b>OpenRouter للتجربة</b><small class="fine">'+(k?'مفعّل على هالجهاز · ينتهي بـ <span dir="ltr">'+esc(k.slice(-4))+'</span>':'غير مفعّل')+'</small></div><span class="chipst '+(k?'st-on':'st-idle')+'">'+(k?'شغّال':'متوقف')+'</span></div>'+
     '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="aK" type="password" autocomplete="off" spellcheck="false" placeholder="sk-or-v1-..."></label>'+
     '<label class="field"><span>نموذج السوالف</span><input class="inp key-in" id="aM" type="text" value="'+esc(orModel())+'" spellcheck="false"></label>'+
-    '<label class="field"><span>نموذج تحويل الصور (Nano Banana)</span><input class="inp key-in" id="aIM" type="text" value="'+esc(imgModel())+'" spellcheck="false"></label>'+
+    '<label class="field"><span>نموذج تحويل الصور (Nano Banana)</span><input class="inp key-in" id="aIM" type="text" list="imgModels" value="'+esc(imgModel())+'" spellcheck="false"><datalist id="imgModels"><option value="google/gemini-nano-banana-2.1">Nano Banana 2.1 · الأحدث</option><option value="google/gemini-3-pro-image">Nano Banana Pro · أعلى جودة وأغلى</option><option value="google/gemini-3.1-flash-image">Nano Banana 2</option></datalist></label><p class="fine">Nano Banana 2.1 الأحدث وسعره معقول. Nano Banana Pro أدق بالتعديل بس تكلفة الصورة تقريباً 3 أضعاف.</p>'+
     '<label class="field"><span>رصيد كل مستخدم شهرياً (دولار)</span><input class="inp" id="aCap" type="number" min="0.5" step="0.5" value="'+esc(monthCap())+'"></label>'+
     '<p class="fine">تحويل الصور بالذكاء الاصطناعي: صورة وحدة لكل مستخدم في الأسبوع، وتنحسب من رصيده الشهري.</p></div>'+
     '<div class="card"><div class="plat"><span class="sh-ic">'+icon('chart')+'</span><div><b>تجميع الاستخدام (Supabase)</b><small class="fine">'+(sb?'مربوط':'غير مربوط: التقرير يطلع من جهازك بس')+'</small></div><span class="chipst '+(sb?'st-on':'st-idle')+'">'+(sb?'مربوط':'اختياري')+'</span></div>'+
     '<label class="field"><span>Project URL</span><input class="inp key-in" id="aSU" type="text" value="'+esc(sb?sb.u:'')+'" placeholder="https://xxxx.supabase.co" spellcheck="false"></label>'+
     '<label class="field"><span>anon public key</span><input class="inp key-in" id="aSK" type="password" value="'+esc(sb?sb.k:'')+'" spellcheck="false"></label>'+
-    '<p class="fine">سوّ الجدول مرة وحدة من ملف <span dir="ltr">supabase/usage.sql</span> في المستودع. يتجمع عدد الشاشات والرسائل والتكلفة بس، بدون أسماء ولا محتوى السوالف.</p></div>'+
+    '<p class="fine">سوّ الجدول مرة وحدة من ملف <span dir="ltr">supabase/setup.sql</span> في المستودع. يتجمع عدد الشاشات والرسائل والتكلفة بس، بدون أسماء ولا محتوى السوالف.</p></div>'+
+    '<div class="card"><b>رابط باقة لمستخدم</b><p class="fine">لما أحد يشتري الباقة: سوّ له مفتاح جديد في OpenRouter باسمه وحط له حد 10$، والصقه هنا. الرابط يحفظ المفتاح على جواله كمفتاحه الخاص.</p><label class="field"><span>مفتاح المستخدم</span><input class="inp key-in" id="pkK" type="password" autocomplete="off" spellcheck="false" placeholder="sk-or-v1-..."></label><button type="button" class="btn-gold wide" id="pkCopy">'+icon('send')+'<span>انسخ رابط الباقة</span></button></div>'+
     '<button type="button" class="btn-brand wide" id="aSave">'+icon('check')+'<span>احفظ</span></button>'+
     (k?'<button type="button" class="btn-gold wide" id="orCopy">'+icon('send')+'<span>انسخ رابط التجربة</span></button><div class="link-row"><code id="orLink" style="direction:ltr">'+esc(tryLink().replace(/k=[^&]+/,'k=••••').replace(/s=[^&]+/,'s=••••'))+'</code></div><button type="button" class="btn-ghost wide" id="orTest">'+icon('sparkle')+'<span>اختبر الاتصال</span></button><p class="result" id="orRes"></p><button type="button" class="btn-ghost wide" id="orDel">احذف المفتاح من جهازي</button>':'')+
     '<p class="fine" style="color:var(--warn)">رابط التجربة فيه مفتاحك مشفّر، وأي أحد يفتحه يستخدم رصيدك. أرسله بس للي يجربون، وخل حد الصرف في OpenRouter.</p>'+(inClaude?'<p class="fine">داخل Claude الذكاء الاصطناعي يشتغل على Claude. رابط التجربة يشتغل على نسخة GitHub.</p>':'');};
@@ -3899,7 +3947,7 @@ var qrcode = function() {
   });
 
   /* ---- My keys (every user): own OpenRouter key, or the app's monthly allowance ---- */
-  const imgModel=()=>lsGet('mn-img-model')||FLAGS.imageModel||'google/gemini-2.5-flash-image';
+  const imgModel=()=>{const v=lsGet('mn-img-model');return (v&&v!=='google/gemini-2.5-flash-image')?v:(FLAGS.imageModel||'google/gemini-nano-banana-2.1')};
   const imgLast=()=>+lsGet('mn-img-week')||0;
   const imgDaysLeft=()=>Math.max(0,Math.ceil((imgLast()+7*DAY-Date.now())/DAY));
   SCREENS.account.keys=()=>{const own=ownKey(), sp=monthSpent(), cap=monthCap(), pct=Math.min(100,Math.round(sp/cap*100));
@@ -3908,7 +3956,7 @@ var qrcode = function() {
     (own?'<p class="fine">الذكاء الاصطناعي يشتغل على حسابك في OpenRouter، بدون حد من التطبيق.</p>':
       '<p class="fine">كل شهر لك '+cap+'$ هدية من التطبيق للسوالف والاقتراحات.</p><div class="bl"><div class="bl-row"><span class="bl-l">صرفت '+sp.toFixed(sp<1?3:2)+'$</span><span class="bl-t"><i style="width:'+Math.max(3,pct)+'%"></i></span><b>'+pct+'%</b></div></div>'+
       '<p class="fine">تحويل صورتك بالذكاء الاصطناعي: '+(imgDaysLeft()?'الصورة الجاية بعد '+imgDaysLeft()+' أيام':'متاح لك صورة هالأسبوع')+'.</p>')+'</div>'+
-    '<div class="card"><b>عندك مفتاح OpenRouter؟</b><p class="fine">إذا عندك مفتاح خاص فيك، أضفه هنا ويصير الذكاء الاصطناعي على حسابك بدون حد، وتحويل الصور بدون انتظار. المفتاح ينحفظ على جهازك بس، ولا أحد يشوفه حتى صاحب التطبيق.</p>'+
+    (own?'':'<div class="card" style="border-color:var(--gold)"><b>تبي حد أعلى؟ باقة بلس</b><p class="fine">رصيد التطبيق الشهري محدود. باقة بلس تعطيك 10$ استخدام للسوالف والصور بـ 12.5$ شامل رسوم الخدمة، وتنشحن على مفتاح خاص فيك.</p><button type="button" class="btn-gold wide" data-plan>'+icon('star')+'<span>اطلب الباقة</span></button></div>')+'<div class="card"><b>عندك مفتاح OpenRouter؟</b><p class="fine">إذا عندك مفتاح خاص فيك، أضفه هنا ويصير الذكاء الاصطناعي على حسابك بدون حد، وتحويل الصور بدون انتظار. المفتاح ينحفظ على جهازك بس، ولا أحد يشوفه حتى صاحب التطبيق.</p>'+
     '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="uK" type="password" autocomplete="off" spellcheck="false" placeholder="'+(own?'محفوظ · ينتهي بـ '+esc(own.slice(-4)):'sk-or-v1-...')+'"></label>'+
     '<label class="field"><span>النموذج (اختياري)</span><input class="inp key-in" id="uM" type="text" value="'+esc(lsGet('mn-or-own-m'))+'" placeholder="'+esc(orModel())+'" spellcheck="false"></label>'+
     '<button type="button" class="btn-brand wide" id="uSave">'+icon('shield')+'<span>احفظ مفتاحي</span></button>'+(own?'<button type="button" class="btn-ghost wide" id="uDel">احذف مفتاحي وارجع لرصيد التطبيق</button>':'')+
@@ -3943,6 +3991,69 @@ var qrcode = function() {
     btn.disabled=false;
   }
   document.addEventListener('click',e=>{if(e.target.closest('#aiImg'))aiImage()});
+
+  /* ---- Supabase sign-up, email confirmation, login, consent ---- */
+  const SB_DEFAULT=null; /* {u:'https://xxxx.supabase.co',k:'anon key'} لما يجهز، يشتغل للكل بدون رابط */
+  const sbBase=()=>{const c=sbCfg()||SB_DEFAULT;return c?{u:c.u.replace(/\/$/,''),k:c.k}:null};
+  function sbErr(j){const m=String((j&&(j.msg||j.error_description||j.message||j.error))||'');
+    if(/already|registered|exists/i.test(m))return 'هالإيميل مسجّل من قبل. اضغط «عندي حساب» وسجّل دخول.';
+    if(/password/i.test(m))return 'كلمة المرور ضعيفة، خلها أطول وفيها أرقام وحروف.';
+    if(/rate|limit|seconds/i.test(m))return 'محاولات كثيرة، جرّب بعد دقيقة.';
+    if(/email/i.test(m))return 'تأكد من الإيميل.';
+    return 'ما اكتمل التسجيل'+(m?': '+m:'')}
+  async function sbSignup(email,pw,meta){const c=sbBase();if(!c)return {ok:false,msg:'السيرفر مو مربوط'};
+    try{const r=await fetch(c.u+'/auth/v1/signup?redirect_to='+encodeURIComponent(appBase()),{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({email,password:pw,data:meta})});
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok)return {ok:false,msg:sbErr(j)};
+      const ids=(j&&j.identities)||(j&&j.user&&j.user.identities);
+      if(Array.isArray(ids)&&ids.length===0)return {ok:false,msg:'هالإيميل مسجّل من قبل. اضغط «عندي حساب» وسجّل دخول.'};
+      return {ok:true};
+    }catch(e){return {ok:false,msg:'ما قدر يوصل للسيرفر. تأكد من النت وجرّب.'}}}
+  async function sbLogin(email,pw){const c=sbBase();if(!c)return {ok:false};
+    try{const r=await fetch(c.u+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
+      const j=await r.json().catch(()=>({}));
+      if(r.ok&&j.access_token)return {ok:true,token:j.access_token,user:j.user||{}};
+      return {ok:false,code:j.error_code||(/not confirmed/i.test(j.msg||j.error_description||'')?'email_not_confirmed':'invalid')};
+    }catch(e){return {ok:false,code:'network'}}}
+  function sbAfterLogin(r,em,pw,rem){
+    lsSet('mn-sbtok',r.token); const meta=r.user.user_metadata||{}, uid=meta.app_id;
+    const same=!S.demo&&((uid&&S.uid===uid)||(S.contact&&ckey(S.contact)===ckey(em)));
+    if(!same){ if(uid&&hasSnap(uid))restoreAccount(uid); else createNew({name:meta.name||em.split('@')[0],contact:em,g:meta.gender||'m',city:meta.city||'الرياض',uid,pw,rem,mk:!!meta.marketing,terms:Date.now(),verified:!!r.user.email_confirmed_at},false) }
+    else{go('home')}
+    S.emailVerified=!!r.user.email_confirmed_at; S.marketing=meta.marketing!=null?!!meta.marketing:S.marketing; save(); setRemember(rem);
+    toast('أهلاً '+(meta.name||S.profile.name||''));
+  }
+  async function sbResend(email){const c=sbBase();if(!c)return;
+    try{const r=await fetch(c.u+'/auth/v1/resend?redirect_to='+encodeURIComponent(appBase()),{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({type:'signup',email})});toast(r.ok?'أرسلنا الرابط مرة ثانية. شيّك على الإيميل والسبام':'ما انرسل. جرّب بعد دقيقة')}catch(e){toast('ما قدر يوصل للسيرفر')}}
+  async function sbMarketing(on){const c=sbBase(),tok=lsGet('mn-sbtok');if(!c||!tok||!S.contact)return;
+    try{await fetch(c.u+'/rest/v1/profiles?email=eq.'+encodeURIComponent(S.contact.toLowerCase()),{method:'PATCH',headers:{apikey:c.k,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({marketing:!!on})})}catch(e){}}
+  async function signupStats(){const c=sbBase();if(!c||inClaude)return null;
+    try{const r=await fetch(c.u+'/rest/v1/rpc/signup_stats',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json'},body:'{}'});return r.ok?await r.json():null}catch(e){return null}}
+
+  /* terms & privacy (draft) */
+  const TERMS='<h4>عن التطبيق</h4><p>«مع نفسك» تطبيق تحفيز وتنظيم شخصي: تسجّل إنجازاتك، وتسولف مع رفيق بالذكاء الاصطناعي، وتجمع نقاط. التطبيق للاستخدام الشخصي، وما يقدّم استشارات طبية أو نفسية أو مالية أو قانونية.</p>'+
+    '<h4>الذكاء الاصطناعي</h4><p>الردود والاقتراحات يولّدها الذكاء الاصطناعي وممكن تكون غلط أو غير مناسبة، فاستخدم حكمك. رسائلك للرفيق تنرسل لمزوّد خدمة الذكاء الاصطناعي (عن طريق OpenRouter) عشان يرد عليك. إذا كنت تمر بضيق شديد، تواصل مع شخص تثق فيه أو مختص.</p>'+
+    '<h4>حسابك وبياناتك</h4><p>نحفظ اسمك وإيميلك أو جوالك ومدينتك واهتماماتك وسجل إنجازاتك عشان نقدّم لك الخدمة. ونجمع أرقام استخدام بدون أسماء (مثل عدد فتحات الشاشات) عشان نطوّر التطبيق. ما نبيع بياناتك لأحد. تقدر تحذف حسابك من الإعدادات بأي وقت.</p>'+
+    '<h4>الرسائل التسويقية</h4><p>نرسل لك أخبار وعروض على الإيميل بس إذا وافقت، وتقدر توقفها من الإعدادات متى ما تبي.</p>'+
+    '<h4>مفاتيحك الخاصة</h4><p>إذا أضفت مفتاح ذكاء اصطناعي خاص فيك، ينحفظ على جهازك فقط، وأنت المسؤول عن تكلفته واستخدامه.</p>'+
+    '<h4>النقاط والباقات</h4><p>النقاط داخل التطبيق ما لها قيمة نقدية، وممكن تتغير طريقة كسبها واستخدامها. الرصيد الشهري المجاني للذكاء الاصطناعي محدود، والباقات المدفوعة حسب ما يوضّح وقت الشراء.</p>'+
+    '<h4>المجتمع واللقاءات</h4><p>تعامل مع الناس باحترام. اللقاءات في أماكن عامة وللي أعمارهم 18 سنة وفوق، وكل مشارك مسؤول عن نفسه. نقدر نوقف أي حساب يسيء الاستخدام.</p>'+
+    '<h4>التعديلات</h4><p>ممكن نحدّث هالشروط، ونبلّغك داخل التطبيق إذا صار تغيير مهم. استمرارك في الاستخدام يعني موافقتك على النسخة المحدّثة.</p>'+
+    '<p class="fine">مسودة أولية للتجربة · راجعها مع مختص قبل الإطلاق الرسمي.</p>';
+  function showTerms(){const old=$('#termsM');if(old)old.remove();const el=document.createElement('div');el.className='modal';el.id='termsM';el.style.zIndex='38';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
+    el.innerHTML='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:1.1rem">الشروط والأحكام والخصوصية</b><button type="button" class="inst-x" data-closeterms aria-label="إغلاق">✕</button></div><div class="terms-body">'+TERMS+'</div><button type="button" class="btn-brand wide" data-closeterms>تمام</button></div>';
+    $('#app').appendChild(el)}
+  document.addEventListener('click',async e=>{
+    if(e.target.closest('[data-terms]')){e.preventDefault();showTerms();return}
+    if(e.target.closest('[data-closeterms]')){const m=$('#termsM');if(m)m.remove();return}
+    const rs=e.target.closest('[data-resend]'); if(rs){sbResend(rs.dataset.resend);return}
+    const mk=e.target.closest('[data-mk]'); if(mk){S.marketing=!S.marketing;mk.setAttribute('aria-checked',String(S.marketing));save();sbMarketing(S.marketing);toast(S.marketing?'بتوصلك الأخبار والعروض':'وقّفنا الأخبار والعروض');return}
+    if(e.target.closest('[data-plan]')){const c=sbBase(), txt='طلب باقة بلس (10$ بـ 12.5$)\nالاسم: '+S.profile.name+'\nID: '+S.uid+'\nالتواصل: '+(S.contact||'');
+      if(c&&!inClaude){try{const r=await fetch(c.u+'/rest/v1/plan_requests',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({email:S.contact||'',name:S.profile.name,app_id:S.uid})});if(r.ok){toast('وصل طلبك. بيتواصل معك صاحب التطبيق');return}}catch(err){}}
+      try{await navigator.clipboard.writeText(txt)}catch(err){} toast('انتسخ الطلب. أرسله لصاحب التطبيق');return}
+    if(e.target.closest('#pkCopy')){const k=$('#pkK').value.trim();if(!/^sk-or-/.test(k)){toast('الصق مفتاح المستخدم sk-or-...');return}
+      const sb=lsGet('mn-sb'),link=appBase()+'#own='+encK(k)+(sb?'&s='+encK(sb):'');try{await navigator.clipboard.writeText(link);toast('انتسخ رابط الباقة. أرسله للمستخدم بس')}catch(err){toast('ما قدر ينسخ')}$('#pkK').value='';return}
+  });
 
   function extWire(k){
     if(k==='admin/usage')drawReport(false);

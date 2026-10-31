@@ -24,12 +24,16 @@
 | `logo.png` و `mark.png` | الشعار والعلامة |
 | `manifest.webmanifest` و `icons/` و `sw.js` | التثبيت على الشاشة الرئيسية، وشريط «تثبيت» يطلع بعد 3 ثواني |
 
-## تقرير الاستخدام للتجربة (اختياري)
+## Supabase: التسجيل وتفعيل الإيميل وتقرير الاستخدام
 
-عشان تشوف استخدام كل اللي يجربون في «لوحة التحكم ← تقرير الاستخدام»:
+1. سوّ مشروع في supabase.com (أو استخدم مشروع موجود).
+2. SQL Editor ← New query ← الصق ملف `supabase/setup.sql` كامل ← Run.
+3. Authentication ← Sign In / Providers ← Email: خلّ «Confirm email» مفعّل.
+4. Authentication ← URL Configuration: حط Site URL = `https://3pp3ll.github.io/ma-nafsak/` وأضفه في Redirect URLs.
+5. Authentication ← Emails ← SMTP Settings: اربط خدمة إيميل (مثل Resend أو Brevo). خدمة Supabase المجانية ما ترسل إلا لإيميلات فريق المشروع وبعدد قليل جداً.
+6. Project Settings ← API (أو Data API): انسخ Project URL ومفتاح anon public، والصقهم في التطبيق: لوحة التحكم ← مفاتيح الذكاء ← تجميع الاستخدام، وبعدها انسخ رابط التجربة من جديد.
 
-1. في Supabase سوّ مشروع (أو استخدم مشروع موجود)، ومن SQL Editor شغّل ملف `supabase/usage.sql`.
-2. من Project Settings ← API انسخ Project URL ومفتاح anon public.
-3. في التطبيق: لوحة التحكم ← مفاتيح الذكاء، الصقهم واحفظ، وبعدها انسخ رابط التجربة من جديد.
-
-اللي يتجمع: عدد فتحات كل شاشة، وعدد الرسائل والإنجازات، وتكلفة الذكاء الاصطناعي، لكل جهاز ولكل يوم. بدون أسماء ولا إيميلات ولا محتوى السوالف.
+اللي تشوفه بعدها:
+- لوحة التحكم ← تقرير الاستخدام: عدد اللي سجّلوا وفعّلوا وقبلوا الأخبار، والاستخدام الأسبوعي.
+- Supabase ← Table Editor ← profiles: الإيميلات ومين وافق على الأخبار.
+- Supabase ← Table Editor ← plan_requests: طلبات باقة بلس.
