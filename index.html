@@ -494,7 +494,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 
   /* ---------- Persistence (private per viewer; this browser as fallback) ---------- */
   const store={ref:null,ready:false,busy:false,again:false,t:0}; const LS='maanafsak-state-v3';
-  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet}));
+  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0}));
   function save(){if(!store.ready||S.demo)return;clearTimeout(store.t);store.t=setTimeout(flush,700)}
   function flush(){
     const d=snap(); try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}
@@ -952,7 +952,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
     (!isAdmin?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
-    '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+tile('restore','استعادة الحساب','account/restore',8)+tile('gear','الإعدادات','account/settings',9)+'</div>';};
+    '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+(S.restoreUntil>Date.now()?tile('restore','استعادة الحساب','account/restore',8,'','متاحة '+Math.max(1,Math.ceil((S.restoreUntil-Date.now())/DAY))+' أيام'):tile('info','عن التطبيق','account/about',8))+tile('gear','الإعدادات','account/settings',9)+'</div>';};
   Object.assign(SCREENS.account,{
     profile:()=>{const p=S.profile, cities=['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الأحساء','الطائف','أبها','تبوك','بريدة','حائل','جازان','نجران','العلا'], known=cities.includes(p.city);
       return subhead('ملفي','idcard')+'<form class="card" id="pForm">'+
@@ -973,7 +973,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
     reports:()=>subhead('تقارير اللقاءات','meet')+(S.reports.length?S.reports.map(r=>'<div class="card"><b>'+esc(r.title)+'</b><p class="result">'+esc(r.text)+'</p><span class="fine">'+when(r.ts)+'</span></div>').join(''):'<p class="empty">أول ما يبدأ لقاء نظمته، ينحفظ تقريره هنا.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat/meetups">'+icon('meet')+'<span>اللقاءات</span></button>',
     restore:()=>subhead('استعادة الحساب','restore')+'<div class="card"><b>رقم حسابك</b><span class="idtag">'+esc(S.uid)+'</span><p class="fine">مرتبط بـ: <span dir="ltr">'+esc(S.contact||'ما أضفت إيميل أو جوال')+'</span></p></div><div class="card"><b>كيف تشتغل؟</b><p class="fine">إذا حذفت التطبيق أو الحساب ورجعت تسجّل بنفس الإيميل أو رقم الجوال، يطلع لك كل حساباتك السابقة وحالة كل واحد، وتختار: تستعيد واحد منها أو تبدأ حساب جديد.</p><button type="button" class="btn-gold wide" id="simReg">'+icon('restore')+'<span>تجربة: سجّلت من جديد</span></button></div><div id="regBox"></div>',
-    settings:()=>subhead('الإعدادات','gear')+'<div class="card"><div class="field"><span>صوت الاحتفال</span><div class="seg" id="sndSeg"><button type="button" role="radio" data-s="1" aria-checked="'+S.sound+'">تشغيل</button><button type="button" role="radio" data-s="0" aria-checked="'+(!S.sound)+'">إيقاف</button></div></div><div class="field"><span>أسلوب التشجيع</span><div class="seg">'+[['hype','حماسي'],['calm','هادي'],['local','باللهجة']].map(s=>'<button type="button" role="radio" data-style="'+s[0]+'" aria-checked="'+(S.style===s[0])+'">'+s[1]+'</button>').join('')+'</div></div><div class="field"><span>الوضع</span><div class="seg" id="modeSeg">'+[['auto','تلقائي'],['light','نهاري'],['dark','ليلي']].map(m=>'<button type="button" role="radio" data-modeui="'+m[0]+'" aria-checked="'+((S.mode||'auto')===m[0])+'">'+m[1]+'</button>').join('')+'</div></div></div><div class="tiles">'+tile('palette','مظهري المتحرك','ai/theme',0)+tile('info','عن التطبيق','account/about',1)+'</div>'
+    settings:()=>subhead('الإعدادات','gear')+'<div class="card"><div class="field"><span>صوت الاحتفال</span><div class="seg" id="sndSeg"><button type="button" role="radio" data-s="1" aria-checked="'+S.sound+'">تشغيل</button><button type="button" role="radio" data-s="0" aria-checked="'+(!S.sound)+'">إيقاف</button></div></div><div class="field"><span>أسلوب التشجيع</span><div class="seg">'+[['hype','حماسي'],['calm','هادي'],['local','باللهجة']].map(s=>'<button type="button" role="radio" data-style="'+s[0]+'" aria-checked="'+(S.style===s[0])+'">'+s[1]+'</button>').join('')+'</div></div><div class="field"><span>الوضع</span><div class="seg" id="modeSeg">'+[['auto','تلقائي'],['light','نهاري'],['dark','ليلي']].map(m=>'<button type="button" role="radio" data-modeui="'+m[0]+'" aria-checked="'+((S.mode||'auto')===m[0])+'">'+m[1]+'</button>').join('')+'</div></div></div><div class="tiles">'+tile('palette','مظهري المتحرك','ai/theme',0)+tile('info','عن التطبيق','account/about',1)+'</div>'+(S.demo?'':'<div id="delBox"><button type="button" class="btn-ghost wide" data-delacc style="color:var(--warn)">حذف حسابي</button></div>')
   });
 
   SCREENS.admin={
@@ -1103,6 +1103,53 @@ button.row{width:100%;text-align:start;cursor:pointer}
   });
 
   /* ---- Welcome: create an account on first open ---- */
+  /* ---- Accounts remembered on this device: recognise the email or phone at sign-up ---- */
+  const ACC_LS='mn-accounts';
+  const accMap=()=>{try{return JSON.parse(lsGet(ACC_LS)||'{}')||{}}catch(e){return {}}};
+  const accSave=m=>lsSet(ACC_LS,JSON.stringify(m));
+  const ckey=c=>String(c||'').trim().toLowerCase().replace(/\s+/g,'');
+  const accList=c=>accMap()[ckey(c)]||[];
+  const hasSnap=id=>!!lsGet('mn-acct-'+id);
+  function recordAccount(){
+    if(!S.contact||S.demo)return;
+    const m=accMap(),k=ckey(S.contact),L=m[k]||[];
+    L.forEach(a=>{if(a.id!==S.uid&&a.status==='يعمل')a.status='خامل'});
+    let me=L.find(a=>a.id===S.uid); if(!me){me={id:S.uid,since:today()};L.push(me)}
+    me.status='يعمل'; me.name=S.profile.name; m[k]=L; accSave(m);
+    S.registry=L.map(a=>({id:a.id,status:a.status,since:a.since}));
+  }
+  function restoreAccount(id){
+    const raw=lsGet('mn-acct-'+id); if(!raw)return false;
+    let d; try{d=JSON.parse(raw)}catch(e){return false}
+    if(!S.demo&&S.uid&&S.uid!==id)lsSet('mn-acct-'+S.uid,JSON.stringify(snap()));
+    S=Object.assign(demoState(),d,{demo:false}); S.uid=id; S.restoreUntil=0; recordAccount();
+    lsSet('mn-welcomed','1'); store.ready=true; applyTheme(); renderChrome(); flush(); go('home');
+    notify('رجع حسابك '+id+' بكل سجله','restore'); celebrate('رجع حسابك '+id,0); $('#celPts').textContent='';
+    return true;
+  }
+  function deleteAccount(){
+    if(S.demo)return;
+    lsSet('mn-acct-'+S.uid,JSON.stringify(snap()));
+    const m=accMap(),k=ckey(S.contact); (m[k]||[]).forEach(a=>{if(a.id===S.uid)a.status='محذوف'}); accSave(m);
+    lsSet(LS,''); lsSet('mn-welcomed',''); lsSet('mn-admin',''); isAdmin=false;
+    if(store.ref)store.ref.delete().catch(()=>{});
+    S=demoState(); lastReply=null; applyTheme(); renderChrome(); go('home'); toast('انحذف حسابك');
+    setTimeout(()=>showWelcome(true),500);
+  }
+  function createNew(p,recognized){
+    S.profile={name:p.name,gender:p.g,city:p.city,interests:[],team:'',goal:'',about:''}; S.contact=p.contact;
+    S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
+    S.uid=newId();S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
+    S.restoreUntil=recognized?Date.now()+7*DAY:0; recordAccount();
+    lsSet('mn-welcomed','1'); store.ready=true; renderChrome(); flush(); go('home');
+    celebrate(G('أهلاً '+p.name+'! حسابك جاهز','أهلاً '+p.name+'! حسابك جاهز'),100); addPoints(100,true);
+    setTimeout(()=>{
+      notify('رقم حسابك '+S.uid+'. كمّل ملفك واهتماماتك من حسابي','idcard');
+      if(recognized)notify('حسابك القديم ينتظرك 7 أيام. تقدر تستعيده من حسابي ← استعادة الحساب','restore');
+      go('account/profile');
+    },2300);
+  }
+
   const ADMIN_EMAIL_HASH='017f7ff879570832eb24621c71ea73934fca4fdcd8d3600264198c7e3e651ff7';
   function showWelcome(force,start){
     if($('#welcome'))return; if(!force&&(!S.demo||lsGet('mn-welcomed')))return;
@@ -1121,12 +1168,14 @@ button.row{width:100%;text-align:start;cursor:pointer}
       '<label class="field"><span>كلمة المرور</span><input class="inp key-in" id="wLP" type="password" autocomplete="current-password" dir="ltr"></label>'+
       '<p class="fine" id="wLMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('idcard')+'<span>دخول</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div><button type="button" class="btn-ghost wide" data-w="new" style="border:0;color:var(--muted)">ما عندي حساب؟ أنشئ حساب</button></form>';
     el.innerHTML=start==='have'?have():home(); $('#app').appendChild(el);
-    let g='m';
+    let g='m', pending=null;
     el.addEventListener('click',ev=>{
+      const wr=ev.target.closest('[data-wr]'); if(wr){el.remove();restoreAccount(wr.dataset.wr);return}
       const w=ev.target.closest('[data-w]'); const wg=ev.target.closest('[data-wg]');
       if(wg){g=wg.dataset.wg;el.querySelectorAll('[data-wg]').forEach(b=>b.setAttribute('aria-checked',String(b===wg)));return}
       if(!w)return; const v=w.dataset.w;
       if(v==='skip'){lsSet('mn-welcomed','1');el.remove();return}
+      if(v==='newacc'&&pending){el.remove();createNew(pending,true);return}
       if(v==='back'){el.innerHTML=home();return}
       if(v==='have'){el.innerHTML=have();return}
       if(v==='new'){el.innerHTML=form();g='m';setTimeout(()=>{const n=$('#wN');if(n)n.focus()},50)}
@@ -1140,7 +1189,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
         if(eh===ADMIN_EMAIL_HASH&&ph===ADMIN_HASH){
           if(S.demo){S.profile={name:'عبدالله',gender:'m',city:'الرياض',interests:['work','ai','outing'],team:'',goal:'',about:''};S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
             S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null}
-          S.contact=em; isAdmin=true; lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
+          S.contact=em; recordAccount(); isAdmin=true; lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
           el.remove(); store.ready=true; renderChrome(); flush(); go('admin'); toast('أهلاً عبدالله، دخلت كصاحب التطبيق'); return;
         }
         if(eh===ADMIN_EMAIL_HASH){fails++;if(fails>=5){fails=0;lockUntil=Date.now()+30000}msg.style.color='var(--warn)';msg.textContent='كلمة المرور غلط.';$('#wLP').value='';return}
@@ -1150,12 +1199,15 @@ button.row{width:100%;text-align:start;cursor:pointer}
       if(!name){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب اسمك';return}
       try{if(await sha256(contact.toLowerCase())===ADMIN_EMAIL_HASH){el.innerHTML=have();$('#wLE').value=contact;$('#wLMsg').textContent='هذا إيميل صاحب التطبيق. اكتب كلمة المرور.';$('#wLP').focus();return}}catch(err){}
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)&&!/^\+?[0-9\s]{9,15}$/.test(contact)){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب إيميل صحيح أو رقم جوال';return}
-      S.profile={name,gender:g,city:$('#wCity').value,interests:[],team:'',goal:'',about:''}; S.contact=contact;
-      S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
-      S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
-      lsSet('mn-welcomed','1'); el.remove(); store.ready=true; renderChrome(); flush(); go('home');
-      celebrate(G('أهلاً '+name+'! حسابك جاهز','أهلاً '+name+'! حسابك جاهز'),100); addPoints(100,true);
-      setTimeout(()=>{notify('رقم حسابك '+S.uid+'. كمّل ملفك واهتماماتك من حسابي','idcard');go('account/profile')},2300);
+      pending={name,contact,g,city:$('#wCity').value};
+      const prev=accList(contact);
+      if(prev.length){
+        el.innerHTML='<div class="card"><div style="display:flex;gap:10px;align-items:center"><span class="sh-ic">'+icon('restore')+'</span><b>لقينا حساب سابق مرتبط بـ <span dir="ltr">'+esc(contact)+'</span></b></div><p class="fine">تبي ترجع لحسابك القديم بكل سجله، أو تبدأ حساب جديد؟</p><div class="list">'+
+          prev.map(a=>'<div class="row"><span class="ric">'+icon('idcard')+'</span><span class="t"><span class="idtag">'+esc(a.id)+'</span><br><small style="color:var(--muted)">'+esc(a.name||'')+' · من '+esc(a.since||'')+'</small></span>'+(hasSnap(a.id)?'<button type="button" class="btn-gold" data-wr="'+esc(a.id)+'">استعادة</button>':'<span class="chipst '+regCls(a.status)+'">'+esc(a.status)+'</span>')+'</div>').join('')+
+          '</div><button type="button" class="btn-ghost wide" data-w="newacc">'+icon('plus')+'<span>لا، أنشئ حساب جديد</span></button><p class="fine">إذا سويت حساب جديد، يبقى زر «استعادة الحساب» في حسابك 7 أيام.</p></div>';
+        return;
+      }
+      el.remove(); createNew(pending,false);
     });
   }
 
@@ -1194,14 +1246,14 @@ button.row{width:100%;text-align:start;cursor:pointer}
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});
     window.addEventListener('appinstalled',()=>{const b=$('#inst');if(b)b.remove();toast('انثبّت التطبيق على جوالك')});
     if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-    if(Date.now()<(+lsGet('mn-inst-skip')||0))return;
+    try{if(sessionStorage.getItem('mn-inst-skip'))return}catch(e){}
     const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
     setTimeout(()=>{
       if($('#inst'))return;
       const el=document.createElement('div'); el.className='inst'; el.id='inst'; el.setAttribute('role','dialog'); el.setAttribute('aria-label','تثبيت التطبيق');
-      el.innerHTML='<img src="mark.png" alt=""><div class="inst-t"><b>ثبّت «مع نفسك» على جوالك</b><small>يفتح مثل التطبيق من الشاشة الرئيسية</small></div><button type="button" class="btn-brand" id="instGo">تثبيت</button><button type="button" class="inst-x" id="instX" aria-label="إغلاق">✕</button>';
+      el.innerHTML='<img src="icons/icon-192.png" alt="" style="border-radius:12px"><div class="inst-t"><b>ثبّت «مع نفسك» على جوالك</b><small>يفتح مثل التطبيق من الشاشة الرئيسية</small></div><button type="button" class="btn-brand" id="instGo">تثبيت</button><button type="button" class="inst-x" id="instX" aria-label="إغلاق">✕</button>';
       $('#app').appendChild(el);
-      $('#instX').addEventListener('click',()=>{lsSet('mn-inst-skip',String(Date.now()+3*DAY));el.remove()});
+      $('#instX').addEventListener('click',()=>{try{sessionStorage.setItem('mn-inst-skip','1')}catch(e){}el.remove()});
       $('#instGo').addEventListener('click',async()=>{
         if(deferred){deferred.prompt();try{const c=await deferred.userChoice;if(c&&c.outcome==='accepted')el.remove()}catch(e){}deferred=null;return}
         const how=ios?'في Safari: اضغط زر المشاركة (المربع والسهم) تحت، ثم «إضافة إلى الشاشة الرئيسية»، ثم «إضافة».':'من قائمة المتصفح (⋮) اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».';
@@ -1221,6 +1273,17 @@ button.row{width:100%;text-align:start;cursor:pointer}
   if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',renderModeBtn);
   document.addEventListener('click',e=>{if(e.target.closest('[data-modeui]')){lsSet('mn-mode',S.mode);renderModeBtn()}});
   {const lm=lsGet('mn-mode');if(lm&&(!S.mode||S.mode==='auto'))S.mode=lm;applyMode()}
+
+  SCREENS.account.restore=()=>{const L=accList(S.contact), left=Math.max(0,Math.ceil(((S.restoreUntil||0)-Date.now())/DAY));
+    return subhead('استعادة الحساب','restore')+'<div class="card"><b>حسابك الحالي</b><span class="idtag">'+esc(S.uid)+'</span><p class="fine">مرتبط بـ <span dir="ltr">'+esc(S.contact||'—')+'</span>'+(left?' · الاستعادة متاحة '+left+' أيام':'')+'</p></div>'+
+      '<div class="card"><b>حساباتك المرتبطة بنفس الإيميل أو الجوال</b><div class="list">'+(L.length?L.map(a=>'<div class="row"><span class="ric">'+icon('idcard')+'</span><span class="t"><span class="idtag">'+esc(a.id)+'</span><br><small style="color:var(--muted)">'+esc(a.name||'')+' · من '+esc(a.since||'')+'</small></span>'+(a.id===S.uid?'<span class="chipst st-on">الحالي</span>':hasSnap(a.id)?'<button type="button" class="btn-gold" data-racc="'+esc(a.id)+'">استعادة</button>':'<span class="chipst '+regCls(a.status)+'">'+esc(a.status)+'</span>')+'</div>').join(''):'<p class="empty">ما فيه حسابات ثانية.</p>')+'</div></div>'+
+      '<p class="fine">في هالنسخة الحسابات القديمة محفوظة على هالجهاز. في التطبيق الحقيقي تنحفظ في السيرفر وتطلع لك من أي جوال.</p>';};
+  document.addEventListener('click',e=>{
+    const r=e.target.closest('[data-racc]'); if(r){restoreAccount(r.dataset.racc);return}
+    if(e.target.closest('[data-delacc]')){const b=$('#delBox');if(b)b.innerHTML='<div class="card" style="border-color:var(--warn)"><b>متأكد تبي تحذف حسابك؟</b><p class="fine">يطلع حسابك من الجهاز. إذا رجعت وسجّلت بنفس الإيميل أو الجوال، نعرض لك حسابك القديم وتقدر تستعيده.</p><div style="display:flex;gap:8px"><button type="button" class="btn-brand" data-delyes style="flex:1;background:var(--warn)">احذف</button><button type="button" class="btn-ghost" data-delno>إلغاء</button></div></div>';return}
+    if(e.target.closest('[data-delno]')){render();return}
+    if(e.target.closest('[data-delyes]')){deleteAccount();return}
+  });
 
   function extWire(k){
     if(R.tab==='account')maybeByok();
@@ -1243,7 +1306,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
       $$('#psPicks [data-ps]').forEach(b=>b.addEventListener('click',()=>{photoStyle=b.dataset.ps;$$('#psPicks [data-ps]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawPhoto();chime('pop')}));
       $('#photoSave').addEventListener('click',()=>{if(!photoImg){toast('اختر صورة أول');return}const c=document.createElement('canvas');c.width=c.height=120;c.getContext('2d').drawImage($('#photoCv'),0,0,120,120);S.avatar=c.toDataURL('image/jpeg',.82);save();task('photo');toast('انحفظت صورتك');go('account')});
     }
-    if(k==='account/restore'){$('#simReg').addEventListener('click',()=>{
+    if(k==='account/restore'&&$('#simReg')){$('#simReg').addEventListener('click',()=>{
       const box=$('#regBox');
       box.innerHTML='<div class="card"><b>لقينا حسابات مرتبطة بـ <span dir="ltr">'+esc(S.contact||'رقمك')+'</span></b><div class="list">'+S.registry.map(r=>'<div class="row"><span class="ric">'+icon('idcard')+'</span><span class="t"><span class="idtag">'+esc(r.id)+'</span><br><small style="color:var(--muted)">من '+esc(r.since)+'</small></span>'+(r.status==='يعمل'?'<span class="chipst st-on">يعمل</span>':'<button type="button" class="btn-gold" data-restore="'+r.id+'">استعادة</button>')+'</div>').join('')+'</div><button type="button" class="btn-ghost wide" data-newacc>'+icon('plus')+'<span>لا، أنشئ حساب جديد</span></button></div>';
     })}
@@ -1500,7 +1563,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
       S.contact=($('#pContact')?$('#pContact').value.trim():S.contact);
       if(first){S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;offered=false;lastReply=null;
         S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;photoImg=null}
-      store.ready=true; renderChrome(); flush(); setTimeout(()=>task('profile'),first?2300:0);
+      recordAccount(); store.ready=true; renderChrome(); flush(); setTimeout(()=>task('profile'),first?2300:0);
       if(first){celebrate(G('أهلاً '+name+'! ملفك جاهز','أهلاً '+name+'! ملفك جاهز'),100);addPoints(100,true);go('home')}
       else{toast('انحفظ ملفك');render()}
     });
@@ -1523,7 +1586,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   }
 
   /* ---------- Boot ---------- */
-  applyTheme(); renderChrome(); render(); load(); setTimeout(showWelcome,900);
+  applyTheme(); renderChrome(); render(); load(); setTimeout(()=>{recordAccount();showWelcome()},900);
 })();
 </script>
 
