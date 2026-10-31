@@ -382,6 +382,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   <header class="top gut">
     <div class="who"><img class="brandmark" src="mark.png" alt="مع نفسك"><div><small id="greet">مساء الخير</small><strong id="hName">عبدالله</strong></div></div>
     <div class="top-act">
+      <button type="button" class="bell" id="modeBtn" aria-label="الوضع الليلي والنهاري"><span id="modeIc"></span></button>
       <button type="button" class="bell" id="bellBtn" aria-label="التنبيهات"><span id="bellIc"></span><span class="badge" id="bellN" hidden></span></button>
       <button type="button" class="pts" id="ptsBtn" aria-label="نقاطي"><span id="ptsIc"></span><span id="ptsTop">0</span></button>
     </div>
@@ -460,6 +461,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     tasks:'<rect x="4" y="3" width="16" height="18" rx="3"/><path class="acs" d="M7.5 8.5l1.5 1.5 3-3M7.5 15l1.5 1.5 3-3"/><path d="M14 9h3M14 15.5h3"/>',
     restore:'<path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v4h-4"/><circle class="ac pulse" cx="12" cy="12" r="2.5"/>',
     meet:'<circle cx="6" cy="8" r="2.2"/><circle cx="12" cy="6.5" r="2.2"/><circle cx="18" cy="8" r="2.2"/><path d="M3 20v-3a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v3"/><rect class="ac bounce" x="8" y="15.5" width="8" height="3" rx="1"/>',
+    moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><circle class="ac twinkle" cx="17" cy="5.5" r="1.3"/><circle class="ac2 tw2" cx="20.5" cy="9.5" r=".9"/>',
     flag:'<path d="M5 21V4"/><path class="ac floaty" d="M5 4h12l-2.5 4L17 12H5z"/>'
   };
   const icon=(n,c)=>'<svg class="i '+(c||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[n]||'')+'</svg>';
@@ -1208,6 +1210,18 @@ button.row{width:100%;text-align:start;cursor:pointer}
     },3000);
   })();
 
+  /* ---- Light / dark toggle in the top bar ---- */
+  const isDark=()=>S.mode==='dark'||(S.mode!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
+  function renderModeBtn(){const b=$('#modeBtn');if(!b)return;const d=isDark();$('#modeIc').innerHTML=icon(d?'sun':'moon');b.setAttribute('aria-label',d?'الوضع النهاري':'الوضع الليلي');b.title=d?'نهاري':'ليلي'}
+  $('#modeBtn').addEventListener('click',()=>{
+    S.mode=isDark()?'light':'dark'; lsSet('mn-mode',S.mode); applyMode(); save(); renderModeBtn(); chime('pop');
+    $$('[data-modeui]').forEach(x=>x.setAttribute('aria-checked',String(x.dataset.modeui===S.mode)));
+    const b=$('#modeBtn'); b.classList.remove('ring-bell'); void b.offsetWidth; b.classList.add('ring-bell');
+  });
+  if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',renderModeBtn);
+  document.addEventListener('click',e=>{if(e.target.closest('[data-modeui]')){lsSet('mn-mode',S.mode);renderModeBtn()}});
+  {const lm=lsGet('mn-mode');if(lm&&(!S.mode||S.mode==='auto'))S.mode=lm;applyMode()}
+
   function extWire(k){
     if(R.tab==='account')maybeByok();
     if(k==='chat/friend'){const f=S.friends.find(x=>x.id===R.arg);if(!f)return;const list=$('#fList');
@@ -1259,7 +1273,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     const h=new Date().getHours();
     $('#greet').textContent=h<12?'صباح الخير':'مساء الخير';
     $('#hName').textContent=S.profile.name; renderPts();
-    $('#ptsIc').innerHTML=icon('coin'); $('#bellIc').innerHTML=icon('bell'); renderBell();
+    $('#ptsIc').innerHTML=icon('coin'); $('#bellIc').innerHTML=icon('bell'); renderBell(); renderModeBtn();
     $('#nav').innerHTML=NAV.map(n=>'<button type="button" role="tab" data-go="'+n[0]+'" aria-selected="'+(R.tab===n[0])+'"><span class="nic">'+icon(n[1])+'</span>'+n[2]+'</button>').join('');
   }
   let catchT=null,moveT=null,playing=false,caught=0,left=0,stage=0,draftTheme=null;
