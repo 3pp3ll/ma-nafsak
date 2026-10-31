@@ -485,13 +485,27 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .tiles .tile:nth-child(9n+2),.tiles .tile:nth-child(9n+4),.tiles .tile:nth-child(9n+9){--tc:#3B82F6}
 .tiles .tile:nth-child(9n+3),.tiles .tile:nth-child(9n+5),.tiles .tile:nth-child(9n+7){--tc:#E6B370}
 
-/* v24: soft background by gender (light mode only) */
-:root[data-gender="m"]{--bg:#F1E3E0;--bg-art:linear-gradient(180deg,#C9E6FA 0%,#DCEBF6 30%,#F6E2D8 62%,#FAD5C0 100%)}
-:root[data-gender="f"]{--bg:#F7DEE0;--bg-art:linear-gradient(180deg,#F9CFE0 0%,#F9DCE6 30%,#FAE1D6 62%,#FAD3BE 100%)}
-.app{background-image:var(--bg-art,none)}
+/* v25: app background (gender default, presets, own photo) */
+:root[data-bgk="sky"]{--bg:#DCEBF6;--bg-art:linear-gradient(180deg,#C6E4FA 0%,#D6EAF8 45%,#E6EAF2 72%,#F9DCCB 100%)}
+:root[data-bgk="rose"]{--bg:#F7DEE0;--bg-art:linear-gradient(180deg,#F9CFE0 0%,#F9DCE6 30%,#FAE1D6 62%,#FAD3BE 100%)}
+:root[data-bgk="mint"]{--bg:#DDF1EA;--bg-art:linear-gradient(180deg,#CDEFE3 0%,#DDF2EC 45%,#EAF1EE 72%,#F7E6CF 100%)}
+:root[data-bgk="lav"]{--bg:#E7E1F7;--bg-art:linear-gradient(180deg,#DCD2FA 0%,#E6E0F8 45%,#EEE9F5 72%,#F8E1EC 100%)}
+:root[data-bgk]{--surface:#FFFFFF}
+:root[data-bgk="photo"]{--bg:#F2F0F6;--surface:#FFFFFF;--bg-art:linear-gradient(rgba(255,255,255,.58),rgba(255,255,255,.58)),var(--bg-img)}
+.app{background-image:var(--bg-art,none);background-size:cover;background-position:center;background-repeat:no-repeat}
 .chat-input{background:transparent}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg-art:none;--bg:#0F0C29}}
-:root[data-theme="dark"]{--bg-art:none;--bg:#0F0C29}
+.tiles .tile:nth-child(9n+3),.tiles .tile:nth-child(9n+5),.tiles .tile:nth-child(9n+7){--tc:#D8952F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg-art:none;--bg:#0F0C29;--surface:#1E1B38}
+ :root:not([data-theme="light"])[data-bgk="photo"]{--bg-art:linear-gradient(rgba(15,12,41,.72),rgba(15,12,41,.72)),var(--bg-img)}
+ :root:not([data-theme="light"]) .tiles .tile:nth-child(9n+3),:root:not([data-theme="light"]) .tiles .tile:nth-child(9n+5),:root:not([data-theme="light"]) .tiles .tile:nth-child(9n+7){--tc:#E6B370}}
+:root[data-theme="dark"]{--bg-art:none;--bg:#0F0C29;--surface:#1E1B38}
+:root[data-theme="dark"][data-bgk="photo"]{--bg-art:linear-gradient(rgba(15,12,41,.72),rgba(15,12,41,.72)),var(--bg-img)}
+:root[data-theme="dark"] .tiles .tile:nth-child(9n+3),:root[data-theme="dark"] .tiles .tile:nth-child(9n+5),:root[data-theme="dark"] .tiles .tile:nth-child(9n+7){--tc:#E6B370}
+.bg-picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.bg-pick{display:grid;gap:6px;justify-items:center;border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:8px 4px;font-size:.75rem;font-weight:700;color:var(--ink)}
+.bg-pick[aria-pressed="true"]{border-color:#8B5CF6;box-shadow:0 0 0 3px color-mix(in srgb,#8B5CF6 22%,transparent)}
+.bg-pick .bgsw{width:100%;height:56px;border-radius:11px;background-size:cover;background-position:center;border:1px solid var(--line);display:grid;place-items:center}
+.bg-pick .bgsw .i{width:24px;height:24px}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="ar">
@@ -2917,7 +2931,7 @@ var qrcode = function() {
 
   /* ---------- Persistence (private per viewer; this browser as fallback) ---------- */
   const store={ref:null,ready:false,busy:false,again:false,t:0}; const LS='maanafsak-state-v3';
-  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
+  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,bg:S.bg,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
   function save(){if(!store.ready||S.demo)return;clearTimeout(store.t);store.t=setTimeout(flush,700)}
   function flush(){
     const d=snap(); try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}
@@ -3627,7 +3641,7 @@ var qrcode = function() {
     el.addEventListener('click',ev=>{
       const wr=ev.target.closest('[data-wr]'); if(wr){el.remove();restoreAccount(wr.dataset.wr);return}
       const w=ev.target.closest('[data-w]'); const wg=ev.target.closest('[data-wg]');
-      if(wg){g=wg.dataset.wg;document.documentElement.setAttribute('data-gender',g);el.querySelectorAll('[data-wg]').forEach(b=>b.setAttribute('aria-checked',String(b===wg)));return}
+      if(wg){g=wg.dataset.wg;document.documentElement.setAttribute('data-bgk',g==='f'?'rose':'sky');el.querySelectorAll('[data-wg]').forEach(b=>b.setAttribute('aria-checked',String(b===wg)));return}
       if(!w)return; const v=w.dataset.w;
       if(v==='skip'){lsSet('mn-welcomed','1');el.remove();return}
       if(v==='newacc'&&pending){el.remove();createNew(pending,true);return}
@@ -4231,6 +4245,27 @@ var qrcode = function() {
 
   /* growing message boxes: up to 5 lines, Enter sends on computers */
   document.addEventListener('keydown',e=>{const el=e.target;if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&el.matches&&el.matches('textarea.msgbox')&&!matchMedia('(pointer:coarse)').matches){e.preventDefault();const f=el.closest('form');if(f)f.requestSubmit()}});
+  /* ---- App background: gender default, preset colours, or the user's own photo ---- */
+  const BGS={auto:['حسب جنسي',''],sky:['سماء وخوخ','linear-gradient(180deg,#C6E4FA,#E6EAF2,#F9DCCB)'],rose:['وردي وخوخ','linear-gradient(180deg,#F9CFE0,#FAE1D6,#FAD3BE)'],mint:['نعناع','linear-gradient(180deg,#CDEFE3,#EAF1EE,#F7E6CF)'],lav:['لافندر','linear-gradient(180deg,#DCD2FA,#EEE9F5,#F8E1EC)'],photo:['صورتي','']};
+  function applyBg(){const r=document.documentElement, ch=S.bg||'auto', img=lsGet('mn-bgimg');
+    let k=ch==='auto'?(S.profile&&S.profile.gender==='f'?'rose':'sky'):ch; if(k==='photo'&&!img)k=(S.profile&&S.profile.gender==='f')?'rose':'sky';
+    r.setAttribute('data-bgk',k); r.setAttribute('data-gender',S.profile&&S.profile.gender==='f'?'f':'m');
+    if(k==='photo')r.style.setProperty('--bg-img','url("'+img+'")');else r.style.removeProperty('--bg-img');}
+  function bgCard(){const ch=S.bg||'auto',img=lsGet('mn-bgimg');
+    return '<div class="card"><b>خلفية التطبيق</b><p class="fine">تطلع في وضع النهار. صورتك تطلع خفيفة ورا التطبيق في النهار والليل.</p><div class="bg-picks">'+
+      Object.keys(BGS).map(k=>{const sw=k==='photo'?(img?'background-image:url(&quot;'+img+'&quot;)':''):k==='auto'?'background:'+(S.profile.gender==='f'?BGS.rose[1]:BGS.sky[1]):'background:'+BGS[k][1];
+        return '<button type="button" class="bg-pick" data-bgc="'+k+'" aria-pressed="'+(ch===k)+'"><span class="bgsw" style="'+sw+'">'+(k==='photo'&&!img?icon('camera'):'')+'</span>'+BGS[k][0]+'</button>'}).join('')+
+      '</div><input type="file" id="bgFile" accept="image/*" hidden>'+(img?'<button type="button" class="btn-ghost wide" id="bgNew">'+icon('camera')+'<span>غيّر الصورة</span></button>':'')+'</div>';}
+  const _settings=SCREENS.account.settings; SCREENS.account.settings=()=>_settings()+bgCard();
+  function setBg(k){S.bg=k;applyBg();save();render()}
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-bgc]');if(b){const k=b.dataset.bgc;if(k==='photo'&&!lsGet('mn-bgimg')){$('#bgFile').click();return}setBg(k);return}
+    if(e.target.closest('#bgNew'))$('#bgFile').click()});
+  document.addEventListener('change',async e=>{if(e.target.id!=='bgFile'||!e.target.files[0])return;
+    const url=URL.createObjectURL(e.target.files[0]);const im=await loadImg(url);URL.revokeObjectURL(url);if(!im){toast('ما قدرت أفتح الصورة');return}
+    const W=720,H=Math.round(W*1.8),c=document.createElement('canvas');c.width=W;c.height=H;const s=Math.max(W/im.width,H/im.height),w=im.width*s,h=im.height*s;
+    c.getContext('2d').drawImage(im,(W-w)/2,(H-h)/2,w,h);
+    const d=c.toDataURL('image/jpeg',.72);lsSet('mn-bgimg',d);if(lsGet('mn-bgimg')!==d){toast('ما فيه مساحة كافية للصورة، جرّب صورة ثانية');return}setBg('photo');toast('صارت صورتك خلفية التطبيق')});
+
   function extWire(k){
     if(k==='admin/usage')drawReport(false);
     if(k==='account/card'){shareBlobs={};cardPNG().then(b=>{shareBlobs.card=b});qrPNG().then(b=>{shareBlobs.qr=b})}
@@ -4294,7 +4329,7 @@ var qrcode = function() {
     stopAmb(); stopCatch();
     $$('#nav button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.go===R.tab)));
     const grp=SCREENS[R.tab]||SCREENS.home, fn=(R.sub&&grp[R.sub])||grp._;
-    document.documentElement.setAttribute('data-gender',S.profile&&S.profile.gender==='f'?'f':'m');
+    applyBg();
     $('#main').innerHTML=fn();
     const k=R.tab+'/'+(R.sub||'');
     if(k==='home/'){requestAnimationFrame(()=>{const r=$('#rfg');if(r)r.style.strokeDashoffset=r.dataset.to});ambient($('#amb'),()=>S.theme,14)}
@@ -4503,7 +4538,7 @@ var qrcode = function() {
   /* ---------- Account ---------- */
   function wireProfile(){
     let gender=S.profile.gender||'m';
-    $$('#gSeg [data-g]').forEach(b=>b.addEventListener('click',()=>{gender=b.dataset.g;document.documentElement.setAttribute('data-gender',gender);$$('#gSeg [data-g]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))}));
+    $$('#gSeg [data-g]').forEach(b=>b.addEventListener('click',()=>{gender=b.dataset.g;if(!S.bg||S.bg==='auto')document.documentElement.setAttribute('data-bgk',gender==='f'?'rose':'sky');$$('#gSeg [data-g]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))}));
     $$('#pInts [data-i]').forEach(b=>b.addEventListener('click',()=>b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'))));
     $('#pCity').addEventListener('change',function(){$('#otherWrap').hidden=this.value!=='other'});
     $('#pForm').addEventListener('submit',e=>{
