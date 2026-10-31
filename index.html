@@ -3310,7 +3310,7 @@ var qrcode = function() {
     '<div class="status-row" role="group" aria-label="حالتك">'+Object.keys(STATUS).map(k=>'<button type="button" class="chip" data-status="'+k+'" aria-pressed="'+(S.status===k)+'"><i class="sdot-inline '+STATUS[k][1]+'"></i>'+STATUS[k][0]+'</button>').join('')+'</div>'+
     byokCard()+
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
-    (!isAdmin?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
+    (S.demo?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
     (S.restoreUntil>Date.now()?'<button type="button" class="notice-card" data-go="account/restore">'+icon('restore')+'<span><b>استعادة الحساب</b><br><small style="color:var(--muted)">لقينا حساب قديم بإيميلك. متاحة '+Math.max(1,Math.ceil((S.restoreUntil-Date.now())/DAY))+' أيام</small></span></button>':'')+
     '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+tile('chart','تحليل استخدامي','account/usage',8)+tile('gear','الإعدادات','account/settings',9)+'</div>'+(S.demo?'':'<button type="button" class="btn-ghost wide" data-logout>'+icon('logout')+'<span>تسجيل خروج</span></button>');};
@@ -3354,7 +3354,7 @@ var qrcode = function() {
   const DEMO_USERS=[{id:'MN-300114',name:'نورة',contact:'noura@example.com',status:'online',keys:true},{id:'MN-498230',name:'فهد',contact:'05XXXXXX12',status:'busy',keys:false},{id:'MN-552013',name:'سعود',contact:'saud@example.com',status:'off',keys:false}];
   function byokCard(){
     if(S.demo)return '';
-    return '<button type="button" class="admin-card" data-go="account/keys">'+icon('ai')+'<span><b>مفاتيحي</b><br><small style="color:var(--hero-muted)">'+(ownKey()?'تستخدم مفتاحك الخاص':'رصيد الشهر: '+monthSpent().toFixed(2)+'$ من '+monthCap()+'$')+'</small></span></button>';
+    return '<button type="button" class="admin-card" data-go="account/keys">'+icon('ai')+'<span><b>مفاتيحي</b><br><small style="color:var(--hero-muted)">'+(ownKey()?'تستخدم مفتاحك الخاص':'رصيد الشهر: '+monthSpent().toFixed(monthSpent()<1?3:2)+'$ من '+monthCap()+'$')+'</small></span></button>';
     return '<button>'+(S.byokSet?'محفوظة ومشفرة على جهازك':'ما أضفت مفاتيحك للحين')+'</small></span></button>';
   }
   let byokT=null, byokShown=false;
@@ -3906,7 +3906,7 @@ var qrcode = function() {
     return subhead('مفاتيحي','ai')+
     '<div class="card"><b>'+(own?'تستخدم مفتاحك الخاص':'تستخدم رصيد التطبيق')+'</b>'+
     (own?'<p class="fine">الذكاء الاصطناعي يشتغل على حسابك في OpenRouter، بدون حد من التطبيق.</p>':
-      '<p class="fine">كل شهر لك '+cap+'$ هدية من التطبيق للسوالف والاقتراحات.</p><div class="bl"><div class="bl-row"><span class="bl-l">صرفت '+sp.toFixed(2)+'$</span><span class="bl-t"><i style="width:'+Math.max(3,pct)+'%"></i></span><b>'+pct+'%</b></div></div>'+
+      '<p class="fine">كل شهر لك '+cap+'$ هدية من التطبيق للسوالف والاقتراحات.</p><div class="bl"><div class="bl-row"><span class="bl-l">صرفت '+sp.toFixed(sp<1?3:2)+'$</span><span class="bl-t"><i style="width:'+Math.max(3,pct)+'%"></i></span><b>'+pct+'%</b></div></div>'+
       '<p class="fine">تحويل صورتك بالذكاء الاصطناعي: '+(imgDaysLeft()?'الصورة الجاية بعد '+imgDaysLeft()+' أيام':'متاح لك صورة هالأسبوع')+'.</p>')+'</div>'+
     '<div class="card"><b>عندك مفتاح OpenRouter؟</b><p class="fine">إذا عندك مفتاح خاص فيك، أضفه هنا ويصير الذكاء الاصطناعي على حسابك بدون حد، وتحويل الصور بدون انتظار. المفتاح ينحفظ على جهازك بس، ولا أحد يشوفه حتى صاحب التطبيق.</p>'+
     '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="uK" type="password" autocomplete="off" spellcheck="false" placeholder="'+(own?'محفوظ · ينتهي بـ '+esc(own.slice(-4)):'sk-or-v1-...')+'"></label>'+
