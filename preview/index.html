@@ -484,6 +484,14 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .tiles .tile:nth-child(9n+1),.tiles .tile:nth-child(9n+6),.tiles .tile:nth-child(9n+8){--tc:#8B5CF6}
 .tiles .tile:nth-child(9n+2),.tiles .tile:nth-child(9n+4),.tiles .tile:nth-child(9n+9){--tc:#3B82F6}
 .tiles .tile:nth-child(9n+3),.tiles .tile:nth-child(9n+5),.tiles .tile:nth-child(9n+7){--tc:#E6B370}
+
+/* v24: soft background by gender (light mode only) */
+:root[data-gender="m"]{--bg:#F4EEF0;--bg-art:radial-gradient(120% 70% at 100% 0%,#D6ECFA 0%,transparent 60%),radial-gradient(120% 70% at 0% 100%,#FDE3D3 0%,transparent 62%),linear-gradient(180deg,#EEF4FA,#FAEDE6)}
+:root[data-gender="f"]{--bg:#F8ECEE;--bg-art:radial-gradient(120% 70% at 100% 0%,#FBDCE7 0%,transparent 60%),radial-gradient(120% 70% at 0% 100%,#FDE3D3 0%,transparent 62%),linear-gradient(180deg,#FBEFF3,#FBEDE6)}
+.app{background-image:var(--bg-art,none)}
+.chat-input{background:color-mix(in srgb,var(--bg) 78%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg-art:none;--bg:#0F0C29}}
+:root[data-theme="dark"]{--bg-art:none;--bg:#0F0C29}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="ar">
@@ -3175,7 +3183,7 @@ var qrcode = function() {
       profile:()=>{const p=S.profile, cities=['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الأحساء','الطائف','أبها','تبوك','بريدة','حائل','جازان','نجران','العلا'], known=cities.includes(p.city);
         return subhead('ملفي','idcard')+'<form class="card" id="pForm">'+
           '<label class="field"><span>اسمك</span><input id="pName" type="text" maxlength="30" value="'+esc(p.name)+'" autocomplete="off"></label>'+
-          '<div class="field"><span>أخاطبك بصيغة</span><div class="seg" id="gSeg"><button type="button" role="radio" data-g="m" aria-checked="'+(p.gender!=='f')+'">مذكر</button><button type="button" role="radio" data-g="f" aria-checked="'+(p.gender==='f')+'">مؤنث</button></div></div>'+
+          '<div class="field"><span>الجنس</span><div class="seg" id="gSeg"><button type="button" role="radio" data-g="m" aria-checked="'+(p.gender!=='f')+'">ذكر</button><button type="button" role="radio" data-g="f" aria-checked="'+(p.gender==='f')+'">أنثى</button></div></div>'+
           '<label class="field"><span>مدينتك</span><select id="pCity">'+cities.map(c=>'<option'+(c===p.city?' selected':'')+'>'+c+'</option>').join('')+'<option value="other"'+(known?'':' selected')+'>مدينة ثانية</option></select></label>'+
           '<label class="field" id="otherWrap"'+(known?' hidden':'')+'><span>اكتب مدينتك</span><input id="pCityO" type="text" maxlength="40" value="'+(known?'':esc(p.city))+'"></label>'+
           '<div class="field"><span>اهتماماتك</span><div class="picks" id="pInts">'+Object.keys(INT).map(k=>'<button type="button" data-i="'+k+'" aria-pressed="'+(p.interests||[]).includes(k)+'">'+icon(INT[k][1])+INT[k][0]+'</button>').join('')+'</div></div>'+
@@ -3375,7 +3383,7 @@ var qrcode = function() {
       return subhead('ملفي','idcard')+'<form class="card" id="pForm">'+
         '<label class="field"><span>اسمك</span><input id="pName" type="text" maxlength="30" value="'+esc(p.name)+'" autocomplete="off"></label>'+
         '<label class="field"><span>الإيميل أو رقم الجوال (للاستعادة)</span><input id="pContact" type="text" maxlength="60" value="'+esc(S.contact)+'" autocomplete="off" dir="ltr"></label>'+
-        '<div class="field"><span>أخاطبك بصيغة</span><div class="seg" id="gSeg"><button type="button" role="radio" data-g="m" aria-checked="'+(p.gender!=='f')+'">مذكر</button><button type="button" role="radio" data-g="f" aria-checked="'+(p.gender==='f')+'">مؤنث</button></div></div>'+
+        '<div class="field"><span>الجنس</span><div class="seg" id="gSeg"><button type="button" role="radio" data-g="m" aria-checked="'+(p.gender!=='f')+'">ذكر</button><button type="button" role="radio" data-g="f" aria-checked="'+(p.gender==='f')+'">أنثى</button></div></div>'+
         '<label class="field"><span>مدينتك</span><select id="pCity">'+cities.map(c=>'<option'+(c===p.city?' selected':'')+'>'+c+'</option>').join('')+'<option value="other"'+(known?'':' selected')+'>مدينة ثانية</option></select></label>'+
         '<label class="field" id="otherWrap"'+(known?' hidden':'')+'><span>اكتب مدينتك</span><input id="pCityO" type="text" maxlength="40" value="'+(known?'':esc(p.city))+'"></label>'+
         '<div class="field"><span>اهتماماتك</span><div class="picks" id="pInts">'+Object.keys(INT).map(k=>'<button type="button" data-i="'+k+'" aria-pressed="'+(p.interests||[]).includes(k)+'">'+icon(INT[k][1])+INT[k][0]+'</button>').join('')+'</div></div>'+
@@ -3602,7 +3610,7 @@ var qrcode = function() {
     const form=()=>'<form class="card" id="wForm"><b style="font-size:1.1rem">إنشاء حساب</b>'+
       '<label class="field"><span>اسمك</span><input class="inp" id="wN" type="text" maxlength="30" autocomplete="name"></label>'+
       '<label class="field"><span>الإيميل أو رقم الجوال</span><input class="inp key-in" id="wC" type="text" maxlength="60" autocomplete="email" dir="ltr"></label>'+
-      '<div class="field"><span>أخاطبك بصيغة</span><div class="seg" id="wG"><button type="button" role="radio" data-wg="m" aria-checked="true">مذكر</button><button type="button" role="radio" data-wg="f" aria-checked="false">مؤنث</button></div></div>'+
+      '<div class="field"><span>الجنس</span><div class="seg" id="wG"><button type="button" role="radio" data-wg="m" aria-checked="true">ذكر</button><button type="button" role="radio" data-wg="f" aria-checked="false">أنثى</button></div></div>'+
       '<label class="field"><span>مدينتك</span><select class="inp" id="wCity">'+cities.map(c=>'<option>'+c+'</option>').join('')+'</select></label>'+
       '<label class="field"><span>كلمة المرور (6 أحرف أو أكثر)</span><input class="inp key-in" id="wP" type="password" autocomplete="new-password" dir="ltr"></label>'+
       '<label class="remember"><input type="checkbox" id="wRem" checked>تذكرني على هالجهاز</label>'+
@@ -3619,7 +3627,7 @@ var qrcode = function() {
     el.addEventListener('click',ev=>{
       const wr=ev.target.closest('[data-wr]'); if(wr){el.remove();restoreAccount(wr.dataset.wr);return}
       const w=ev.target.closest('[data-w]'); const wg=ev.target.closest('[data-wg]');
-      if(wg){g=wg.dataset.wg;el.querySelectorAll('[data-wg]').forEach(b=>b.setAttribute('aria-checked',String(b===wg)));return}
+      if(wg){g=wg.dataset.wg;document.documentElement.setAttribute('data-gender',g);el.querySelectorAll('[data-wg]').forEach(b=>b.setAttribute('aria-checked',String(b===wg)));return}
       if(!w)return; const v=w.dataset.w;
       if(v==='skip'){lsSet('mn-welcomed','1');el.remove();return}
       if(v==='newacc'&&pending){el.remove();createNew(pending,true);return}
@@ -4286,6 +4294,7 @@ var qrcode = function() {
     stopAmb(); stopCatch();
     $$('#nav button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.go===R.tab)));
     const grp=SCREENS[R.tab]||SCREENS.home, fn=(R.sub&&grp[R.sub])||grp._;
+    document.documentElement.setAttribute('data-gender',S.profile&&S.profile.gender==='f'?'f':'m');
     $('#main').innerHTML=fn();
     const k=R.tab+'/'+(R.sub||'');
     if(k==='home/'){requestAnimationFrame(()=>{const r=$('#rfg');if(r)r.style.strokeDashoffset=r.dataset.to});ambient($('#amb'),()=>S.theme,14)}
@@ -4494,7 +4503,7 @@ var qrcode = function() {
   /* ---------- Account ---------- */
   function wireProfile(){
     let gender=S.profile.gender||'m';
-    $$('#gSeg [data-g]').forEach(b=>b.addEventListener('click',()=>{gender=b.dataset.g;$$('#gSeg [data-g]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))}));
+    $$('#gSeg [data-g]').forEach(b=>b.addEventListener('click',()=>{gender=b.dataset.g;document.documentElement.setAttribute('data-gender',gender);$$('#gSeg [data-g]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))}));
     $$('#pInts [data-i]').forEach(b=>b.addEventListener('click',()=>b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'))));
     $('#pCity').addEventListener('change',function(){$('#otherWrap').hidden=this.value!=='other'});
     $('#pForm').addEventListener('submit',e=>{
