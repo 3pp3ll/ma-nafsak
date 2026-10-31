@@ -3036,7 +3036,8 @@ var qrcode = function() {
       '- إذا سأل وين وصل: لخّص تقدمه من السجل والهدف بأرقام، وعطه الخطوة الجاية.\n'+
       '- إذا لاحظت ضيق شديد أو حزن عميق: كن لطيف واسمعه، وشجعه بهدوء يكلم شخص يثق فيه أو مختص. لا تعطي نصائح طبية.\n'+
       '- لا تقول إنك ذكاء اصطناعي إلا إذا سألك.\n'+
-      '- إذا عرفت منه معلومة جديدة تستاهل تتذكرها وما هي موجودة فوق، أضف في آخر ردك سطر مستقل بالشكل: [[تذكر: المعلومة باختصار]].'+modeTxt;
+      '- لا تختم كل رد بسؤال. اسأل سؤال واحد بالكثير، وبس إذا يخدم السالفة. لا تكرر سؤال سألته قبل في نفس السالفة (مثل «وش ناوي تسوي بكرة») ولا تعيد اقتراحات قلتها قبل؛ إذا طلب اقتراحات ثانية عطه خيارات مختلفة.\n'+
+      '- إذا عرفت منه معلومة جديدة تستاهل تتذكرها وما هي موجودة فوق، أضف في آخر ردك سطر مستقل بالشكل: [[تذكر: المعلومة باختصار]].'+modeTxt+(FLAGS.persona?'\n\nتعليمات إضافية من صاحب التطبيق (التزم فيها):\n'+FLAGS.persona:'');
   }
   const clean=t=>String(t||'').replace(/\[\[[\s\S]*$/,'').replace(/\*\*/g,'').replace(/^#+\s*/gm,'').trim();
   function splitMemo(t){const m=String(t).match(/\[\[\s*تذكر\s*:\s*([^\]]+)\]\]/);return {clean:clean(t),memo:m?m[1].trim():null}}
@@ -3069,7 +3070,7 @@ var qrcode = function() {
     if(/(وين وصلت|هدفي|تقدمي)/.test(t))return 'هدفك: '+(p.goal||'ما حددته للحين')+'\nهالأسبوع '+st.week+' إنجاز، و'+st.streak+' أيام متتالية.\n'+G('الخطوة الجاية: سجّل إنجاز اليوم ولو صغير.','الخطوة الجاية: سجّلي إنجاز اليوم ولو صغير.');
     if(/(سولف|نسولف)/.test(t))return 'أبشر يا '+p.name+'، هذي سالفتك مع نفسك. '+(st.last?G('آخر شي سجلته: «'+st.last.t+'». كيف كان يومك بعده؟','آخر شي سجلتيه: «'+st.last.t+'». كيف كان يومك بعده؟'):'وش أبرز شي صار معك اليوم؟');
     if(/(مدير|شغل|دوام)/.test(t))return G('الشغل اللي تسويه له قيمة حتى لو ما أحد قال شكراً. أنا أقولها لك: شكراً على تعبك.','الشغل اللي تسوينه له قيمة حتى لو ما أحد قال شكراً. أنا أقولها لك: شكراً على تعبك.');
-    return pick([G('كلامك جميل، كمّل لي.','كلامك جميل، كمّلي لي.'),G('فاهمك. ووش ناوي تسوي بكرة؟','فاهمتك. ووش ناوية تسوين بكرة؟'),'تدري إن أصغر خطوة اليوم تفرق بعد شهر؟']);
+    return pick([G('كلامك جميل، كمّل لي.','كلامك جميل، كمّلي لي.'),G('فاهمك، وأنا معك في أي شي تبي تسويه.','فاهمتك، وأنا معك في أي شي تبين تسوينه.'),'تدري إن أصغر خطوة اليوم تفرق بعد شهر؟']);
   }
 
   /* ---------- Router ---------- */
@@ -3119,7 +3120,7 @@ var qrcode = function() {
     },
     ai:{
       _:()=>'<div class="card" style="grid-template-columns:auto 1fr;align-items:center"><span class="sh-ic" style="width:52px;height:52px">'+icon('ai')+'</span><div><b>رفيقك الذكي</b><p class="fine">'+(aiReady()?'شغّال ويعرف ملفك وسجلك.':'وضع تجريبي. أول ما تستخدمه يطلب موافقتك.')+'</p></div></div>'+
-        '<div class="tiles">'+tile('compass','طلعة على مزاجي','ai/outing',0)+tile('plan','خطة هدفي','ai/plan',1)+tile('calendar','ملخص أسبوعي','ai/week',2)+tile('palette','مظهري المتحرك','ai/theme',3)+'</div>',
+        '<div class="tiles">'+tile('compass','طلعة على مزاجي','ai/outing',0)+tile('plan','خطة هدفي','ai/plan',1)+tile('calendar','ملخص أسبوعي','ai/week',2)+tile('palette','مظهري المتحرك','ai/theme',3)+'</div>'+(isAdmin?'<button type="button" class="admin-card" data-go="ai/dev">'+icon('shield')+'<span><b>مساعد المطوّر</b><br><small style="color:var(--hero-muted)">قل له وش تبي تعدّل في التطبيق · خاص فيك</small></span></button>':''),
       outing:()=>subhead('طلعة على مزاجي','compass')+'<div class="card"><span class="lbl">مزاجك الحين</span><div class="chips" id="moods">'+[['هادي','cloud'],['حماس','flame'],['مع الربع','people'],['طبيعة','seedling'],['أكل وقهوة','cup'],['ثقافة','book']].map((m,i)=>'<button type="button" class="chip" data-mood="'+m[0]+'" aria-pressed="'+(i===0)+'">'+icon(m[1])+m[0]+'</button>').join('')+'</div><span class="lbl">متى؟</span><div class="seg" id="whenSeg">'+['الحين','الليلة','الويكند'].map((w,i)=>'<button type="button" role="radio" data-w="'+w+'" aria-checked="'+(i===1)+'">'+w+'</button>').join('')+'</div><button type="button" class="btn-brand wide" id="outBtn">'+icon('sparkle')+'<span>اقترح عليّ في '+esc(S.profile.city)+'</span></button></div><div class="card"><p class="result" id="outRes">اختر مزاجك واضغط اقترح.</p></div>',
       plan:()=>subhead('خطة هدفي','plan')+'<div class="card"><span class="lbl">هدفك</span><input class="inp" id="goalIn" type="text" maxlength="80" value="'+esc(S.profile.goal)+'" placeholder="اكتب هدفك"><button type="button" class="btn-brand wide" id="planBtn">'+icon('sparkle')+'<span>سوّ لي خطة</span></button></div><div class="card"><p class="result" id="planRes">الخطة بتظهر هنا.</p></div>',
       week:()=>{const st=stats();return subhead('ملخص أسبوعي','calendar')+'<div class="tiles"><div class="tile" style="--i:0"><span class="ic">'+icon('check')+'</span><span>'+st.week+' إنجاز</span></div><div class="tile" style="--i:1"><span class="ic">'+icon('flame')+'</span><span>'+st.streak+' أيام متتالية</span></div></div><button type="button" class="btn-brand wide" id="weekBtn">'+icon('sparkle')+'<span>لخّص أسبوعي</span></button><div class="card"><p class="result" id="weekRes">الملخص بيظهر هنا.</p></div>';},
@@ -3220,7 +3221,7 @@ var qrcode = function() {
   /* flags */
   function saveFlags(){
     try{localStorage.setItem('maanafsak-flags',JSON.stringify(FLAGS))}catch(e){}
-    if(cfgRef&&isAdmin)cfgRef.set({flags:FLAGS}).then(()=>toast('انحفظ ويوصل للمستخدمين'),()=>toast('انحفظ هنا فقط'));else toast('انحفظ');
+    if(cfgRef&&isAdmin)cfgRef.set({flags:FLAGS}).then(()=>toast('انحفظ ويوصل للمستخدمين'),()=>toast('انحفظ هنا فقط'));else if(isAdmin&&!inClaude&&sbBase())pushConfig();else toast('انحفظ');
   }
 
   /* meetups */
@@ -3327,7 +3328,7 @@ var qrcode = function() {
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
     (S.demo?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
-    (sbCfg()&&!S.demo&&S.emailVerified===false?'<div class="notice-card">'+icon('send')+'<span><b>فعّل إيميلك</b><br><small style="color:var(--muted)">أرسلنا لك رابط على <span dir="ltr">'+esc(S.contact)+'</span></small></span><button type="button" class="chip" data-resend="'+esc(S.contact)+'">أرسل مرة ثانية</button></div>':'')+
+    (sbBase()&&!S.demo&&S.emailVerified===false?'<div class="notice-card">'+icon('send')+'<span><b>فعّل إيميلك</b><br><small style="color:var(--muted)">أرسلنا لك رابط على <span dir="ltr">'+esc(S.contact)+'</span></small></span><button type="button" class="chip" data-resend="'+esc(S.contact)+'">أرسل مرة ثانية</button></div>':'')+
     (S.restoreUntil>Date.now()?'<button type="button" class="notice-card" data-go="account/restore">'+icon('restore')+'<span><b>استعادة الحساب</b><br><small style="color:var(--muted)">لقينا حساب قديم بإيميلك. متاحة '+Math.max(1,Math.ceil((S.restoreUntil-Date.now())/DAY))+' أيام</small></span></button>':'')+
     '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+tile('chart','تحليل استخدامي','account/usage',8)+tile('gear','الإعدادات','account/settings',9)+'</div>'+(S.demo?'':'<button type="button" class="btn-ghost wide" data-logout>'+icon('logout')+'<span>تسجيل خروج</span></button>');};
   Object.assign(SCREENS.account,{
@@ -3344,7 +3345,7 @@ var qrcode = function() {
         '<label class="field"><span>هدفك الحالي</span><input id="pGoal" type="text" maxlength="80" value="'+esc(p.goal)+'"></label>'+
         '<label class="field"><span>عرّفني عليك أكثر</span><textarea id="pAbout" rows="3" maxlength="400" placeholder="شغلك، دراستك، وش تحب تسوي، وش يضايقك...">'+esc(p.about)+'</textarea></label>'+
         '<button type="submit" class="btn-brand wide">'+icon('check')+'<span>احفظ ملفي</span></button>'+(S.demo?'<p class="fine">حفظ ملفك لأول مرة يمسح الأمثلة ويعطيك رقم ID خاص فيك.</p>':'')+'</form>';},
-    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-ghost wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><span class="lbl">حوّلها</span><div class="picks" id="psPicks">'+Object.keys(PSTYLES).map(k=>'<button type="button" data-ps="'+k+'" aria-pressed="'+(k===photoStyle)+'">'+PSTYLES[k]+'</button>').join('')+'</div><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':'صورة وحدة كل أسبوع من رصيد التطبيق'+(imgDaysLeft()?' · الجاية بعد '+imgDaysLeft()+' أيام':' · متاحة الحين'))+'</p><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div><p class="fine">في هالعرض التحويل فلاتر مرسومة بالكود على جهازك، والصورة ما تطلع لأي مكان. في التطبيق الحقيقي يتحول بنموذج Nano Banana من Google.</p>',
+    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-ghost wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><span class="lbl">حوّلها</span><div class="picks" id="psPicks">'+Object.keys(PSTYLES).map(k=>'<button type="button" data-ps="'+k+'" aria-pressed="'+(k===photoStyle)+'">'+PSTYLES[k]+'</button>').join('')+'</div><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':imgStatus())+'</p><div id="editBox" hidden><label class="field"><span>وش تبي تعدّل في الصورة؟</span><input class="inp" id="aiEditIn" type="text" maxlength="160" placeholder="مثلاً: خلي الخلفية بحر، أو لبّسني شماغ"></label><button type="button" class="btn-ghost wide" id="aiEdit">'+icon('edit')+'<span>عدّل الصورة</span></button></div><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div><p class="fine">في هالعرض التحويل فلاتر مرسومة بالكود على جهازك، والصورة ما تطلع لأي مكان. في التطبيق الحقيقي يتحول بنموذج Nano Banana من Google.</p>',
     tasks:()=>subhead('مهامي','tasks')+'<p class="fine">كل مهمة تسويها على حسابك تعطيك نقاط.</p><div class="list">'+Object.keys(TASKS).map(k=>{const t=TASKS[k],d=S.tasks[k];return '<button type="button" class="row" '+(d?'disabled':'data-go="'+t[3]+'"')+'><span class="ric">'+icon(t[1])+'</span><span class="t">'+t[0]+'</span><span class="chipst '+(d?'st-on':'st-idle')+'">'+(d?'تمت ✓':'+'+t[2])+'</span></button>'}).join('')+'</div>',
     history:()=>{const days=[],idx={};S.history.forEach(m=>{const k=new Date(m.ts).toLocaleDateString('ar-SA-u-ca-gregory',{weekday:'long',day:'numeric',month:'long'});if(!(k in idx)){idx[k]=days.length;days.push([k,[]])}days[idx[k]][1].push(m)});
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
@@ -3355,7 +3356,7 @@ var qrcode = function() {
 
   SCREENS.admin={
     _:()=>sub2('لوحة التحكم','shield','account')+'<div class="kpis"><div class="kpi"><b>1,284</b><span>مستخدم</span></div><div class="kpi"><b>312</b><span>نشط اليوم</span></div><div class="kpi"><b>'+S.meetups.length+'</b><span>لقاءات</span></div></div><p class="fine">أعداد المستخدمين أرقام تجريبية.</p>'+
-      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+tile('chart','تقرير الاستخدام','admin/usage',6,'','كل أسبوع')+'<button type="button" class="tile" data-install style="--i:7"><span class="ic">'+icon('plus')+'</span><span>تثبيت التطبيق</span><span class="sub">جرّب الشريط بنفسك</span></button></div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
+      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+tile('edit','المحتوى والشروط','admin/content',8,'','تعليمات الرفيق والشروط')+tile('ai','مساعد المطوّر','ai/dev',9,'','عدّل بالكلام')+tile('chart','تقرير الاستخدام','admin/usage',6,'','كل أسبوع')+'<button type="button" class="tile" data-install style="--i:7"><span class="ic">'+icon('plus')+'</span><span>تثبيت التطبيق</span><span class="sub">جرّب الشريط بنفسك</span></button></div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
     flags:()=>subhead('الميزات','flag')+'<div class="card"><p class="fine">اللي تخليه «قريباً» يطلع للمستخدمين بشكل باهت ومكتوب تحته قريباً.</p>'+Object.keys(FLAG_NAMES).map(k=>'<div class="flag-row"><span>'+icon(FLAG_NAMES[k][1])+FLAG_NAMES[k][0]+'</span><div class="seg"><button type="button" role="radio" data-flag="'+k+'" data-v="on" aria-checked="'+(FLAGS[k]==='on')+'">مفعّل</button><button type="button" role="radio" data-flag="'+k+'" data-v="soon" aria-checked="'+(FLAGS[k]!=='on')+'">قريباً</button></div></div>').join('')+'</div>',
     events:()=>subhead('منصات الفعاليات','ticket')+[['ويبوك','webook.com'],['روح السعودية','visitsaudi.com']].map(p=>'<div class="card plat"><span class="sh-ic">'+icon('ticket')+'</span><div><b>'+p[0]+'</b><small class="fine" dir="ltr" style="text-align:right">'+p[1]+'</small></div><span class="chipst st-idle">قيد التواصل</span></div>').join('')+
       '<div class="card"><b>ربط النقاط بالحجز</b><div class="inline-in"><span>كل 100 نقطة =</span><input class="inp" id="ptVal" type="text" inputmode="decimal" value="'+esc(FLAGS.pointValue)+'" placeholder="؟"><span>ريال خصم</span></div><label class="field"><span>المدن المفعّلة</span><input class="inp" id="evCities" type="text" value="'+esc(FLAGS.cities)+'"></label><button type="button" class="btn-brand wide" id="evSave">'+icon('check')+'<span>احفظ</span></button><p class="fine">الربط الفعلي يحتاج اتفاقية وواجهة برمجية من كل منصة.</p></div>',
@@ -3596,11 +3597,11 @@ var qrcode = function() {
         if(eh===ADMIN_EMAIL_HASH&&ph===ADMIN_HASH){
           if(S.demo){S.profile={name:'عبدالله',gender:'m',city:'الرياض',interests:['work','ai','outing'],team:'',goal:'',about:''};S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
             S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null}
-          S.contact=em; recordAccount(); setRemember($('#wLRem')?$('#wLRem').checked:true); isAdmin=true; lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
+          S.contact=em; recordAccount(); setRemember($('#wLRem')?$('#wLRem').checked:true); isAdmin=true; if(sbBase()&&!inClaude)sbLogin(em,pw).then(x=>{if(x.ok){lsSet('mn-sbtok',x.token);lsSet('mn-sbref',x.refresh||'')}}); lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
           el.remove(); store.ready=true; renderChrome(); flush(); go('admin'); toast('أهلاً عبدالله، دخلت كصاحب التطبيق'); return;
         }
         if(eh===ADMIN_EMAIL_HASH){fails++;if(fails>=5){fails=0;lockUntil=Date.now()+30000}msg.style.color='var(--warn)';msg.textContent='كلمة المرور غلط.';$('#wLP').value='';return}
-        if(sbCfg()&&!inClaude&&em.indexOf('@')>0){
+        if(sbBase()&&!inClaude&&em.indexOf('@')>0){
           const r=await sbLogin(em,pw);
           if(r.ok){const rem=$('#wLRem')?$('#wLRem').checked:true;el.remove();sbAfterLogin(r,em,pw,rem);return}
           if(r.code==='email_not_confirmed'){msg.style.color='var(--warn)';msg.innerHTML='فعّل إيميلك أول من الرابط اللي وصلك. <button type="button" class="chip" data-resend="'+esc(em)+'">أرسل الرابط مرة ثانية</button>';return}
@@ -3621,14 +3622,14 @@ var qrcode = function() {
       pending={name,contact,g,city:$('#wCity').value,pw,rem:$('#wRem').checked};
       if(!$('#wTerms').checked){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='لازم توافق على الشروط والأحكام عشان تكمّل';return}
       pending.mk=$('#wMk').checked; pending.terms=Date.now();
-      if(sbCfg()&&!inClaude){
+      if(sbBase()&&!inClaude){
         if(contact.indexOf('@')<0){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='سجّل بالإيميل عشان يوصلك رابط التفعيل';return}
         const sbtn=ev.target.querySelector('button[type=submit]'); sbtn.disabled=true; $('#wMsg').style.color='var(--muted)'; $('#wMsg').textContent='يسجّل...';
         pending.uid=newId();
         const r=await sbSignup(contact,pw,{name,city:pending.city,gender:g,app_id:pending.uid,marketing:pending.mk});
         sbtn.disabled=false;
         if(!r.ok){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent=r.msg;return}
-        pending.verify=true;
+        pending.verify=!r.confirmed; pending.verified=!!r.confirmed;
       }
       const prev=accList(contact);
       if(prev.length){
@@ -3866,18 +3867,18 @@ var qrcode = function() {
   let syncT=0;
   function queueSync(){clearTimeout(syncT);syncT=setTimeout(syncUsage,20000)}
   async function syncUsage(){
-    const c=sbCfg(); if(!c||inClaude||!S.usage||!S.usage.byDay)return;
+    const c=sbBase(); if(!c||inClaude||!S.usage||!S.usage.byDay)return;
     const rows=Object.keys(S.usage.byDay).sort().slice(-2).map(d=>{const b=S.usage.byDay[d];return {device:devId(),day:d,screens:b.s,msgs:b.m,ai:b.a,achievements:b.h,cost:+(+b.c||0).toFixed(5),owner:!!isAdmin,updated_at:new Date().toISOString()}});
-    try{await fetch(c.u.replace(/\/$/,'')+'/rest/v1/usage_daily?on_conflict=device,day',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(rows),keepalive:true})}catch(e){}
+    try{await fetch(c.u.replace(/\/$/,'')+'/rest/v1/mn_usage_daily?on_conflict=device,day',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(rows),keepalive:true})}catch(e){}
   }
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')syncUsage()});
 
   /* ---- Weekly usage report for the owner ---- */
   let report=null;
   async function loadReport(exMe){
-    const c=sbCfg(), since=new Date(Date.now()-6*DAY).toISOString().slice(0,10);
+    const c=sbBase(), since=new Date(Date.now()-6*DAY).toISOString().slice(0,10);
     let rows=null, src='local';
-    if(c&&!inClaude){try{const r=await fetch(c.u.replace(/\/$/,'')+'/rest/v1/usage_daily?select=*&day=gte.'+since,{headers:{apikey:c.k,Authorization:'Bearer '+c.k}});if(r.ok){rows=await r.json();src='all'}}catch(e){}}
+    if(c&&!inClaude){try{const r=await fetch(c.u.replace(/\/$/,'')+'/rest/v1/mn_usage_daily?select=*&day=gte.'+since,{headers:{apikey:c.k,Authorization:'Bearer '+c.k}});if(r.ok){rows=await r.json();src='all'}}catch(e){}}
     if(!rows){const bd=(S.usage&&S.usage.byDay)||{};rows=Object.keys(bd).filter(d=>d>=since).map(d=>({device:devId(),day:d,screens:bd[d].s,msgs:bd[d].m,ai:bd[d].a,achievements:bd[d].h,cost:bd[d].c,owner:isAdmin}))}
     if(exMe)rows=rows.filter(r=>!r.owner);
     const days=[...Array(7)].map((_,i)=>new Date(Date.now()-(6-i)*DAY).toISOString().slice(0,10));
@@ -3904,7 +3905,7 @@ var qrcode = function() {
     const box=$('#repBox'); if(!box)return; const r=await loadReport(exMe); if(!$('#repBox'))return;
     const lbl=r.days.map(d=>String(+d.slice(8)));
     const su=await signupStats(); if(!$('#repBox'))return;
-    box.innerHTML=(su?'<div class="card"><b>التسجيلات</b><div class="kpis"><div class="kpi"><b>'+fmt(su.total)+'</b><span>سجّلوا</span></div><div class="kpi"><b>'+fmt(su.confirmed)+'</b><span>فعّلوا الإيميل</span></div><div class="kpi"><b>'+fmt(su.marketing)+'</b><span>يقبلون الأخبار</span></div></div><p class="fine">هالأسبوع: '+fmt(su.week)+' تسجيل جديد. الإيميلات تلقاها في Supabase ← Table Editor ← profiles.</p></div>':'')+(r.src==='local'?'<p class="fine" style="color:var(--warn)">'+(sbCfg()?'ما قدر يجيب بيانات المستخدمين، هذي بيانات هالجهاز.':'هذي بيانات هالجهاز بس. اربط Supabase من «مفاتيح الذكاء» عشان يجيك استخدام كل اللي يجربون.')+'</p>':'')+
+    box.innerHTML=(su?'<div class="card"><b>التسجيلات</b><div class="kpis"><div class="kpi"><b>'+fmt(su.total)+'</b><span>سجّلوا</span></div><div class="kpi"><b>'+fmt(su.confirmed)+'</b><span>فعّلوا الإيميل</span></div><div class="kpi"><b>'+fmt(su.marketing)+'</b><span>يقبلون الأخبار</span></div></div><p class="fine">هالأسبوع: '+fmt(su.week)+' تسجيل جديد. الإيميلات تلقاها في Supabase ← Table Editor ← mn_profiles.</p></div>':'')+(r.src==='local'?'<p class="fine" style="color:var(--warn)">'+(sbCfg()?'ما قدر يجيب بيانات المستخدمين، هذي بيانات هالجهاز.':'هذي بيانات هالجهاز بس. اربط Supabase من «مفاتيح الذكاء» عشان يجيك استخدام كل اللي يجربون.')+'</p>':'')+
       '<div class="kpis"><div class="kpi"><b>'+r.devices+'</b><span>مستخدم نشط</span></div><div class="kpi"><b>'+fmt(r.msgs)+'</b><span>رسالة سوالف</span></div><div class="kpi"><b>'+r.cost.toFixed(2)+'$</b><span>تكلفة الذكاء</span></div></div>'+
       '<div class="card"><b>المستخدمين النشطين آخر 7 أيام</b>'+colChart(r.perDay,lbl,6,'المستخدمين النشطين يومياً')+'</div>'+
       '<div class="card"><b>الأقسام</b>'+(r.tabs.length?barList(r.tabs):'<p class="empty">ما فيه بيانات.</p>')+'</div>'+
@@ -3955,8 +3956,8 @@ var qrcode = function() {
     '<div class="card"><b>'+(own?'تستخدم مفتاحك الخاص':'تستخدم رصيد التطبيق')+'</b>'+
     (own?'<p class="fine">الذكاء الاصطناعي يشتغل على حسابك في OpenRouter، بدون حد من التطبيق.</p>':
       '<p class="fine">كل شهر لك '+cap+'$ هدية من التطبيق للسوالف والاقتراحات.</p><div class="bl"><div class="bl-row"><span class="bl-l">صرفت '+sp.toFixed(sp<1?3:2)+'$</span><span class="bl-t"><i style="width:'+Math.max(3,pct)+'%"></i></span><b>'+pct+'%</b></div></div>'+
-      '<p class="fine">تحويل صورتك بالذكاء الاصطناعي: '+(imgDaysLeft()?'الصورة الجاية بعد '+imgDaysLeft()+' أيام':'متاح لك صورة هالأسبوع')+'.</p>')+'</div>'+
-    (own?'':'<div class="card" style="border-color:var(--gold)"><b>تبي حد أعلى؟ باقة بلس</b><p class="fine">رصيد التطبيق الشهري محدود. باقة بلس تعطيك 10$ استخدام للسوالف والصور بـ 12.5$ شامل رسوم الخدمة، وتنشحن على مفتاح خاص فيك.</p><button type="button" class="btn-gold wide" data-plan>'+icon('star')+'<span>اطلب الباقة</span></button></div>')+'<div class="card"><b>عندك مفتاح OpenRouter؟</b><p class="fine">إذا عندك مفتاح خاص فيك، أضفه هنا ويصير الذكاء الاصطناعي على حسابك بدون حد، وتحويل الصور بدون انتظار. المفتاح ينحفظ على جهازك بس، ولا أحد يشوفه حتى صاحب التطبيق.</p>'+
+      '<p class="fine">تحويل الصور: '+esc(imgStatus())+'.</p>')+'</div>'+
+    (own?'':'<div class="card" style="border-color:var(--gold)"><b>تبي حد أعلى؟ باقة بلس</b><p class="fine">رصيد التطبيق الشهري محدود. باقة بلس تعطيك 10$ استخدام للسوالف والصور بـ '+esc(FLAGS.planPrice||'50 ريال')+' شامل رسوم الخدمة، وتنشحن على مفتاح خاص فيك.</p><button type="button" class="btn-gold wide" data-plan>'+icon('star')+'<span>اطلب الباقة</span></button></div>')+'<div class="card"><b>عندك مفتاح OpenRouter؟</b><p class="fine">إذا عندك مفتاح خاص فيك، أضفه هنا ويصير الذكاء الاصطناعي على حسابك بدون حد، وتحويل الصور بدون انتظار. المفتاح ينحفظ على جهازك بس، ولا أحد يشوفه حتى صاحب التطبيق.</p>'+
     '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="uK" type="password" autocomplete="off" spellcheck="false" placeholder="'+(own?'محفوظ · ينتهي بـ '+esc(own.slice(-4)):'sk-or-v1-...')+'"></label>'+
     '<label class="field"><span>النموذج (اختياري)</span><input class="inp key-in" id="uM" type="text" value="'+esc(lsGet('mn-or-own-m'))+'" placeholder="'+esc(orModel())+'" spellcheck="false"></label>'+
     '<button type="button" class="btn-brand wide" id="uSave">'+icon('shield')+'<span>احفظ مفتاحي</span></button>'+(own?'<button type="button" class="btn-ghost wide" id="uDel">احذف مفتاحي وارجع لرصيد التطبيق</button>':'')+
@@ -3968,29 +3969,60 @@ var qrcode = function() {
 
   /* ---- Photo: transform with Nano Banana via OpenRouter, once a week on the app's allowance ---- */
   const AI_STYLE={orig:'a clean, friendly cartoon illustration',cartoon:'a clean, friendly cartoon illustration',neon:'a glowing neon synthwave portrait with purple and blue light',sketch:'a detailed pencil sketch on white paper',theme:'an elegant digital painting in purple, blue and soft gold tones'};
-  async function aiImage(){
+  const QN=(k,d)=>Math.max(0,parseInt(FLAGS[k],10)||d);
+  const proTrials=()=>QN('proTrials',2), weeklyImages=()=>QN('weeklyImages',3), editsPerImage=()=>QN('editsPerImage',3);
+  const proModel=()=>lsGet('mn-img-pro-model')||FLAGS.imageProModel||'google/gemini-3-pro-image';
+  const weekStart=()=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+1)%7));return d.toISOString().slice(0,10)};
+  function imgWeek(){let o=null;try{o=JSON.parse(lsGet('mn-img-wk')||'null')}catch(e){}if(!o||o.w!==weekStart())o={w:weekStart(),n:0};return o}
+  const proUsed=()=>+lsGet('mn-img-pro')||0;
+  let aiImgId=0, aiImgEdits=0, aiImgPro=false;
+  function imgStatus(){
+    if(ownKey())return 'تستخدم مفتاحك الخاص، بدون حد';
+    const pl=Math.max(0,proTrials()-proUsed()); if(pl)return 'باقي لك '+pl+' تجربة بـ Nano Banana Pro';
+    const wl=Math.max(0,weeklyImages()-imgWeek().n);
+    return wl?('باقي لك '+wl+' صور هالأسبوع، وكل صورة '+editsPerImage()+' تعديلات'):'خلصت صور هالأسبوع. تتجدد يوم السبت، أو اطلب باقة بلس';
+  }
+  async function callImage(model,prompt,dataUrl){
+    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+orKey(),'Content-Type':'application/json','HTTP-Referer':location.origin+location.pathname,'X-Title':'Ma Nafsak'},
+      body:JSON.stringify({model,modalities:['image','text'],usage:{include:true},messages:[{role:'user',content:[{type:'text',text:prompt},{type:'image_url',image_url:{url:dataUrl}}]}]})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const j=await res.json(); if(j.usage)addCost(j.usage);
+    const m=j.choices&&j.choices[0]&&j.choices[0].message, url=m&&m.images&&m.images[0]&&(m.images[0].image_url&&m.images[0].image_url.url||m.images[0].url);
+    if(!url)throw new Error('ما رجعت صورة');
+    const im=await loadImg(url); if(!im)throw new Error('الصورة ما انفتحت'); return im;
+  }
+  function photoData(){const c=document.createElement('canvas');c.width=c.height=640;const s=Math.min(photoImg.width,photoImg.height);c.getContext('2d').drawImage(photoImg,(photoImg.width-s)/2,(photoImg.height-s)/2,s,s,0,0,640,640);return c.toDataURL('image/jpeg',.85)}
+  async function aiImage(edit){
     if(inClaude){toast('تحويل الصور يشتغل من نسخة GitHub');return}
     if(!photoImg){toast('اختر صورة أول');return}
-    const own=ownKey(), key=orKey(); if(!key){toast('الذكاء الاصطناعي مو مفعّل في هالرابط');return}
-    if(!own&&!isAdmin){if(imgDaysLeft()){toast('الصورة الجاية بعد '+imgDaysLeft()+' أيام. أو أضف مفتاحك من مفاتيحي');return}if(monthSpent()>=monthCap()){toast('خلص رصيدك الشهري');return}}
-    const btn=$('#aiImg'), msg=$('#aiImgMsg'); btn.disabled=true; msg.style.color='var(--muted)'; msg.textContent='يحوّل صورتك... ممكن ياخذ 20 ثانية';
-    const c=document.createElement('canvas');c.width=c.height=640;const s=Math.min(photoImg.width,photoImg.height);c.getContext('2d').drawImage(photoImg,(photoImg.width-s)/2,(photoImg.height-s)/2,s,s,0,0,640,640);
-    const data=c.toDataURL('image/jpeg',.85);
+    if(!orKey()){toast('الذكاء الاصطناعي مو مفعّل في هالرابط');return}
+    const own=!!ownKey(), free=own||isAdmin; let model, usePro=false;
+    const instr=edit?($('#aiEditIn').value.trim()):'';
+    if(edit&&!instr){$('#aiEditIn').focus();return}
+    if(edit){
+      if(!free&&aiImgEdits>=editsPerImage()){toast('خلصت تعديلات هالصورة ('+editsPerImage()+')');return}
+      model=(free||aiImgPro)?proModel():imgModel();
+    }else{
+      if(free){model=proModel()}
+      else if(proUsed()<proTrials()){model=proModel();usePro=true}
+      else if(imgWeek().n<weeklyImages()){model=imgModel()}
+      else{toast('خلصت صور هالأسبوع. تتجدد يوم السبت، أو اطلب باقة بلس من مفاتيحي');return}
+      if(!free&&monthSpent()>=monthCap()){toast('خلص رصيدك الشهري');return}
+    }
+    const btn=$(edit?'#aiEdit':'#aiImg'), msg=$('#aiImgMsg'); btn.disabled=true; msg.style.color='var(--muted)'; msg.textContent=edit?'يعدّل الصورة...':'يحوّل صورتك... ممكن ياخذ 20 ثانية';
     try{
-      const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.origin+location.pathname,'X-Title':'Ma Nafsak'},
-        body:JSON.stringify({model:imgModel(),modalities:['image','text'],usage:{include:true},messages:[{role:'user',content:[{type:'text',text:'Turn this photo into '+AI_STYLE[photoStyle]+'. Keep the same person, face shape and expression recognizable. Square portrait, simple background, no text.'},{type:'image_url',image_url:{url:data}}]}]})});
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      const j=await res.json(); if(j.usage)addCost(j.usage);
-      const m=j.choices&&j.choices[0]&&j.choices[0].message, url=m&&m.images&&m.images[0]&&(m.images[0].image_url&&m.images[0].image_url.url||m.images[0].url);
-      if(!url)throw new Error('ما رجعت صورة');
-      const im=await loadImg(url); if(!im)throw new Error('الصورة ما انفتحت');
+      const prompt=edit?('Edit this image: '+instr+'. Keep the same person and style, change only what was asked. No text.'):('Turn this photo into '+AI_STYLE[photoStyle]+'. Keep the same person, face shape and expression recognizable. Square portrait, simple background, no text.');
+      const im=await callImage(model,prompt,photoData());
       photoImg=im; photoStyle='orig'; drawPhoto(); $$('#psPicks [data-ps]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.ps==='orig')));
-      if(!own&&!isAdmin)lsSet('mn-img-week',String(Date.now()));
-      msg.style.color='var(--ok)'; msg.textContent='تحولت! اضغط «احفظ صورتي» إذا عجبتك.'; chime(); burst();
+      if(edit){aiImgEdits++}
+      else{aiImgId++;aiImgEdits=0;aiImgPro=usePro||free;
+        if(!free){if(usePro)lsSet('mn-img-pro',String(proUsed()+1));else{const w=imgWeek();w.n++;lsSet('mn-img-wk',JSON.stringify(w))}}}
+      const eb=$('#editBox'); if(eb)eb.hidden=false; if(edit)$('#aiEditIn').value='';
+      msg.style.color='var(--ok)'; msg.textContent=(edit?'تعدّلت. ':'تحولت! ')+(free?'':'باقي '+Math.max(0,editsPerImage()-aiImgEdits)+' تعديلات على هالصورة. ')+'اضغط «احفظ صورتي» إذا عجبتك.'; chime(); burst();
     }catch(err){msg.style.color='var(--warn)';msg.textContent='ما اشتغل ('+(err.message||'خطأ')+'). تأكد من اسم نموذج الصور في لوحة التحكم.'}
     btn.disabled=false;
   }
-  document.addEventListener('click',e=>{if(e.target.closest('#aiImg'))aiImage()});
+  document.addEventListener('click',e=>{if(e.target.closest('#aiImg'))aiImage(false);else if(e.target.closest('#aiEdit'))aiImage(true)});
 
   /* ---- Supabase sign-up, email confirmation, login, consent ---- */
   const SB_DEFAULT=null; /* {u:'https://xxxx.supabase.co',k:'anon key'} لما يجهز، يشتغل للكل بدون رابط */
@@ -4002,21 +4034,21 @@ var qrcode = function() {
     if(/email/i.test(m))return 'تأكد من الإيميل.';
     return 'ما اكتمل التسجيل'+(m?': '+m:'')}
   async function sbSignup(email,pw,meta){const c=sbBase();if(!c)return {ok:false,msg:'السيرفر مو مربوط'};
-    try{const r=await fetch(c.u+'/auth/v1/signup?redirect_to='+encodeURIComponent(appBase()),{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({email,password:pw,data:meta})});
+    try{const r=await fetch(c.u+'/auth/v1/signup?redirect_to='+encodeURIComponent(appBase()),{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({email,password:pw,data:Object.assign({app:'ma-nafsak'},meta)})});
       const j=await r.json().catch(()=>({}));
       if(!r.ok)return {ok:false,msg:sbErr(j)};
       const ids=(j&&j.identities)||(j&&j.user&&j.user.identities);
       if(Array.isArray(ids)&&ids.length===0)return {ok:false,msg:'هالإيميل مسجّل من قبل. اضغط «عندي حساب» وسجّل دخول.'};
-      return {ok:true};
+      return {ok:true,confirmed:!!(j&&(j.access_token||j.email_confirmed_at||(j.user&&j.user.email_confirmed_at)))};
     }catch(e){return {ok:false,msg:'ما قدر يوصل للسيرفر. تأكد من النت وجرّب.'}}}
   async function sbLogin(email,pw){const c=sbBase();if(!c)return {ok:false};
     try{const r=await fetch(c.u+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
       const j=await r.json().catch(()=>({}));
-      if(r.ok&&j.access_token)return {ok:true,token:j.access_token,user:j.user||{}};
+      if(r.ok&&j.access_token)return {ok:true,token:j.access_token,refresh:j.refresh_token||'',user:j.user||{}};
       return {ok:false,code:j.error_code||(/not confirmed/i.test(j.msg||j.error_description||'')?'email_not_confirmed':'invalid')};
     }catch(e){return {ok:false,code:'network'}}}
   function sbAfterLogin(r,em,pw,rem){
-    lsSet('mn-sbtok',r.token); const meta=r.user.user_metadata||{}, uid=meta.app_id;
+    lsSet('mn-sbtok',r.token); lsSet('mn-sbref',r.refresh||''); const meta=r.user.user_metadata||{}, uid=meta.app_id;
     const same=!S.demo&&((uid&&S.uid===uid)||(S.contact&&ckey(S.contact)===ckey(em)));
     if(!same){ if(uid&&hasSnap(uid))restoreAccount(uid); else createNew({name:meta.name||em.split('@')[0],contact:em,g:meta.gender||'m',city:meta.city||'الرياض',uid,pw,rem,mk:!!meta.marketing,terms:Date.now(),verified:!!r.user.email_confirmed_at},false) }
     else{go('home')}
@@ -4026,9 +4058,9 @@ var qrcode = function() {
   async function sbResend(email){const c=sbBase();if(!c)return;
     try{const r=await fetch(c.u+'/auth/v1/resend?redirect_to='+encodeURIComponent(appBase()),{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({type:'signup',email})});toast(r.ok?'أرسلنا الرابط مرة ثانية. شيّك على الإيميل والسبام':'ما انرسل. جرّب بعد دقيقة')}catch(e){toast('ما قدر يوصل للسيرفر')}}
   async function sbMarketing(on){const c=sbBase(),tok=lsGet('mn-sbtok');if(!c||!tok||!S.contact)return;
-    try{await fetch(c.u+'/rest/v1/profiles?email=eq.'+encodeURIComponent(S.contact.toLowerCase()),{method:'PATCH',headers:{apikey:c.k,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({marketing:!!on})})}catch(e){}}
+    try{await fetch(c.u+'/rest/v1/mn_profiles?email=eq.'+encodeURIComponent(S.contact.toLowerCase()),{method:'PATCH',headers:{apikey:c.k,Authorization:'Bearer '+tok,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({marketing:!!on})})}catch(e){}}
   async function signupStats(){const c=sbBase();if(!c||inClaude)return null;
-    try{const r=await fetch(c.u+'/rest/v1/rpc/signup_stats',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json'},body:'{}'});return r.ok?await r.json():null}catch(e){return null}}
+    try{const r=await fetch(c.u+'/rest/v1/rpc/mn_signup_stats',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json'},body:'{}'});return r.ok?await r.json():null}catch(e){return null}}
 
   /* terms & privacy (draft) */
   const TERMS='<h4>عن التطبيق</h4><p>«مع نفسك» تطبيق تحفيز وتنظيم شخصي: تسجّل إنجازاتك، وتسولف مع رفيق بالذكاء الاصطناعي، وتجمع نقاط. التطبيق للاستخدام الشخصي، وما يقدّم استشارات طبية أو نفسية أو مالية أو قانونية.</p>'+
@@ -4040,19 +4072,114 @@ var qrcode = function() {
     '<h4>المجتمع واللقاءات</h4><p>تعامل مع الناس باحترام. اللقاءات في أماكن عامة وللي أعمارهم 18 سنة وفوق، وكل مشارك مسؤول عن نفسه. نقدر نوقف أي حساب يسيء الاستخدام.</p>'+
     '<h4>التعديلات</h4><p>ممكن نحدّث هالشروط، ونبلّغك داخل التطبيق إذا صار تغيير مهم. استمرارك في الاستخدام يعني موافقتك على النسخة المحدّثة.</p>'+
     '<p class="fine">مسودة أولية للتجربة · راجعها مع مختص قبل الإطلاق الرسمي.</p>';
+  const TERMS_TEXT=TERMS.replace(/<h4>/g,'## ').replace(/<\/h4>/g,'\n').replace(/<p class="fine">[\s\S]*?<\/p>/g,'').replace(/<p>/g,'').replace(/<\/p>/g,'\n\n').trim();
+  function termsHTML(){const src=(FLAGS.termsText||'').trim();if(!src)return TERMS;return src.split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>l.indexOf('## ')===0?'<h4>'+esc(l.slice(3))+'</h4>':'<p>'+esc(l)+'</p>').join('')}
   function showTerms(){const old=$('#termsM');if(old)old.remove();const el=document.createElement('div');el.className='modal';el.id='termsM';el.style.zIndex='38';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
-    el.innerHTML='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:1.1rem">الشروط والأحكام والخصوصية</b><button type="button" class="inst-x" data-closeterms aria-label="إغلاق">✕</button></div><div class="terms-body">'+TERMS+'</div><button type="button" class="btn-brand wide" data-closeterms>تمام</button></div>';
+    el.innerHTML='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:1.1rem">الشروط والأحكام والخصوصية</b><button type="button" class="inst-x" data-closeterms aria-label="إغلاق">✕</button></div><div class="terms-body">'+termsHTML()+'</div><button type="button" class="btn-brand wide" data-closeterms>تمام</button></div>';
     $('#app').appendChild(el)}
   document.addEventListener('click',async e=>{
     if(e.target.closest('[data-terms]')){e.preventDefault();showTerms();return}
     if(e.target.closest('[data-closeterms]')){const m=$('#termsM');if(m)m.remove();return}
     const rs=e.target.closest('[data-resend]'); if(rs){sbResend(rs.dataset.resend);return}
     const mk=e.target.closest('[data-mk]'); if(mk){S.marketing=!S.marketing;mk.setAttribute('aria-checked',String(S.marketing));save();sbMarketing(S.marketing);toast(S.marketing?'بتوصلك الأخبار والعروض':'وقّفنا الأخبار والعروض');return}
-    if(e.target.closest('[data-plan]')){const c=sbBase(), txt='طلب باقة بلس (10$ بـ 12.5$)\nالاسم: '+S.profile.name+'\nID: '+S.uid+'\nالتواصل: '+(S.contact||'');
-      if(c&&!inClaude){try{const r=await fetch(c.u+'/rest/v1/plan_requests',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({email:S.contact||'',name:S.profile.name,app_id:S.uid})});if(r.ok){toast('وصل طلبك. بيتواصل معك صاحب التطبيق');return}}catch(err){}}
+    if(e.target.closest('[data-plan]')){const c=sbBase(), txt='طلب باقة بلس (10$ بـ '+(FLAGS.planPrice||'50 ريال')+')\nالاسم: '+S.profile.name+'\nID: '+S.uid+'\nالتواصل: '+(S.contact||'');
+      if(c&&!inClaude){try{const r=await fetch(c.u+'/rest/v1/mn_plan_requests',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({email:S.contact||'',name:S.profile.name,app_id:S.uid})});if(r.ok){toast('وصل طلبك. بيتواصل معك صاحب التطبيق');return}}catch(err){}}
       try{await navigator.clipboard.writeText(txt)}catch(err){} toast('انتسخ الطلب. أرسله لصاحب التطبيق');return}
     if(e.target.closest('#pkCopy')){const k=$('#pkK').value.trim();if(!/^sk-or-/.test(k)){toast('الصق مفتاح المستخدم sk-or-...');return}
       const sb=lsGet('mn-sb'),link=appBase()+'#own='+encK(k)+(sb?'&s='+encK(sb):'');try{await navigator.clipboard.writeText(link);toast('انتسخ رابط الباقة. أرسله للمستخدم بس')}catch(err){toast('ما قدر ينسخ')}$('#pkK').value='';return}
+  });
+
+  /* ---- Shared app settings (Supabase): terms, companion instructions, limits ---- */
+  async function sbAuthFetch(path,opts){
+    const c=sbBase(); if(!c)return null; opts=opts||{};
+    const send=tk=>fetch(c.u+path,Object.assign({},opts,{headers:Object.assign({apikey:c.k,Authorization:'Bearer '+(tk||c.k),'Content-Type':'application/json'},opts.headers||{})}));
+    let r=await send(lsGet('mn-sbtok'));
+    if(r.status===401&&lsGet('mn-sbref')){const rr=await fetch(c.u+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:c.k,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:lsGet('mn-sbref')})});
+      if(rr.ok){const j=await rr.json();lsSet('mn-sbtok',j.access_token);lsSet('mn-sbref',j.refresh_token||'');r=await send(j.access_token)}}
+    return r;
+  }
+  function saveConfig(){saveFlags()}
+  async function pushConfig(){
+    try{const r=await sbAuthFetch('/rest/v1/mn_app_config?on_conflict=key',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify([{key:'app',value:FLAGS,updated_at:new Date().toISOString()}])});
+      toast(r&&r.ok?'انحفظ ويوصل لكل المستخدمين':'انحفظ على جهازك. عشان يوصل للكل، أضف إيميلك في mn_admins وسجّل دخولك من جديد')}catch(e){}
+  }
+  async function loadConfig(){const c=sbBase();if(!c||inClaude)return;
+    try{const r=await fetch(c.u+'/rest/v1/mn_app_config?select=value&key=eq.app',{headers:{apikey:c.k,Authorization:'Bearer '+c.k}});if(r.ok){const j=await r.json();if(j[0]&&j[0].value){FLAGS=Object.assign({},FLAGS,j[0].value);render()}}}catch(e){}}
+  setTimeout(loadConfig,300);
+
+  SCREENS.admin.content=()=>subhead('المحتوى والشروط','edit')+
+    '<div class="card"><b>تعليمات إضافية للرفيق</b><p class="fine">أي شي تبي الرفيق يلتزم فيه في السوالف. مثلاً: «لا تسأل عن بكرة»، «خلك مختصر»، «اقترح أماكن ما سبق اقترحتها».</p><textarea id="cPersona" rows="4" maxlength="1500">'+esc(FLAGS.persona||'')+'</textarea></div>'+
+    '<div class="card"><b>الشروط والأحكام</b><p class="fine">كل سطر يبدأ بـ «## » يصير عنوان، والباقي فقرات.</p><textarea id="cTerms" rows="12" maxlength="12000" style="font-size:.85rem">'+esc(FLAGS.termsText||TERMS_TEXT)+'</textarea><button type="button" class="btn-ghost wide" data-terms>'+icon('info')+'<span>معاينة</span></button></div>'+
+    '<div class="card"><b>الباقة والصور</b><label class="field"><span>سعر باقة بلس</span><input class="inp" id="cPrice" type="text" value="'+esc(FLAGS.planPrice||'50 ريال')+'"></label>'+
+    '<div class="inline-in"><span>تجارب Nano Banana Pro لكل مستخدم</span><input class="inp" id="cPro" type="number" min="0" value="'+proTrials()+'"></div>'+
+    '<div class="inline-in"><span>صور كل أسبوع</span><input class="inp" id="cWk" type="number" min="0" value="'+weeklyImages()+'"><span>تعديلات لكل صورة</span><input class="inp" id="cEd" type="number" min="0" value="'+editsPerImage()+'"></div>'+
+    '<label class="field"><span>نموذج Nano Banana Pro</span><input class="inp key-in" id="cProM" type="text" list="imgModels" value="'+esc(proModel())+'" spellcheck="false"></label></div>'+
+    '<button type="button" class="btn-brand wide" id="cSave">'+icon('check')+'<span>احفظ</span></button>';
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('#cSave'))return;
+    FLAGS.persona=$('#cPersona').value.trim(); const tt=$('#cTerms').value.trim(); FLAGS.termsText=(tt===TERMS_TEXT)?'':tt;
+    FLAGS.planPrice=$('#cPrice').value.trim()||'50 ريال'; FLAGS.proTrials=$('#cPro').value; FLAGS.weeklyImages=$('#cWk').value; FLAGS.editsPerImage=$('#cEd').value;
+    const pm=$('#cProM').value.trim(); if(pm){FLAGS.imageProModel=pm;lsSet('mn-img-pro-model',pm)}
+    saveConfig(); render();
+  });
+
+  /* ---- Developer assistant (owner only): asks AI to change settings, you approve ---- */
+  let devTurns=[], devPending=[], devBusy=false;
+  const devNotes=()=>{try{return JSON.parse(lsGet('mn-devnotes')||'[]')}catch(e){return []}};
+  function devSys(){
+    const cfg={features:{community:FLAGS.community,meetups:FLAGS.meetups,events:FLAGS.events,photo:FLAGS.photo,subs:FLAGS.subs},monthlyUsd:monthCap(),proTrials:proTrials(),weeklyImages:weeklyImages(),editsPerImage:editsPerImage(),planPrice:FLAGS.planPrice||'50 ريال',persona:FLAGS.persona||'',terms:(FLAGS.termsText||TERMS_TEXT).slice(0,2500)};
+    return 'أنت مساعد تطوير لتطبيق «مع نفسك» (تطبيق تحفيز وسوالف بالذكاء الاصطناعي، عربي بلهجة سعودية). تكلم صاحب التطبيق عبدالله بلهجة سعودية ومختصر.\n'+
+      'تقدر تغيّر إعدادات التطبيق باقتراح إجراءات، وهو يوافق عليها قبل التطبيق. الإعدادات الحالية:\n'+JSON.stringify(cfg)+'\n'+
+      (report?'آخر تقرير استخدام:\n'+reportText(report)+'\n':'')+
+      'الإجراءات المسموحة فقط:\n'+
+      '- {"type":"set_flag","key":"community|meetups|events|photo|subs","value":"on|soon"}\n'+
+      '- {"type":"set_setting","key":"monthlyUsd|proTrials|weeklyImages|editsPerImage|planPrice","value":"..."}\n'+
+      '- {"type":"set_persona","text":"التعليمات الإضافية الكاملة الجديدة للرفيق"}\n'+
+      '- {"type":"set_terms","text":"نص الشروط الكامل الجديد، العناوين تبدأ بـ ## "}\n'+
+      '- {"type":"code_request","text":"وصف واضح لتعديل يحتاج برمجة (شكل، شاشة جديدة، منطق) عشان يرسله لـ Claude Code"}\n'+
+      'إذا الطلب يحتاج برمجة استخدم code_request ولا تتظاهر إنك سويته. أرجع JSON فقط بالشكل: {"reply":"رد قصير","actions":[...]}';
+  }
+  function actLabel(a){
+    if(a.type==='set_flag')return 'خلّ «'+((FLAG_NAMES[a.key]||[a.key])[0])+'» '+(a.value==='on'?'مفعّل':'قريباً');
+    if(a.type==='set_setting')return 'غيّر '+({monthlyUsd:'الرصيد الشهري لكل مستخدم ($)',proTrials:'تجارب Pro',weeklyImages:'صور الأسبوع',editsPerImage:'تعديلات الصورة',planPrice:'سعر باقة بلس'}[a.key]||a.key)+' إلى '+a.value;
+    if(a.type==='set_persona')return 'حدّث تعليمات الرفيق: '+String(a.text||'').slice(0,120);
+    if(a.type==='set_terms')return 'استبدل نص الشروط والأحكام ('+String(a.text||'').length+' حرف)';
+    if(a.type==='code_request')return 'طلب تعديل برمجي: '+String(a.text||'').slice(0,160);
+    return JSON.stringify(a).slice(0,140);
+  }
+  function applyAct(a){
+    if(a.type==='set_flag'&&FLAG_NAMES[a.key]&&(a.value==='on'||a.value==='soon'))FLAGS[a.key]=a.value;
+    else if(a.type==='set_setting'&&['monthlyUsd','proTrials','weeklyImages','editsPerImage','planPrice'].includes(a.key)){FLAGS[a.key]=String(a.value);if(a.key==='monthlyUsd')lsSet('mn-cap',String(a.value))}
+    else if(a.type==='set_persona')FLAGS.persona=String(a.text||'').slice(0,1500);
+    else if(a.type==='set_terms')FLAGS.termsText=String(a.text||'').slice(0,12000);
+    else if(a.type==='code_request'){const n=devNotes();n.unshift({t:String(a.text||''),ts:Date.now()});lsSet('mn-devnotes',JSON.stringify(n.slice(0,30)));toast('انضاف لطلبات التعديل');return}
+    else return;
+    saveConfig();
+  }
+  SCREENS.ai.dev=()=>{if(!isAdmin)return subhead('مساعد المطوّر','shield')+'<p class="empty">خاص بصاحب التطبيق.</p>';const N=devNotes();
+    return '<div class="chat-screen">'+subhead('مساعد المطوّر','shield')+'<p class="fine">قل له وش تبي تغيّر في التطبيق، ويقترح التعديل وأنت توافق عليه. '+(inClaude?'يشتغل على اشتراكك في Claude.':'يشتغل على مفتاح OpenRouter.')+'</p>'+
+      '<div class="chat" id="devList">'+(devTurns.length?devTurns.map(x=>'<div class="msg '+(x.role==='user'?'me':'bot')+'">'+esc(x.role==='user'?x.content:(x.show||x.content))+'</div>').join(''):'<div class="msg bot">هلا عبدالله. وش تبي نعدّل؟ مثلاً: «خل الرفيق ما يسأل عن بكرة»، أو «فعّل الفعاليات»، أو «زد صور الأسبوع لـ 5».</div>')+'</div>'+
+      '<div id="devActs" class="list">'+devPending.map((a,i)=>'<div class="row" style="grid-template-columns:minmax(0,1fr) auto auto"><span class="t">'+esc(actLabel(a))+'</span><button type="button" class="btn-brand" data-devok="'+i+'">طبّق</button><button type="button" class="btn-ghost" data-devno="'+i+'">تجاهل</button></div>').join('')+'</div>'+
+      '<form class="chat-input" id="devForm"><input id="devIn" type="text" placeholder="وش تبي تعدّل؟" aria-label="طلبك" autocomplete="off"><button type="submit" class="send" aria-label="إرسال">'+icon('send')+'</button></form>'+
+      (N.length?'<div class="card"><b>طلبات تعديل برمجية ('+N.length+')</b><ul class="plan-ul">'+N.slice(0,8).map(x=>'<li>'+esc(x.t)+'</li>').join('')+'</ul><button type="button" class="btn-gold wide" id="devCopy">'+icon('send')+'<span>انسخها وأرسلها لـ Claude</span></button><button type="button" class="btn-ghost wide" id="devClear">امسح الطلبات</button></div>':'')+'</div>';};
+  async function devSend(txt){
+    if(devBusy||!txt)return;
+    if(!aiReady()){toast(inClaude?'وافق على استخدام Claude أول':'فعّل مفتاح OpenRouter من مفاتيح الذكاء');return}
+    devBusy=true; devTurns.push({role:'user',content:txt}); render();
+    const list=$('#devList'); if(list){const m=document.createElement('div');m.className='msg bot typing';m.textContent='يفكر...';list.appendChild(m);m.scrollIntoView({block:'end'})}
+    try{
+      const j=await sample.json([{role:'user',content:devSys()}].concat(devTurns.slice(-10).map(x=>({role:x.role,content:x.content}))),{modelTier:'default',cache:false});
+      const reply=String((j&&j.reply)||'تمام.'); devTurns.push({role:'assistant',content:JSON.stringify(j),show:reply});
+      devPending=(Array.isArray(j&&j.actions)?j.actions:[]).filter(a=>a&&a.type).slice(0,6);
+    }catch(e){aiFail(e);devTurns.push({role:'assistant',content:'تعذّر الرد',show:'ما قدرت أرد الحين. جرّب مرة ثانية.'})}
+    devBusy=false; if(R.tab==='ai'&&R.sub==='dev')render();
+  }
+  document.addEventListener('submit',e=>{if(e.target.id==='devForm'){e.preventDefault();const i=$('#devIn'),v=i.value.trim();i.value='';devSend(v)}});
+  document.addEventListener('click',async e=>{
+    const ok=e.target.closest('[data-devok]'); if(ok){const a=devPending.splice(+ok.dataset.devok,1)[0];if(a)applyAct(a);render();return}
+    const no=e.target.closest('[data-devno]'); if(no){devPending.splice(+no.dataset.devno,1);render();return}
+    if(e.target.closest('#devCopy')){const txt='طلبات تعديل «مع نفسك»:\n'+devNotes().map((x,i)=>(i+1)+'. '+x.t).join('\n');try{await navigator.clipboard.writeText(txt);toast('انتسخت. الصقها في محادثتك مع Claude')}catch(err){toast('ما قدر ينسخ')}return}
+    if(e.target.closest('#devClear')){lsSet('mn-devnotes','[]');render();return}
   });
 
   function extWire(k){
