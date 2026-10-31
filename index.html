@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0F0C29">
 <meta name="description" content="مع نفسك: سولف مع نفسك، واحتفل بكل إنجاز.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="مع نفسك">
+<meta property="og:locale" content="ar_SA">
+<meta property="og:title" content="مع نفسك">
+<meta property="og:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
+<meta property="og:url" content="https://3pp3ll.github.io/ma-nafsak/">
+<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="شعار مع نفسك">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="مع نفسك">
+<meta name="twitter:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
+<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.png">
+<title>مع نفسك</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -343,7 +358,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .inline-in{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.9rem}
 .inline-in input{width:90px}
 
-.inst{position:absolute;top:8px;inset-inline:12px;z-index:34;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:10px 12px;box-shadow:0 14px 34px -14px rgba(20,10,60,.45);animation:drop .45s cubic-bezier(.2,1.3,.4,1) both}
+.inst{position:absolute;top:8px;inset-inline:12px;z-index:39;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:10px 12px;box-shadow:0 14px 34px -14px rgba(20,10,60,.45);animation:drop .45s cubic-bezier(.2,1.3,.4,1) both}
 .inst img{width:44px;height:auto;flex:none}
 .inst-t{flex:1;min-width:0;display:grid;line-height:1.4}
 .inst-t b{font-size:.92rem}
@@ -351,6 +366,26 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .inst .btn-brand{padding:8px 14px;flex:none}
 .inst-x{border:0;background:transparent;color:var(--muted);font-size:1rem;padding:4px;flex:none}
 @keyframes drop{from{transform:translateY(-120%)}to{transform:none}}
+/* Password eye, remember me, charts */
+.pw-wrap{position:relative;display:block}
+.pw-wrap input{padding-left:46px!important}
+.pw-eye{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;background:transparent;color:var(--muted);display:grid;place-items:center;padding:0;border-radius:10px}
+.pw-eye .i{width:21px;height:21px}
+.remember{display:flex;gap:8px;align-items:center;font-size:.88rem;cursor:pointer}
+.remember input{width:18px;height:18px;accent-color:var(--brand);margin:0}
+.chart{width:100%;height:auto;display:block;margin-top:6px}
+.chart .bar{fill:color-mix(in srgb,var(--brand) 45%,transparent)}
+.chart .bar.hi{fill:var(--brand)}
+.chart .ax{fill:var(--muted);font-size:9px;font-family:var(--f-body)}
+.bl{display:grid;gap:9px}
+.bl-row{display:grid;grid-template-columns:minmax(0,7.5em) 1fr auto;gap:8px;align-items:center;font-size:.85rem}
+.bl-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bl-t{height:10px;border-radius:99px;background:var(--bubble);overflow:hidden}
+.bl-t i{display:block;height:100%;border-radius:99px;background:linear-gradient(270deg,var(--fx2),var(--fx1))}
+.bl-row b{font-variant-numeric:tabular-nums;font-size:.8rem}
+.plan-ul{margin:0;padding-inline-start:18px;font-size:.88rem;display:grid;gap:4px}
+.notice-card{display:flex;gap:12px;align-items:center;border:1px solid var(--gold);background:var(--gold-soft);border-radius:20px;padding:12px 14px;text-align:start;width:100%;color:var(--ink)}
+.notice-card .i{width:28px;height:28px;flex:none}
 /* Celebration overlay */
 .celebrate{position:absolute;inset:0;z-index:30;display:grid;place-items:center;align-content:center;gap:12px;background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 .cel-core{position:relative;width:160px;height:160px;display:grid;place-items:center}
@@ -461,6 +496,9 @@ button.row{width:100%;text-align:start;cursor:pointer}
     tasks:'<rect x="4" y="3" width="16" height="18" rx="3"/><path class="acs" d="M7.5 8.5l1.5 1.5 3-3M7.5 15l1.5 1.5 3-3"/><path d="M14 9h3M14 15.5h3"/>',
     restore:'<path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v4h-4"/><circle class="ac pulse" cx="12" cy="12" r="2.5"/>',
     meet:'<circle cx="6" cy="8" r="2.2"/><circle cx="12" cy="6.5" r="2.2"/><circle cx="18" cy="8" r="2.2"/><path d="M3 20v-3a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v3"/><rect class="ac bounce" x="8" y="15.5" width="8" height="3" rx="1"/>',
+    eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle class="ac" cx="12" cy="12" r="3"/>',
+    eyeoff:'<path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.6 9.6 0 0 0 5.4-1.6"/>',
+    logout:'<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path class="acs" d="M9 8l-4 4 4 4M5 12h10"/>',
     moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/><circle class="ac twinkle" cx="17" cy="5.5" r="1.3"/><circle class="ac2 tw2" cx="20.5" cy="9.5" r=".9"/>',
     flag:'<path d="M5 21V4"/><path class="ac floaty" d="M5 4h12l-2.5 4L17 12H5z"/>'
   };
@@ -485,7 +523,8 @@ button.row{width:100%;text-align:start;cursor:pointer}
       referred:[{id:'MN-552013',name:'سعود'},{id:'MN-660417',name:'ريم'}],
       meetups:[], reports:[], history:[], tasks:{profile:now-DAY},
       notifs:[{t:'فهد أرسل لك رسالة',ic:'chat',ts:now-3*36e5,read:false},{t:'سعود سجّل من رابطك. تقدر تضيفه من المجتمع',ic:'people',ts:now-5*36e5,read:false}],
-      registry:[{id:'MN-118302',status:'محذوف',since:'2025-03-14'},{id:'MN-204817',status:'يعمل',since:'2026-10-31'}]
+      registry:[{id:'MN-118302',status:'محذوف',since:'2025-03-14'},{id:'MN-204817',status:'يعمل',since:'2026-10-31'}],
+      usage:(()=>{const u={days:{},hours:[],screens:{'home/':18,'chat/':12,'home/new':9,'ai/outing':4,'interests/':6,'account/':7,'home/catch':3},ai:6,msgs:14};for(let i=0;i<12;i++){if(i%3===2)continue;u.days[new Date(now-i*DAY).toISOString().slice(0,10)]=2+((i*7)%5)}[8,9,13,21,22,23].forEach((h,i)=>{u.hours[h]=2+i});return u})()
     };
   }
   let S=demoState();
@@ -494,7 +533,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 
   /* ---------- Persistence (private per viewer; this browser as fallback) ---------- */
   const store={ref:null,ready:false,busy:false,again:false,t:0}; const LS='maanafsak-state-v3';
-  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0}));
+  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage}));
   function save(){if(!store.ready||S.demo)return;clearTimeout(store.t);store.t=setTimeout(flush,700)}
   function flush(){
     const d=snap(); try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}
@@ -840,7 +879,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   function task(k){if(!TASKS[k]||S.tasks[k])return;S.tasks[k]=Date.now();addPoints(TASKS[k][2],true);notify('أنجزت مهمة «'+TASKS[k][0]+'»: +'+TASKS[k][2]+' نقطة','coin');toast('+'+TASKS[k][2]+' نقطة: '+TASKS[k][0])}
 
   /* chat history */
-  function pushChat(role,content){const m={role,content,ts:Date.now()};S.chat.push(m);S.chat=S.chat.slice(-40);S.history.push(m);S.history=S.history.slice(-200);save()}
+  function pushChat(role,content){const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0});if(role==='user')u.msgs=(u.msgs||0)+1;else if(aiReady())u.ai=(u.ai||0)+1;const m={role,content,ts:Date.now()};S.chat.push(m);S.chat=S.chat.slice(-40);S.history.push(m);S.history=S.history.slice(-200);save()}
 
   /* flags */
   function saveFlags(){
@@ -952,7 +991,8 @@ button.row{width:100%;text-align:start;cursor:pointer}
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
     (!isAdmin?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
-    '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+(S.restoreUntil>Date.now()?tile('restore','استعادة الحساب','account/restore',8,'','متاحة '+Math.max(1,Math.ceil((S.restoreUntil-Date.now())/DAY))+' أيام'):tile('info','عن التطبيق','account/about',8))+tile('gear','الإعدادات','account/settings',9)+'</div>';};
+    (S.restoreUntil>Date.now()?'<button type="button" class="notice-card" data-go="account/restore">'+icon('restore')+'<span><b>استعادة الحساب</b><br><small style="color:var(--muted)">لقينا حساب قديم بإيميلك. متاحة '+Math.max(1,Math.ceil((S.restoreUntil-Date.now())/DAY))+' أيام</small></span></button>':'')+
+    '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+tile('chart','تحليل استخدامي','account/usage',8)+tile('gear','الإعدادات','account/settings',9)+'</div>'+(S.demo?'':'<button type="button" class="btn-ghost wide" data-logout>'+icon('logout')+'<span>تسجيل خروج</span></button>');};
   Object.assign(SCREENS.account,{
     profile:()=>{const p=S.profile, cities=['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الأحساء','الطائف','أبها','تبوك','بريدة','حائل','جازان','نجران','العلا'], known=cities.includes(p.city);
       return subhead('ملفي','idcard')+'<form class="card" id="pForm">'+
@@ -973,12 +1013,12 @@ button.row{width:100%;text-align:start;cursor:pointer}
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
     reports:()=>subhead('تقارير اللقاءات','meet')+(S.reports.length?S.reports.map(r=>'<div class="card"><b>'+esc(r.title)+'</b><p class="result">'+esc(r.text)+'</p><span class="fine">'+when(r.ts)+'</span></div>').join(''):'<p class="empty">أول ما يبدأ لقاء نظمته، ينحفظ تقريره هنا.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat/meetups">'+icon('meet')+'<span>اللقاءات</span></button>',
     restore:()=>subhead('استعادة الحساب','restore')+'<div class="card"><b>رقم حسابك</b><span class="idtag">'+esc(S.uid)+'</span><p class="fine">مرتبط بـ: <span dir="ltr">'+esc(S.contact||'ما أضفت إيميل أو جوال')+'</span></p></div><div class="card"><b>كيف تشتغل؟</b><p class="fine">إذا حذفت التطبيق أو الحساب ورجعت تسجّل بنفس الإيميل أو رقم الجوال، يطلع لك كل حساباتك السابقة وحالة كل واحد، وتختار: تستعيد واحد منها أو تبدأ حساب جديد.</p><button type="button" class="btn-gold wide" id="simReg">'+icon('restore')+'<span>تجربة: سجّلت من جديد</span></button></div><div id="regBox"></div>',
-    settings:()=>subhead('الإعدادات','gear')+'<div class="card"><div class="field"><span>صوت الاحتفال</span><div class="seg" id="sndSeg"><button type="button" role="radio" data-s="1" aria-checked="'+S.sound+'">تشغيل</button><button type="button" role="radio" data-s="0" aria-checked="'+(!S.sound)+'">إيقاف</button></div></div><div class="field"><span>أسلوب التشجيع</span><div class="seg">'+[['hype','حماسي'],['calm','هادي'],['local','باللهجة']].map(s=>'<button type="button" role="radio" data-style="'+s[0]+'" aria-checked="'+(S.style===s[0])+'">'+s[1]+'</button>').join('')+'</div></div><div class="field"><span>الوضع</span><div class="seg" id="modeSeg">'+[['auto','تلقائي'],['light','نهاري'],['dark','ليلي']].map(m=>'<button type="button" role="radio" data-modeui="'+m[0]+'" aria-checked="'+((S.mode||'auto')===m[0])+'">'+m[1]+'</button>').join('')+'</div></div></div><div class="tiles">'+tile('palette','مظهري المتحرك','ai/theme',0)+tile('info','عن التطبيق','account/about',1)+'</div>'+(S.demo?'':'<div id="delBox"><button type="button" class="btn-ghost wide" data-delacc style="color:var(--warn)">حذف حسابي</button></div>')
+    settings:()=>subhead('الإعدادات','gear')+'<div class="card"><div class="field"><span>صوت الاحتفال</span><div class="seg" id="sndSeg"><button type="button" role="radio" data-s="1" aria-checked="'+S.sound+'">تشغيل</button><button type="button" role="radio" data-s="0" aria-checked="'+(!S.sound)+'">إيقاف</button></div></div><div class="field"><span>أسلوب التشجيع</span><div class="seg">'+[['hype','حماسي'],['calm','هادي'],['local','باللهجة']].map(s=>'<button type="button" role="radio" data-style="'+s[0]+'" aria-checked="'+(S.style===s[0])+'">'+s[1]+'</button>').join('')+'</div></div><div class="field"><span>الوضع</span><div class="seg" id="modeSeg">'+[['auto','تلقائي'],['light','نهاري'],['dark','ليلي']].map(m=>'<button type="button" role="radio" data-modeui="'+m[0]+'" aria-checked="'+((S.mode||'auto')===m[0])+'">'+m[1]+'</button>').join('')+'</div></div></div><div class="tiles">'+tile('palette','مظهري المتحرك','ai/theme',0)+tile('info','عن التطبيق','account/about',1)+'</div>'+(inClaude?'':'<button type="button" class="btn-ghost wide" data-install>'+icon('plus')+'<span>ثبّت التطبيق على جوالك</span></button>')+(S.demo?'':'<div id="delBox"><button type="button" class="btn-ghost wide" data-delacc style="color:var(--warn)">حذف حسابي</button></div>')
   });
 
   SCREENS.admin={
     _:()=>sub2('لوحة التحكم','shield','account')+'<div class="kpis"><div class="kpi"><b>1,284</b><span>مستخدم</span></div><div class="kpi"><b>312</b><span>نشط اليوم</span></div><div class="kpi"><b>'+S.meetups.length+'</b><span>لقاءات</span></div></div><p class="fine">أعداد المستخدمين أرقام تجريبية.</p>'+
-      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+'</div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
+      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+tile('chart','تحليلات الاستخدام','admin/usage',6,'','للتطوير')+'<button type="button" class="tile" data-install style="--i:7"><span class="ic">'+icon('plus')+'</span><span>تثبيت التطبيق</span><span class="sub">جرّب الشريط بنفسك</span></button></div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
     flags:()=>subhead('الميزات','flag')+'<div class="card"><p class="fine">اللي تخليه «قريباً» يطلع للمستخدمين بشكل باهت ومكتوب تحته قريباً.</p>'+Object.keys(FLAG_NAMES).map(k=>'<div class="flag-row"><span>'+icon(FLAG_NAMES[k][1])+FLAG_NAMES[k][0]+'</span><div class="seg"><button type="button" role="radio" data-flag="'+k+'" data-v="on" aria-checked="'+(FLAGS[k]==='on')+'">مفعّل</button><button type="button" role="radio" data-flag="'+k+'" data-v="soon" aria-checked="'+(FLAGS[k]!=='on')+'">قريباً</button></div></div>').join('')+'</div>',
     events:()=>subhead('منصات الفعاليات','ticket')+[['ويبوك','webook.com'],['روح السعودية','visitsaudi.com']].map(p=>'<div class="card plat"><span class="sh-ic">'+icon('ticket')+'</span><div><b>'+p[0]+'</b><small class="fine" dir="ltr" style="text-align:right">'+p[1]+'</small></div><span class="chipst st-idle">قيد التواصل</span></div>').join('')+
       '<div class="card"><b>ربط النقاط بالحجز</b><div class="inline-in"><span>كل 100 نقطة =</span><input class="inp" id="ptVal" type="text" inputmode="decimal" value="'+esc(FLAGS.pointValue)+'" placeholder="؟"><span>ريال خصم</span></div><label class="field"><span>المدن المفعّلة</span><input class="inp" id="evCities" type="text" value="'+esc(FLAGS.cities)+'"></label><button type="button" class="btn-brand wide" id="evSave">'+icon('check')+'<span>احفظ</span></button><p class="fine">الربط الفعلي يحتاج اتفاقية وواجهة برمجية من كل منصة.</p></div>',
@@ -1071,14 +1111,16 @@ button.row{width:100%;text-align:start;cursor:pointer}
     f.json=async(i,o)=>{const r=await call(i,o,true),t=r.text,m=t.match(/```(?:json)?\s*([\s\S]*?)```/);const s=m?m[1]:t.slice(Math.max(0,t.search(/[\[{]/)),Math.max(t.lastIndexOf('}'),t.lastIndexOf(']'))+1);try{return JSON.parse(s)}catch(e){throw {code:'invalid_json',text:t}}};
     return f;
   }
+  const encK=s=>btoa(String(s).split('').reverse().join('')).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const decK=s=>{try{s=String(s).replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s).split('').reverse().join('')}catch(e){return ''}};
   (function readTryLink(){
-    const h=location.hash.slice(1); if(!h||h.indexOf('try=')<0)return;
-    const q=new URLSearchParams(h), k=q.get('try'), m=q.get('m');
+    const h=location.hash.slice(1); if(!h||(h.indexOf('try=')<0&&h.indexOf('k=')<0))return;
+    const q=new URLSearchParams(h), k=q.get('try')||decK(q.get('k')||''), m=q.get('m');
     try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
     if(k){lsSet(OR_LS,k);if(m)lsSet(OR_M,m);setTimeout(()=>toast('انفعّل الذكاء الاصطناعي للتجربة'),600)}
   })();
   if(!inClaude&&orKey()){sample=makeOR()}
-  function tryLink(){const base=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';return base+'#try='+encodeURIComponent(orKey())+'&m='+encodeURIComponent(orModel())}
+  function tryLink(){const base=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';return base+'#k='+encK(orKey())+'&m='+encodeURIComponent(orModel())}
 
   SCREENS.admin.keys=()=>{const k=orKey();
     return subhead('مفاتيح الذكاء','ai')+
@@ -1087,7 +1129,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     '<label class="field"><span>النموذج</span><input class="inp key-in" id="orMod" type="text" value="'+esc(orModel())+'" spellcheck="false"></label>'+
     '<label class="field"><span>رسائل الذكاء لكل زائر يومياً</span><input class="inp" id="orLim" type="number" min="1" value="'+esc(FLAGS.freeLimit)+'"></label>'+
     '<button type="button" class="btn-brand wide" id="orSave">'+icon('check')+'<span>احفظ وفعّل على جهازي</span></button>'+
-    (k?'<button type="button" class="btn-gold wide" id="orCopy">'+icon('send')+'<span>انسخ رابط التجربة</span></button><div class="link-row"><code id="orLink" style="direction:ltr">'+esc(tryLink().replace(/try=[^&]+/,'try=••••'))+'</code></div><button type="button" class="btn-ghost wide" id="orTest">'+icon('sparkle')+'<span>اختبر الاتصال</span></button><p class="result" id="orRes"></p><button type="button" class="btn-ghost wide" id="orDel">احذف المفتاح من جهازي</button>':'')+
+    (k?'<button type="button" class="btn-gold wide" id="orCopy">'+icon('send')+'<span>انسخ رابط التجربة</span></button><div class="link-row"><code id="orLink" style="direction:ltr">'+esc(tryLink().replace(/k=[^&]+/,'k=••••'))+'</code></div><button type="button" class="btn-ghost wide" id="orTest">'+icon('sparkle')+'<span>اختبر الاتصال</span></button><p class="result" id="orRes"></p><button type="button" class="btn-ghost wide" id="orDel">احذف المفتاح من جهازي</button>':'')+
     '<p class="fine" style="color:var(--warn)">أي أحد يفتح رابط التجربة يقدر يستخدم المفتاح ويشوفه لو عنده خبرة. سوّ مفتاح خاص للتجربة في OpenRouter وحط له حد صرف (Credit limit) صغير، وغيّره بعد التجربة.</p>'+
     (inClaude?'<p class="fine">داخل Claude الذكاء الاصطناعي يشتغل على Claude. رابط التجربة يشتغل على نسخة GitHub.</p>':'')+'</div>';};
 
@@ -1140,7 +1182,8 @@ button.row{width:100%;text-align:start;cursor:pointer}
     S.profile={name:p.name,gender:p.g,city:p.city,interests:[],team:'',goal:'',about:''}; S.contact=p.contact;
     S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
     S.uid=newId();S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
-    S.restoreUntil=recognized?Date.now()+7*DAY:0; recordAccount();
+    S.usage={days:{},hours:[],screens:{},ai:0,msgs:0};
+    S.restoreUntil=recognized?Date.now()+7*DAY:0; recordAccount(); if(p.pw)setPw(p.pw); setRemember(p.rem!==false);
     lsSet('mn-welcomed','1'); store.ready=true; renderChrome(); flush(); go('home');
     celebrate(G('أهلاً '+p.name+'! حسابك جاهز','أهلاً '+p.name+'! حسابك جاهز'),100); addPoints(100,true);
     setTimeout(()=>{
@@ -1162,10 +1205,13 @@ button.row{width:100%;text-align:start;cursor:pointer}
       '<label class="field"><span>الإيميل أو رقم الجوال</span><input class="inp key-in" id="wC" type="text" maxlength="60" autocomplete="email" dir="ltr"></label>'+
       '<div class="field"><span>أخاطبك بصيغة</span><div class="seg" id="wG"><button type="button" role="radio" data-wg="m" aria-checked="true">مذكر</button><button type="button" role="radio" data-wg="f" aria-checked="false">مؤنث</button></div></div>'+
       '<label class="field"><span>مدينتك</span><select class="inp" id="wCity">'+cities.map(c=>'<option>'+c+'</option>').join('')+'</select></label>'+
+      '<label class="field"><span>كلمة المرور (6 أحرف أو أكثر)</span><input class="inp key-in" id="wP" type="password" autocomplete="new-password" dir="ltr"></label>'+
+      '<label class="remember"><input type="checkbox" id="wRem" checked>تذكرني على هالجهاز</label>'+
       '<p class="fine" id="wMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('check')+'<span>أنشئ حسابي</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div></form>';
     const have=()=>'<form class="card" id="wLogin"><b style="font-size:1.1rem">تسجيل الدخول</b>'+
       '<label class="field"><span>الإيميل أو رقم الجوال</span><input class="inp key-in" id="wLE" type="text" autocomplete="username" dir="ltr"></label>'+
       '<label class="field"><span>كلمة المرور</span><input class="inp key-in" id="wLP" type="password" autocomplete="current-password" dir="ltr"></label>'+
+      '<label class="remember"><input type="checkbox" id="wLRem" checked>تذكرني على هالجهاز</label>'+
       '<p class="fine" id="wLMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('idcard')+'<span>دخول</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div><button type="button" class="btn-ghost wide" data-w="new" style="border:0;color:var(--muted)">ما عندي حساب؟ أنشئ حساب</button></form>';
     el.innerHTML=start==='have'?have():home(); $('#app').appendChild(el);
     let g='m', pending=null;
@@ -1189,17 +1235,24 @@ button.row{width:100%;text-align:start;cursor:pointer}
         if(eh===ADMIN_EMAIL_HASH&&ph===ADMIN_HASH){
           if(S.demo){S.profile={name:'عبدالله',gender:'m',city:'الرياض',interests:['work','ai','outing'],team:'',goal:'',about:''};S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
             S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null}
-          S.contact=em; recordAccount(); isAdmin=true; lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
+          S.contact=em; recordAccount(); setRemember($('#wLRem')?$('#wLRem').checked:true); isAdmin=true; lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
           el.remove(); store.ready=true; renderChrome(); flush(); go('admin'); toast('أهلاً عبدالله، دخلت كصاحب التطبيق'); return;
         }
         if(eh===ADMIN_EMAIL_HASH){fails++;if(fails>=5){fails=0;lockUntil=Date.now()+30000}msg.style.color='var(--warn)';msg.textContent='كلمة المرور غلط.';$('#wLP').value='';return}
-        msg.style.color='var(--muted)';msg.textContent='دخول الحسابات العادية يشتغل لما نربط التطبيق بالسيرفر. الحين أنشئ حساب جديد بنفس الإيميل.';return;
+        const L=accList(em); let ah=''; try{ah=await pbkdf(pw,ckey(em)+'|acct')}catch(err){}
+        const hits=L.filter(a=>a.pw&&a.pw===ah), hit=hits.find(a=>a.status==='يعمل')||hits[hits.length-1];
+        if(hit){const rem=$('#wLRem')?$('#wLRem').checked:true;
+          if(!S.demo&&S.uid===hit.id){el.remove();setRemember(rem);go('home');toast('أهلاً من جديد');return}
+          if(hasSnap(hit.id)){el.remove();restoreAccount(hit.id);setRemember(rem);return}}
+        if(L.length){fails++;if(fails>=5){fails=0;lockUntil=Date.now()+30000}msg.style.color='var(--warn)';msg.textContent=L.some(a=>a.pw)?'كلمة المرور غلط.':'هالحساب انسوى قبل كلمات المرور. أنشئ حساب جديد بنفس الإيميل وتقدر تستعيد القديم.';$('#wLP').value='';return}
+        msg.style.color='var(--muted)';msg.textContent='ما لقينا حساب بهالإيميل على هالجهاز. الدخول من أي جوال يشتغل لما نربط التطبيق بالسيرفر.';return;
       }
       const name=$('#wN').value.trim(), contact=$('#wC').value.trim();
       if(!name){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب اسمك';return}
       try{if(await sha256(contact.toLowerCase())===ADMIN_EMAIL_HASH){el.innerHTML=have();$('#wLE').value=contact;$('#wLMsg').textContent='هذا إيميل صاحب التطبيق. اكتب كلمة المرور.';$('#wLP').focus();return}}catch(err){}
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)&&!/^\+?[0-9\s]{9,15}$/.test(contact)){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب إيميل صحيح أو رقم جوال';return}
-      pending={name,contact,g,city:$('#wCity').value};
+      const pw=$('#wP').value; if(pw.length<6){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='كلمة المرور 6 أحرف أو أكثر';$('#wP').focus();return}
+      pending={name,contact,g,city:$('#wCity').value,pw,rem:$('#wRem').checked};
       const prev=accList(contact);
       if(prev.length){
         el.innerHTML='<div class="card"><div style="display:flex;gap:10px;align-items:center"><span class="sh-ic">'+icon('restore')+'</span><b>لقينا حساب سابق مرتبط بـ <span dir="ltr">'+esc(contact)+'</span></b></div><p class="fine">تبي ترجع لحسابك القديم بكل سجله، أو تبدأ حساب جديد؟</p><div class="list">'+
@@ -1237,29 +1290,36 @@ button.row{width:100%;text-align:start;cursor:pointer}
     const a=e.target.closest('[data-askci]'); if(a){const c=(S.profile.custom||[])[+a.dataset.askci];go('chat');setTimeout(()=>sendChat('عطني أفكار وتحديات صغيرة في '+c),60)}
   });
 
-  /* ---- Install banner (GitHub version): shows 3 seconds after opening ---- */
+  /* ---- Install banner (GitHub version): shows 3 seconds after opening; also on demand ---- */
+  let installNow=null;
   (function setupInstall(){
-    if(inClaude)return;
     const standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
-    if(standalone)return;
     let deferred=null;
-    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});
-    window.addEventListener('appinstalled',()=>{const b=$('#inst');if(b)b.remove();toast('انثبّت التطبيق على جوالك')});
-    if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-    try{if(sessionStorage.getItem('mn-inst-skip'))return}catch(e){}
-    const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-    setTimeout(()=>{
-      if($('#inst'))return;
+    if(!inClaude){
+      window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});
+      window.addEventListener('appinstalled',()=>{const b=$('#inst');if(b)b.remove();toast('انثبّت التطبيق على جوالك')});
+      if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+    }
+    const ua=navigator.userAgent, ios=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    const inApp=/FBAN|FBAV|Instagram|Line\/|Telegram|Snapchat|TikTok|WhatsApp|; wv\)/i.test(ua);
+    function build(force){
+      if(inClaude){if(force)toast('التثبيت يشتغل من رابط التطبيق على GitHub');return}
+      if(standalone){if(force)toast('التطبيق مثبّت عندك وفاتحه منه');return}
+      const old=$('#inst'); if(old)old.remove();
       const el=document.createElement('div'); el.className='inst'; el.id='inst'; el.setAttribute('role','dialog'); el.setAttribute('aria-label','تثبيت التطبيق');
-      el.innerHTML='<img src="icons/icon-192.png" alt="" style="border-radius:12px"><div class="inst-t"><b>ثبّت «مع نفسك» على جوالك</b><small>يفتح مثل التطبيق من الشاشة الرئيسية</small></div><button type="button" class="btn-brand" id="instGo">تثبيت</button><button type="button" class="inst-x" id="instX" aria-label="إغلاق">✕</button>';
+      el.innerHTML='<img src="icons/icon-192.png" alt="" style="border-radius:12px"><div class="inst-t"><b>ثبّت «مع نفسك» على جوالك</b><small>'+(inApp?'افتح الرابط في Chrome أو Safari عشان تقدر تثبّته':'يفتح مثل التطبيق من الشاشة الرئيسية')+'</small></div><button type="button" class="btn-brand" id="instGo">تثبيت</button><button type="button" class="inst-x" id="instX" aria-label="إغلاق">✕</button>';
       $('#app').appendChild(el);
       $('#instX').addEventListener('click',()=>{try{sessionStorage.setItem('mn-inst-skip','1')}catch(e){}el.remove()});
       $('#instGo').addEventListener('click',async()=>{
         if(deferred){deferred.prompt();try{const c=await deferred.userChoice;if(c&&c.outcome==='accepted')el.remove()}catch(e){}deferred=null;return}
-        const how=ios?'في Safari: اضغط زر المشاركة (المربع والسهم) تحت، ثم «إضافة إلى الشاشة الرئيسية»، ثم «إضافة».':'من قائمة المتصفح (⋮) اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».';
+        const how=inApp?'أنت فاتح الرابط من داخل تطبيق محادثة. اضغط النقاط (⋮ أو ...) واختر «فتح في المتصفح»، وبعدها ثبّته من هناك.':ios?'في Safari: اضغط زر المشاركة (المربع والسهم) تحت، ثم «إضافة إلى الشاشة الرئيسية»، ثم «إضافة».':'من قائمة المتصفح (⋮) اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».';
         el.querySelector('.inst-t').innerHTML='<b>طريقة التثبيت</b><small>'+how+'</small>'; $('#instGo').remove();
       });
-    },3000);
+    }
+    installNow=build;
+    if(inClaude||standalone)return;
+    try{if(sessionStorage.getItem('mn-inst-skip'))return}catch(e){}
+    setTimeout(()=>build(false),3000);
   })();
 
   /* ---- Light / dark toggle in the top bar ---- */
@@ -1285,7 +1345,84 @@ button.row{width:100%;text-align:start;cursor:pointer}
     if(e.target.closest('[data-delyes]')){deleteAccount();return}
   });
 
+  /* ---- Passwords, remember me, sign out ---- */
+  async function setPw(pw){try{const h=await pbkdf(pw,ckey(S.contact)+'|acct');const m=accMap(),L=m[ckey(S.contact)]||[],me=L.find(a=>a.id===S.uid);if(me){me.pw=h;accSave(m)}}catch(e){}}
+  function setRemember(r){lsSet('mn-sess',r?'':'1');try{sessionStorage.setItem('mn-alive','1')}catch(e){}}
+  function logout(silent){
+    if(S.demo)return;
+    lsSet('mn-acct-'+S.uid,JSON.stringify(snap()));
+    lsSet(LS,''); lsSet('mn-admin',''); lsSet('mn-welcomed',''); lsSet('mn-sess',''); isAdmin=false;
+    if(store.ref)store.ref.set({loggedOut:true}).catch(()=>{});
+    S=demoState(); lastReply=null; applyTheme(); renderChrome(); go('home');
+    if(!silent)toast('طلعت من حسابك');
+    setTimeout(()=>showWelcome(true,'have'),silent?100:400);
+  }
+  function enhancePw(){
+    document.querySelectorAll('#app input[type="password"]:not([data-pw])').forEach(inp=>{
+      inp.dataset.pw='1'; const w=document.createElement('span'); w.className='pw-wrap'; inp.parentNode.insertBefore(w,inp); w.appendChild(inp);
+      const b=document.createElement('button'); b.type='button'; b.className='pw-eye'; b.setAttribute('aria-label','إظهار كلمة المرور'); b.innerHTML=icon('eye');
+      b.addEventListener('click',()=>{const show=inp.type==='password';inp.type=show?'text':'password';b.innerHTML=icon(show?'eyeoff':'eye');b.setAttribute('aria-label',show?'إخفاء كلمة المرور':'إظهار كلمة المرور')});
+      w.appendChild(b);
+    });
+  }
+  new MutationObserver(enhancePw).observe($('#app'),{childList:true,subtree:true});
+  document.addEventListener('click',e=>{
+    if(e.target.closest('[data-logout]')){logout(false);return}
+    if(e.target.closest('[data-install]')){if(installNow)installNow(true);return}
+  });
+
+  /* ---- Usage analytics: for the user, and for the owner to improve the app ---- */
+  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
+  const TAB_NAMES={home:'الرئيسية',chat:'دردشة',interests:'اهتماماتي',ai:'AI',account:'حسابي'};
+  function track(k){
+    const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0}), d=today(), h=new Date().getHours();
+    u.days[d]=(u.days[d]||0)+1; u.hours[h]=(u.hours[h]||0)+1; u.screens[k]=(u.screens[k]||0)+1;
+    const ks=Object.keys(u.days).sort(); while(ks.length>60)delete u.days[ks.shift()];
+    save();
+  }
+  const hourLbl=h=>h===0?'12 ص':h<12?h+' ص':h===12?'12 م':(h-12)+' م';
+  function colChart(vals,labels,hi,aria){
+    const W=320,H=110,n=vals.length,max=Math.max(1,...vals),bw=W/n;
+    let s='<svg viewBox="0 0 '+W+' '+(H+18)+'" class="chart" role="img" aria-label="'+esc(aria)+'">';
+    vals.forEach((v,i)=>{const h=Math.round(v/max*(H-12)),x=(n-1-i)*bw+bw*.18,w=bw*.64;
+      s+='<rect x="'+x.toFixed(1)+'" y="'+(H-Math.max(h,2))+'" width="'+w.toFixed(1)+'" height="'+Math.max(h,2)+'" rx="3" class="'+(i===hi?'bar hi':'bar')+'"><title>'+esc(labels[i]||'')+': '+v+'</title></rect>';
+      if(labels[i])s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(H+13)+'" class="ax" text-anchor="middle">'+esc(labels[i])+'</text>'});
+    return s+'</svg>';
+  }
+  function barList(items){const max=Math.max(1,...items.map(i=>i[1]));return '<div class="bl">'+items.map(([l,v])=>'<div class="bl-row"><span class="bl-l">'+esc(l)+'</span><span class="bl-t"><i style="width:'+Math.max(4,Math.round(v/max*100))+'%"></i></span><b>'+fmt(v)+'</b></div>').join('')+'</div>'}
+  function usageHTML(admin){
+    const u=S.usage||{days:{},hours:[],screens:{},ai:0,msgs:0};
+    const days=[...Array(14)].map((_,i)=>new Date(Date.now()-(13-i)*DAY).toISOString().slice(0,10));
+    const dv=days.map(d=>u.days[d]||0), dl=days.map((d,i)=>(13-i)%2?'':String(+d.slice(8)));
+    const active30=Object.keys(u.days).filter(d=>Date.now()-new Date(d).getTime()<30*DAY).length;
+    const hours=[...Array(24)].map((_,h)=>u.hours[h]||0), hmax=Math.max(...hours), peak=hours.indexOf(hmax);
+    const tabs={}; Object.keys(u.screens).forEach(k=>{const t=k.split('/')[0];if(TAB_NAMES[t])tabs[t]=(tabs[t]||0)+u.screens[k]});
+    const tabList=Object.keys(tabs).map(t=>[TAB_NAMES[t],tabs[t]]).sort((a,b)=>b[1]-a[1]);
+    const scr=Object.keys(u.screens).filter(k=>SCR_NAMES[k]).map(k=>[SCR_NAMES[k],u.screens[k]]).sort((a,b)=>b[1]-a[1]);
+    const cats={}; S.log.forEach(x=>{const l=x.custom||LABEL[x.cat]||'عام';cats[l]=(cats[l]||0)+1});
+    const catList=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+    let html='<div class="kpis"><div class="kpi"><b>'+active30+'</b><span>يوم نشاط من 30</span></div><div class="kpi"><b>'+fmt(S.log.length)+'</b><span>إنجاز</span></div><div class="kpi"><b>'+fmt(u.msgs||0)+'</b><span>رسالة سوالف</span></div></div>'+
+      '<div class="card"><b>نشاطك آخر 14 يوم</b><span class="fine">كم مرة فتحت شاشات التطبيق كل يوم، واليوم هو العمود الغامق</span>'+colChart(dv,dl,13,'نشاط آخر 14 يوم')+'</div>'+
+      '<div class="card"><b>أكثر الأقسام استخداماً</b>'+(tabList.length?barList(tabList.slice(0,5)):'<p class="empty">ما فيه بيانات للحين.</p>')+'</div>'+
+      '<div class="card"><b>إنجازاتك حسب المجال</b>'+(catList.length?barList(catList.slice(0,6)):'<p class="empty">سجّل أول إنجاز وتطلع هنا.</p>')+'</div>'+
+      '<div class="card"><b>أوقات استخدامك</b>'+colChart(hours,hours.map((_,h)=>h%6===0?hourLbl(h):''),hmax?peak:-1,'الاستخدام حسب الساعة')+(hmax?'<p class="fine">أكثر وقت تفتح فيه التطبيق: '+hourLbl(peak)+'.</p>':'')+'</div>';
+    if(admin){
+      const unused=Object.keys(SCR_NAMES).filter(k=>!u.screens[k]).map(k=>SCR_NAMES[k]);
+      html+='<div class="card"><b>ملاحظات للتطوير</b><ul class="plan-ul">'+
+        '<li>أكثر شاشة انفتحت: '+(scr[0]?esc(scr[0][0])+' ('+scr[0][1]+' مرة)':'—')+'</li>'+
+        '<li>ردود الذكاء الاصطناعي: '+fmt(u.ai||0)+' من '+fmt(u.msgs||0)+' رسالة</li>'+
+        '<li>وقت الذروة: '+(hmax?hourLbl(peak):'—')+'</li>'+
+        '<li>شاشات ما انفتحت أبد: '+(unused.length?esc(unused.slice(0,6).join('، '))+(unused.length>6?' وغيرها':''):'كل الشاشات انفتحت')+'</li></ul>'+
+        '<p class="fine">الأرقام هنا من هالجهاز بس. في التطبيق الحقيقي تتجمع من كل المستخدمين بدون أسماء، وتشوف المتوسطات والاتجاهات.</p></div>'+
+        '<div class="card"><b>كل الشاشات</b>'+(scr.length?barList(scr.slice(0,12)):'<p class="empty">—</p>')+'</div>';
+    }
+    return html;
+  }
+  SCREENS.account.usage=()=>subhead('تحليل استخدامي','chart')+usageHTML(false);
+  SCREENS.admin.usage=()=>subhead('تحليلات الاستخدام','chart')+usageHTML(true);
+
   function extWire(k){
+    track(k);
     if(R.tab==='account')maybeByok();
     if(k==='chat/friend'){const f=S.friends.find(x=>x.id===R.arg);if(!f)return;const list=$('#fList');
       const draw=()=>{list.innerHTML=f.msgs.map(m=>'<div class="msg '+(m.me?'me':'bot')+'">'+esc(m.t)+'</div>').join('')||'<p class="empty">ابدأ السالفة مع '+esc(f.name)+'.</p>';const l=list.lastElementChild;if(l)l.scrollIntoView({block:'end'})};
@@ -1586,7 +1723,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   }
 
   /* ---------- Boot ---------- */
-  applyTheme(); renderChrome(); render(); load(); setTimeout(()=>{recordAccount();showWelcome()},900);
+  applyTheme(); renderChrome(); render(); load(); setTimeout(()=>{let alive='';try{alive=sessionStorage.getItem('mn-alive')}catch(e){}if(lsGet('mn-sess')&&!alive&&!S.demo){logout(true);return}try{sessionStorage.setItem('mn-alive','1')}catch(e){}recordAccount();showWelcome()},900);
 })();
 </script>
 
