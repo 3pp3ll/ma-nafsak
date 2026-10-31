@@ -472,6 +472,17 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .mycard.mini .mc-body{padding-bottom:4px}
 .dev-input{align-items:flex-end}
 .dev-input textarea{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:11px 14px;font:inherit;line-height:1.6;resize:vertical;min-height:8.5em;color:var(--ink)}
+
+/* v22 */
+.chat-input{align-items:flex-end}
+.main>*{min-width:0}
+.chat-input textarea.grow,.dev-input textarea{width:0}
+.chat-input textarea.grow{flex:1;min-width:0;border:2px solid #8B5CF6;background:var(--surface);border-radius:22px;padding:10px 16px;font:inherit;line-height:1.6;color:var(--ink);resize:none;overflow-y:auto;max-height:calc(5 * 1.6em + 24px);min-height:calc(1.6em + 24px)}
+.chat-input input,.dev-input textarea{border:2px solid #8B5CF6!important}
+.chat-input textarea.grow:focus,.dev-input textarea:focus{outline:none;box-shadow:0 0 0 4px color-mix(in srgb,#8B5CF6 22%,transparent)}
+.tiles .tile:nth-child(9n+1),.tiles .tile:nth-child(9n+6),.tiles .tile:nth-child(9n+8){--tc:#8B5CF6}
+.tiles .tile:nth-child(9n+2),.tiles .tile:nth-child(9n+4),.tiles .tile:nth-child(9n+9){--tc:#3B82F6}
+.tiles .tile:nth-child(9n+3),.tiles .tile:nth-child(9n+5),.tiles .tile:nth-child(9n+7){--tc:#E6B370}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="ar">
@@ -3136,7 +3147,7 @@ var qrcode = function() {
       _:()=>'<div class="chat-screen"><div class="modes" role="group" aria-label="نوع السالفة">'+
         [['talk','bubbles','سوالف'],['vent','cloud','فضفضة'],['bored','yawn','طفشان'],['progress','target','وين وصلت'],['outing','pin','طلعة']].map(m=>'<button type="button" class="mode" data-mode="'+m[0]+'" aria-pressed="'+(chatMode===m[0])+'"><span class="mi">'+icon(m[1])+'</span>'+m[2]+'</button>').join('')+
         '</div><span class="chat-state'+(aiReady()?' ai':'')+'">'+(aiReady()?'ذكاء اصطناعي: يعرفك ويتذكرك':'وضع تجريبي: ردود جاهزة')+'</span><div class="chat" id="chatList" aria-live="polite"></div>'+
-        '<form class="chat-input" id="chatForm"><input id="chatInput" type="text" placeholder="سولف مع نفسك..." aria-label="رسالتك" autocomplete="off"><button type="submit" class="send" id="chatSend" aria-label="إرسال">'+icon('send')+'</button></form></div>'
+        '<form class="chat-input" id="chatForm"><textarea id="chatInput" class="grow" rows="1" placeholder="سولف مع نفسك..." aria-label="رسالتك"></textarea><button type="submit" class="send" id="chatSend" aria-label="إرسال">'+icon('send')+'</button></form></div>'
     },
     interests:{
       _:()=>'<div class="tiles">'+Object.keys(INT).map((k,i)=>tile(INT[k][1],INT[k][0],'interests/topic/'+k,i,(S.profile.interests||[]).includes(k)?' on':'')).join('')+tile('edit','عدّل اهتماماتي','account/profile',7)+'</div><p class="fine">النقطة الملوّنة تعني إنها من اهتماماتك.</p>',
@@ -3316,14 +3327,14 @@ var qrcode = function() {
   SCREENS.chat._=()=>'<div class="chat-screen"><div class="modes" role="group" aria-label="نوع السالفة">'+
     [['community','people','المجتمع'],['talk','bubbles','سوالف'],['vent','cloud','فضفضة'],['bored','yawn','طفشان'],['progress','target','وين وصلت'],['outing','pin','طلعة']].map(m=>'<button type="button" class="mode" data-mode="'+m[0]+'" aria-pressed="'+(chatMode===m[0])+'"><span class="mi">'+icon(m[1])+'</span>'+m[2]+'</button>').join('')+
     '</div><span class="chat-state'+(aiReady()?' ai':'')+'">'+(aiReady()?'ذكاء اصطناعي: يعرفك ويتذكرك':'وضع تجريبي: ردود جاهزة')+'</span><div class="chat" id="chatList" aria-live="polite"></div>'+
-    '<form class="chat-input" id="chatForm"><input id="chatInput" type="text" placeholder="سولف مع نفسك..." aria-label="رسالتك" autocomplete="off"><button type="submit" class="send" id="chatSend" aria-label="إرسال">'+icon('send')+'</button></form></div>';
+    '<form class="chat-input" id="chatForm"><textarea id="chatInput" class="grow" rows="1" placeholder="سولف مع نفسك..." aria-label="رسالتك"></textarea><button type="submit" class="send" id="chatSend" aria-label="إرسال">'+icon('send')+'</button></form></div>';
   Object.assign(SCREENS.chat,{
     community:()=>sub2('المجتمع','people','chat')+'<div class="tiles">'+tile('people','أصدقائي','chat/friends',0,'',S.friends.length+' أصدقاء')+tile('plus','إضافة صديق','chat/add',1,'','من رابطك فقط')+soonTile('meet','اللقاءات','chat/meetups',2,'meetups',S.meetups.length?S.meetups.length+' لقاء':'طلعات تعارف')+soonTile('ticket','الفعاليات','chat/events',3,'events','حسب مدينتك')+'</div>',
     friends:()=>subhead('أصدقائي','people')+(S.friends.length?'<div class="list">'+S.friends.map(f=>'<button type="button" class="row" data-go="chat/friend/'+f.id+'"><span class="fav">'+esc(f.name.charAt(0))+'<i class="sdot '+stCls(f.status)+'"></i></span><span class="t"><b>'+esc(f.name)+'</b><br><small style="color:var(--muted)">'+(STATUS[f.status]||STATUS.online)[0]+' · '+esc(f.msgs.length?f.msgs[f.msgs.length-1].t:'ابدأ السالفة')+'</small></span><span class="w">'+icon('chat')+'</span></button>').join('')+'</div>':'<p class="empty">ما عندك أصدقاء للحين.</p>')+'<button type="button" class="btn-gold wide" data-go="chat/add">'+icon('plus')+'<span>إضافة صديق</span></button>',
     add:()=>subhead('إضافة صديق','plus')+'<div class="card"><b>تضيف بس اللي سجّلوا من رابطك</b><p class="fine">ما فيه بحث عن أشخاص غرباء. أرسل رابطك، ولما أحد يسجّل منه يطلع لك هنا.</p><div class="link-row"><code id="invLink2">maanafsak.app/i/'+esc(S.uid)+'</code><button type="button" class="btn-ghost" id="copyBtn2">نسخ</button></div></div>'+
       (S.referred.length?'<div class="list">'+S.referred.map(p=>'<div class="row"><span class="fav">'+esc(p.name.charAt(0))+'</span><span class="t"><b>'+esc(p.name)+'</b><br><small style="color:var(--muted)">سجّل من رابطك</small></span><button type="button" class="btn-brand" data-addf="'+p.id+'">إضافة</button></div>').join('')+'</div>':'<p class="empty">ما فيه أحد سجّل من رابطك للحين.</p>'),
     friend:()=>{const f=S.friends.find(x=>x.id===R.arg);if(!f)return subhead('صديق','people')+'<p class="empty">ما لقيناه.</p>';
-      return '<div class="chat-screen">'+subhead(esc(f.name)+' <small style="font-size:.75rem;color:var(--muted);font-weight:400">'+(STATUS[f.status]||STATUS.online)[0]+'</small>','people')+'<div class="chat" id="fList"></div><form class="chat-input" id="fForm"><input id="fIn" type="text" placeholder="اكتب لـ'+esc(f.name)+'..." aria-label="رسالتك" autocomplete="off"><button type="submit" class="send" aria-label="إرسال">'+icon('send')+'</button></form><p class="fine">ردود الأصدقاء في هالعرض تجريبية.</p></div>';},
+      return '<div class="chat-screen">'+subhead(esc(f.name)+' <small style="font-size:.75rem;color:var(--muted);font-weight:400">'+(STATUS[f.status]||STATUS.online)[0]+'</small>','people')+'<div class="chat" id="fList"></div><form class="chat-input" id="fForm"><textarea id="fIn" class="grow" rows="1" placeholder="اكتب لـ'+esc(f.name)+'..." aria-label="رسالتك"></textarea><button type="submit" class="send" aria-label="إرسال">'+icon('send')+'</button></form><p class="fine">ردود الأصدقاء في هالعرض تجريبية.</p></div>';},
     meetups:()=>subhead('اللقاءات','meet')+'<button type="button" class="cta" data-go="chat/meetnew">'+icon('plus')+'<span>اطلب لقاء جديد</span></button>'+
       (S.meetups.length?'<div class="list">'+S.meetups.map(m=>'<button type="button" class="row" data-go="chat/meet/'+m.id+'"><span class="ric">'+icon(INT[m.topic]?INT[m.topic][1]:'meet')+'</span><span class="t"><b>'+esc(m.title)+'</b><br><small style="color:var(--muted)">'+esc(m.city)+' · '+m.seats.filter(s=>s.state!=='apol').length+' من '+m.cap+'</small></span><span class="chipst '+(MSTATUS[m.status]||MSTATUS.sending)[1]+'">'+(MSTATUS[m.status]||MSTATUS.sending)[0]+'</span></button>').join('')+'</div>':'<p class="empty">ما سوّيت لقاءات للحين. سوّ أول طلعة تعارف.</p>'),
     meetnew:()=>{const t=new Date(Date.now()+DAY);t.setHours(20,0,0,0);const dt=new Date(t.getTime()-t.getTimezoneOffset()*6e4).toISOString().slice(0,16);
@@ -4209,6 +4220,11 @@ var qrcode = function() {
     if(e.target.closest('#devClear')){lsSet('mn-devnotes','[]');render();return}
   });
 
+  /* growing message boxes: up to 5 lines, Enter sends on computers */
+  const growTA=el=>{el.style.height='auto';el.style.height=Math.min(el.scrollHeight+4,parseFloat(getComputedStyle(el).maxHeight)||200)+'px'};
+  document.addEventListener('input',e=>{if(e.target.matches&&e.target.matches('textarea.grow'))growTA(e.target)});
+  document.addEventListener('keydown',e=>{const el=e.target;if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&el.matches&&el.matches('textarea.grow')&&!matchMedia('(pointer:coarse)').matches){e.preventDefault();const f=el.closest('form');if(f)f.requestSubmit()}});
+  document.addEventListener('submit',e=>{setTimeout(()=>e.target.querySelectorAll&&e.target.querySelectorAll('textarea.grow').forEach(growTA),0)});
   function extWire(k){
     if(k==='admin/usage')drawReport(false);
     if(k==='account/card'){shareBlobs={};cardPNG().then(b=>{shareBlobs.card=b});qrPNG().then(b=>{shareBlobs.qr=b})}
