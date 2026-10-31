@@ -939,6 +939,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     '<div class="status-row" role="group" aria-label="حالتك">'+Object.keys(STATUS).map(k=>'<button type="button" class="chip" data-status="'+k+'" aria-pressed="'+(S.status===k)+'"><i class="sdot-inline '+STATUS[k][1]+'"></i>'+STATUS[k][0]+'</button>').join('')+'</div>'+
     byokCard()+
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
+    (!isAdmin?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
     '<div class="tiles">'+tile('idcard','ملفي','account/profile',0)+soonTile('camera','صورتي','account/photo',1,'photo','حوّلها بالذكاء')+tile('tasks','مهامي','account/tasks',2,'',done+' من '+Object.keys(TASKS).length)+tile('coin','نقاطي','account/points',3)+tile('gift',G('ادعُ صديق','ادعي صديقة'),'account/invite',4)+tile('history','سجل السوالف','account/history',5)+tile('meet','تقارير اللقاءات','account/reports',6)+tile('brain','ذاكرتي','account/memory',7)+tile('restore','استعادة الحساب','account/restore',8)+tile('gear','الإعدادات','account/settings',9)+'</div>';};
   Object.assign(SCREENS.account,{
@@ -1090,8 +1091,9 @@ button.row{width:100%;text-align:start;cursor:pointer}
   });
 
   /* ---- Welcome: create an account on first open ---- */
-  function showWelcome(){
-    if(!S.demo||lsGet('mn-welcomed')||$('#welcome'))return;
+  const ADMIN_EMAIL_HASH='017f7ff879570832eb24621c71ea73934fca4fdcd8d3600264198c7e3e651ff7';
+  function showWelcome(force,start){
+    if($('#welcome'))return; if(!force&&(!S.demo||lsGet('mn-welcomed')))return;
     const cities=['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الأحساء','الطائف','أبها','تبوك','بريدة','حائل','جازان','نجران','العلا'];
     const el=document.createElement('div'); el.className='modal'; el.id='welcome'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true');
     const home=()=>'<div class="card" style="text-align:center"><img class="logo-big" src="logo.png" alt="مع نفسك"><b style="font-size:1.15rem">سولف مع نفسك، واحتفل بكل إنجاز</b>'+
@@ -1102,8 +1104,11 @@ button.row{width:100%;text-align:start;cursor:pointer}
       '<div class="field"><span>أخاطبك بصيغة</span><div class="seg" id="wG"><button type="button" role="radio" data-wg="m" aria-checked="true">مذكر</button><button type="button" role="radio" data-wg="f" aria-checked="false">مؤنث</button></div></div>'+
       '<label class="field"><span>مدينتك</span><select class="inp" id="wCity">'+cities.map(c=>'<option>'+c+'</option>').join('')+'</select></label>'+
       '<p class="fine" id="wMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('check')+'<span>أنشئ حسابي</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div></form>';
-    const have=()=>'<div class="card"><b style="font-size:1.1rem">عندي حساب</b><p class="fine">استعادة الحساب بالإيميل أو الجوال تشتغل لما نربط التطبيق بالسيرفر. الحين تقدر تسوي حساب جديد بنفس الإيميل، وأول ما يجهز السيرفر تطلع لك حساباتك وتختار.</p><button type="button" class="btn-brand wide" data-w="new">إنشاء حساب</button><button type="button" class="btn-ghost wide" data-w="back">رجوع</button></div>';
-    el.innerHTML=home(); $('#app').appendChild(el);
+    const have=()=>'<form class="card" id="wLogin"><b style="font-size:1.1rem">تسجيل الدخول</b>'+
+      '<label class="field"><span>الإيميل أو رقم الجوال</span><input class="inp key-in" id="wLE" type="text" autocomplete="username" dir="ltr"></label>'+
+      '<label class="field"><span>كلمة المرور</span><input class="inp key-in" id="wLP" type="password" autocomplete="current-password" dir="ltr"></label>'+
+      '<p class="fine" id="wLMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('idcard')+'<span>دخول</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div><button type="button" class="btn-ghost wide" data-w="new" style="border:0;color:var(--muted)">ما عندي حساب؟ أنشئ حساب</button></form>';
+    el.innerHTML=start==='have'?have():home(); $('#app').appendChild(el);
     let g='m';
     el.addEventListener('click',ev=>{
       const w=ev.target.closest('[data-w]'); const wg=ev.target.closest('[data-wg]');
@@ -1114,9 +1119,24 @@ button.row{width:100%;text-align:start;cursor:pointer}
       if(v==='have'){el.innerHTML=have();return}
       if(v==='new'){el.innerHTML=form();g='m';setTimeout(()=>{const n=$('#wN');if(n)n.focus()},50)}
     });
-    el.addEventListener('submit',ev=>{
-      ev.preventDefault(); const name=$('#wN').value.trim(), contact=$('#wC').value.trim();
+    el.addEventListener('submit',async ev=>{
+      ev.preventDefault();
+      if(ev.target.id==='wLogin'){
+        const msg=$('#wLMsg'), em=$('#wLE').value.trim().toLowerCase(), pw=$('#wLP').value;
+        if(Date.now()<lockUntil){msg.style.color='var(--warn)';msg.textContent='محاولات كثيرة. جرّب بعد 30 ثانية.';return}
+        let eh='',ph=''; try{eh=await sha256(em);ph=await pbkdf(pw,em+'|ma-nafsak')}catch(err){}
+        if(eh===ADMIN_EMAIL_HASH&&ph===ADMIN_HASH){
+          if(S.demo){S.profile={name:'عبدالله',gender:'m',city:'الرياض',interests:['work','ai','outing'],team:'',goal:'',about:''};S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
+            S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null}
+          S.contact=em; isAdmin=true; lsSet('mn-admin',ADMIN_TOKEN); lsSet('mn-welcomed','1');
+          el.remove(); store.ready=true; renderChrome(); flush(); go('admin'); toast('أهلاً عبدالله، دخلت كصاحب التطبيق'); return;
+        }
+        if(eh===ADMIN_EMAIL_HASH){fails++;if(fails>=5){fails=0;lockUntil=Date.now()+30000}msg.style.color='var(--warn)';msg.textContent='كلمة المرور غلط.';$('#wLP').value='';return}
+        msg.style.color='var(--muted)';msg.textContent='دخول الحسابات العادية يشتغل لما نربط التطبيق بالسيرفر. الحين أنشئ حساب جديد بنفس الإيميل.';return;
+      }
+      const name=$('#wN').value.trim(), contact=$('#wC').value.trim();
       if(!name){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب اسمك';return}
+      try{if(await sha256(contact.toLowerCase())===ADMIN_EMAIL_HASH){el.innerHTML=have();$('#wLE').value=contact;$('#wLMsg').textContent='هذا إيميل صاحب التطبيق. اكتب كلمة المرور.';$('#wLP').focus();return}}catch(err){}
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)&&!/^\+?[0-9\s]{9,15}$/.test(contact)){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب إيميل صحيح أو رقم جوال';return}
       S.profile={name,gender:g,city:$('#wCity').value,interests:[],team:'',goal:'',about:''}; S.contact=contact;
       S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
@@ -1127,6 +1147,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     });
   }
 
+  document.addEventListener('click',e=>{if(e.target.closest('[data-login]'))showWelcome(true,'have')});
   function extWire(k){
     if(R.tab==='account')maybeByok();
     if(k==='chat/friend'){const f=S.friends.find(x=>x.id===R.arg);if(!f)return;const list=$('#fList');
