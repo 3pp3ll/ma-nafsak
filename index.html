@@ -38,11 +38,11 @@ img{max-width:100%}
 <style>
 /* Layout: a one-screen app column — top bar, icon-led screens, five-icon bottom nav; motion accents come from the user's chosen theme (--fx1/--fx2). */
 :root{
-  --outer:#E6E8F2; --bg:#F5F6FB; --surface:#FFFFFF; --ink:#1A1F36; --muted:#646B80; --line:#E2E4EF;
-  --brand:#7A42C8; --brand-soft:#EFE7FB; --on-brand:#FFFFFF;
+  --outer:#DADDE9; --bg:#E8EAF2; --surface:#F5F5FA; --ink:#1A1F36; --muted:#5E6579; --line:#D5D8E5;
+  --brand:#7A42C8; --brand-soft:#E6DCF7; --on-brand:#FFFFFF;
   --hero:#1E1B38; --hero-ink:#F4F2FF; --hero-muted:#B3ACD6;
-  --bubble:#F1EDFA; --me:#CFE6FD; --me-ink:#10243F;
-  --gold:#E6B370; --gold-ink:#7A5216; --gold-soft:#FBF1E2;
+  --bubble:#E5E0F2; --me:#C8DDF6; --me-ink:#10243F;
+  --gold:#E6B370; --gold-ink:#7A5216; --gold-soft:#F4E7D2;
   --prog:#12C26B; --ok:#12924F; --warn:#C2410C;
   --fx1:#8B5CF6; --fx2:#3B82F6;
   --f-display:"Lalezar","IBM Plex Sans Arabic",Tahoma,system-ui,sans-serif;
@@ -2996,7 +2996,7 @@ var qrcode = function() {
   let sample=null, aiOff=false;
   if(window.claude&&window.claude.use)claude.use('sample').then(s=>{sample=s;if(R.tab==='chat'||R.tab==='ai')render()}).catch(()=>{});
   const aiReady=()=>!!sample&&!aiOff;
-  function aiFail(e){if(e&&['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code))aiOff=true;if(e&&e.code==='rate_limited')toast('خلصت رسائل الذكاء الاصطناعي لليوم')}
+  function aiFail(e){if(e&&['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code))aiOff=true;if(e&&e.code==='rate_limited')toast(ownKey()?'رصيد مفتاحك خلص':'خلص رصيدك الشهري من التطبيق. تقدر تضيف مفتاحك من حسابي ← مفاتيحي')}
   const INTEREST_NAMES={study:'الدراسة',work:'الشغل',sport:'الرياضة والصحة',football:'الكورة',self:'تطوير الذات',stocks:'الاستثمارات',outing:'الطلعات والفعاليات',ai:'الذكاء الاصطناعي'};
   function profileText(withTime){
     const p=S.profile, st=stats(), d=new Date();
@@ -3200,7 +3200,7 @@ var qrcode = function() {
   function task(k){if(!TASKS[k]||S.tasks[k])return;S.tasks[k]=Date.now();addPoints(TASKS[k][2],true);notify('أنجزت مهمة «'+TASKS[k][0]+'»: +'+TASKS[k][2]+' نقطة','coin');toast('+'+TASKS[k][2]+' نقطة: '+TASKS[k][0])}
 
   /* chat history */
-  function pushChat(role,content){const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0});if(role==='user')u.msgs=(u.msgs||0)+1;else if(aiReady())u.ai=(u.ai||0)+1;const m={role,content,ts:Date.now()};S.chat.push(m);S.chat=S.chat.slice(-40);S.history.push(m);S.history=S.history.slice(-200);save()}
+  function pushChat(role,content){const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0});if(role==='user')u.msgs=(u.msgs||0)+1;else if(aiReady())u.ai=(u.ai||0)+1;try{const b=dayBucket();if(role==='user')b.m++;else if(aiReady())b.a++;queueSync()}catch(e){}const m={role,content,ts:Date.now()};S.chat.push(m);S.chat=S.chat.slice(-40);S.history.push(m);S.history=S.history.slice(-200);save()}
 
   /* flags */
   function saveFlags(){
@@ -3328,7 +3328,7 @@ var qrcode = function() {
         '<label class="field"><span>هدفك الحالي</span><input id="pGoal" type="text" maxlength="80" value="'+esc(p.goal)+'"></label>'+
         '<label class="field"><span>عرّفني عليك أكثر</span><textarea id="pAbout" rows="3" maxlength="400" placeholder="شغلك، دراستك، وش تحب تسوي، وش يضايقك...">'+esc(p.about)+'</textarea></label>'+
         '<button type="submit" class="btn-brand wide">'+icon('check')+'<span>احفظ ملفي</span></button>'+(S.demo?'<p class="fine">حفظ ملفك لأول مرة يمسح الأمثلة ويعطيك رقم ID خاص فيك.</p>':'')+'</form>';},
-    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-ghost wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><span class="lbl">حوّلها</span><div class="picks" id="psPicks">'+Object.keys(PSTYLES).map(k=>'<button type="button" data-ps="'+k+'" aria-pressed="'+(k===photoStyle)+'">'+PSTYLES[k]+'</button>').join('')+'</div><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div><p class="fine">في هالعرض التحويل فلاتر مرسومة بالكود على جهازك، والصورة ما تطلع لأي مكان. في التطبيق الحقيقي يتحول بنموذج Nano Banana من Google.</p>',
+    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-ghost wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><span class="lbl">حوّلها</span><div class="picks" id="psPicks">'+Object.keys(PSTYLES).map(k=>'<button type="button" data-ps="'+k+'" aria-pressed="'+(k===photoStyle)+'">'+PSTYLES[k]+'</button>').join('')+'</div><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':'صورة وحدة كل أسبوع من رصيد التطبيق'+(imgDaysLeft()?' · الجاية بعد '+imgDaysLeft()+' أيام':' · متاحة الحين'))+'</p><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div><p class="fine">في هالعرض التحويل فلاتر مرسومة بالكود على جهازك، والصورة ما تطلع لأي مكان. في التطبيق الحقيقي يتحول بنموذج Nano Banana من Google.</p>',
     tasks:()=>subhead('مهامي','tasks')+'<p class="fine">كل مهمة تسويها على حسابك تعطيك نقاط.</p><div class="list">'+Object.keys(TASKS).map(k=>{const t=TASKS[k],d=S.tasks[k];return '<button type="button" class="row" '+(d?'disabled':'data-go="'+t[3]+'"')+'><span class="ric">'+icon(t[1])+'</span><span class="t">'+t[0]+'</span><span class="chipst '+(d?'st-on':'st-idle')+'">'+(d?'تمت ✓':'+'+t[2])+'</span></button>'}).join('')+'</div>',
     history:()=>{const days=[],idx={};S.history.forEach(m=>{const k=new Date(m.ts).toLocaleDateString('ar-SA-u-ca-gregory',{weekday:'long',day:'numeric',month:'long'});if(!(k in idx)){idx[k]=days.length;days.push([k,[]])}days[idx[k]][1].push(m)});
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
@@ -3339,7 +3339,7 @@ var qrcode = function() {
 
   SCREENS.admin={
     _:()=>sub2('لوحة التحكم','shield','account')+'<div class="kpis"><div class="kpi"><b>1,284</b><span>مستخدم</span></div><div class="kpi"><b>312</b><span>نشط اليوم</span></div><div class="kpi"><b>'+S.meetups.length+'</b><span>لقاءات</span></div></div><p class="fine">أعداد المستخدمين أرقام تجريبية.</p>'+
-      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+tile('chart','تحليلات الاستخدام','admin/usage',6,'','للتطوير')+'<button type="button" class="tile" data-install style="--i:7"><span class="ic">'+icon('plus')+'</span><span>تثبيت التطبيق</span><span class="sub">جرّب الشريط بنفسك</span></button></div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
+      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+tile('chart','تقرير الاستخدام','admin/usage',6,'','كل أسبوع')+'<button type="button" class="tile" data-install style="--i:7"><span class="ic">'+icon('plus')+'</span><span>تثبيت التطبيق</span><span class="sub">جرّب الشريط بنفسك</span></button></div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
     flags:()=>subhead('الميزات','flag')+'<div class="card"><p class="fine">اللي تخليه «قريباً» يطلع للمستخدمين بشكل باهت ومكتوب تحته قريباً.</p>'+Object.keys(FLAG_NAMES).map(k=>'<div class="flag-row"><span>'+icon(FLAG_NAMES[k][1])+FLAG_NAMES[k][0]+'</span><div class="seg"><button type="button" role="radio" data-flag="'+k+'" data-v="on" aria-checked="'+(FLAGS[k]==='on')+'">مفعّل</button><button type="button" role="radio" data-flag="'+k+'" data-v="soon" aria-checked="'+(FLAGS[k]!=='on')+'">قريباً</button></div></div>').join('')+'</div>',
     events:()=>subhead('منصات الفعاليات','ticket')+[['ويبوك','webook.com'],['روح السعودية','visitsaudi.com']].map(p=>'<div class="card plat"><span class="sh-ic">'+icon('ticket')+'</span><div><b>'+p[0]+'</b><small class="fine" dir="ltr" style="text-align:right">'+p[1]+'</small></div><span class="chipst st-idle">قيد التواصل</span></div>').join('')+
       '<div class="card"><b>ربط النقاط بالحجز</b><div class="inline-in"><span>كل 100 نقطة =</span><input class="inp" id="ptVal" type="text" inputmode="decimal" value="'+esc(FLAGS.pointValue)+'" placeholder="؟"><span>ريال خصم</span></div><label class="field"><span>المدن المفعّلة</span><input class="inp" id="evCities" type="text" value="'+esc(FLAGS.cities)+'"></label><button type="button" class="btn-brand wide" id="evSave">'+icon('check')+'<span>احفظ</span></button><p class="fine">الربط الفعلي يحتاج اتفاقية وواجهة برمجية من كل منصة.</p></div>',
@@ -3353,8 +3353,9 @@ var qrcode = function() {
   FLAGS.byok=FLAGS.byok||{}; FLAGS.modelQuick=FLAGS.modelQuick||''; FLAGS.modelStrong=FLAGS.modelStrong||'';
   const DEMO_USERS=[{id:'MN-300114',name:'نورة',contact:'noura@example.com',status:'online',keys:true},{id:'MN-498230',name:'فهد',contact:'05XXXXXX12',status:'busy',keys:false},{id:'MN-552013',name:'سعود',contact:'saud@example.com',status:'off',keys:false}];
   function byokCard(){
-    if(!(FLAGS.byok&&FLAGS.byok[S.uid]))return '';
-    return '<button type="button" class="admin-card" data-openbyok>'+icon('ai')+'<span><b>مفاتيحي</b><br><small style="color:var(--hero-muted)">'+(S.byokSet?'محفوظة ومشفرة على جهازك':'ما أضفت مفاتيحك للحين')+'</small></span></button>';
+    if(S.demo)return '';
+    return '<button type="button" class="admin-card" data-go="account/keys">'+icon('ai')+'<span><b>مفاتيحي</b><br><small style="color:var(--hero-muted)">'+(ownKey()?'تستخدم مفتاحك الخاص':'رصيد الشهر: '+monthSpent().toFixed(2)+'$ من '+monthCap()+'$')+'</small></span></button>';
+    return '<button>'+(S.byokSet?'محفوظة ومشفرة على جهازك':'ما أضفت مفاتيحك للحين')+'</small></span></button>';
   }
   let byokT=null, byokShown=false;
   function closeByok(){clearInterval(byokT);const m=$('#byok');if(m)m.remove()}
@@ -3404,7 +3405,8 @@ var qrcode = function() {
   const OR_LS='mn-or', OR_M='mn-or-model', OR_DAY='mn-or-day';
   const lsGet=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}}, lsSet=(k,v)=>{try{v?localStorage.setItem(k,v):localStorage.removeItem(k)}catch(e){}};
   const inClaude=!!(window.claude&&window.claude.use);
-  const orKey=()=>lsGet(OR_LS);
+  const ownKey=()=>lsGet('mn-or-own');
+  const orKey=()=>ownKey()||lsGet(OR_LS);
   const orModel=()=>lsGet(OR_M)||FLAGS.modelQuick||'openai/gpt-4o-mini';
   function orBudget(){const d=today();let o=null;try{o=JSON.parse(lsGet(OR_DAY)||'null')}catch(e){}if(!o||o.d!==d)o={d,n:0};return o}
   function orSpend(){const o=orBudget();o.n++;lsSet(OR_DAY,JSON.stringify(o))}
@@ -3412,20 +3414,20 @@ var qrcode = function() {
   function makeOR(){
     async function call(input,opts,json){
       opts=opts||{};
-      if(!isAdmin&&orBudget().n>=orLimit())throw {code:'rate_limited',message:'daily limit'};
+      if(!isAdmin&&!ownKey()&&monthSpent()>=monthCap())throw {code:'rate_limited',message:'monthly cap'};
       const msgs=typeof input==='string'?[{role:'user',content:input}]:input.map(m=>({role:m.role,content:m.content}));
       if(json)msgs.push({role:'user',content:'أرجع JSON فقط بدون أي نص قبله أو بعده.'});
       const stream=!!opts.onText&&!json;
       let res;
-      try{res=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',signal:opts.signal,headers:{'Authorization':'Bearer '+orKey(),'Content-Type':'application/json','HTTP-Referer':location.origin+location.pathname,'X-Title':'Ma Nafsak'},body:JSON.stringify({model:orModel(),messages:msgs,stream,max_tokens:800})})}
+      try{res=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',signal:opts.signal,headers:{'Authorization':'Bearer '+orKey(),'Content-Type':'application/json','HTTP-Referer':location.origin+location.pathname,'X-Title':'Ma Nafsak'},body:JSON.stringify({model:(ownKey()&&lsGet('mn-or-own-m'))||orModel(),messages:msgs,stream,max_tokens:800,usage:{include:true}})})}
       catch(e){throw {code:'upstream_error',message:String(e)}}
       if(!res.ok)throw {code:(res.status===401||res.status===403)?'not_granted':(res.status===402||res.status===429)?'rate_limited':'upstream_error',message:'HTTP '+res.status};
       orSpend();
-      if(!stream){const j=await res.json();const text=(j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';if(!text)throw {code:'empty_completion'};if(opts.onText)opts.onText({text,delta:text});return {text}}
+      if(!stream){const j=await res.json();if(j&&j.usage)addCost(j.usage);const text=(j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';if(!text)throw {code:'empty_completion'};if(opts.onText)opts.onText({text,delta:text});return {text}}
       const rd=res.body.getReader(),dec=new TextDecoder();let buf='',text='';
       for(;;){const r=await rd.read();if(r.done)break;buf+=dec.decode(r.value,{stream:true});let i;
         while((i=buf.indexOf('\n'))>-1){const ln=buf.slice(0,i).trim();buf=buf.slice(i+1);if(ln.indexOf('data:')!==0)continue;const d=ln.slice(5).trim();if(d==='[DONE]')continue;
-          try{const c=JSON.parse(d).choices[0].delta.content;if(c){text+=c;opts.onText({text,delta:c})}}catch(e){}}}
+          try{const o=JSON.parse(d);if(o.usage)addCost(o.usage);const c=o.choices&&o.choices[0]&&o.choices[0].delta&&o.choices[0].delta.content;if(c){text+=c;opts.onText({text,delta:c})}}catch(e){}}}
       if(!text)throw {code:'empty_completion'};return {text};
     }
     const f=(i,o)=>call(i,o,false);
@@ -3434,14 +3436,22 @@ var qrcode = function() {
   }
   const encK=s=>btoa(String(s).split('').reverse().join('')).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   const decK=s=>{try{s=String(s).replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s).split('').reverse().join('')}catch(e){return ''}};
+  (function readExtra(){try{const q=new URLSearchParams(location.hash.slice(1));if(!q.get('k')&&!q.get('try'))return;const l=q.get('l'),s=q.get('s');if(l&&+l>0)lsSet('mn-cap',String(+l));if(s){const v=decK(s);if(v.indexOf('{')===0)lsSet('mn-sb',v)}}catch(e){}})();
   (function readTryLink(){
     const h=location.hash.slice(1); if(!h||(h.indexOf('try=')<0&&h.indexOf('k=')<0))return;
     const q=new URLSearchParams(h), k=q.get('try')||decK(q.get('k')||''), m=q.get('m');
     try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
     if(k){lsSet(OR_LS,k);if(m)lsSet(OR_M,m);setTimeout(()=>toast('انفعّل الذكاء الاصطناعي للتجربة'),600)}
   })();
+  /* spend per month on the owner's key, and per-day usage for the report */
+  const monthKey=()=>new Date().toISOString().slice(0,7);
+  function monthObj(){let o=null;try{o=JSON.parse(lsGet('mn-or-month')||'null')}catch(e){}if(!o||o.m!==monthKey())o={m:monthKey(),usd:0};return o}
+  const monthSpent=()=>monthObj().usd;
+  const monthCap=()=>Math.max(0.1,parseFloat(lsGet('mn-cap')||FLAGS.monthlyUsd||'3')||3);
+  function dayBucket(){const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0});u.byDay=u.byDay||{};const d=today();if(!u.byDay[d])u.byDay[d]={s:{},m:0,a:0,h:0,c:0};const ks=Object.keys(u.byDay).sort();while(ks.length>30)delete u.byDay[ks.shift()];return u.byDay[d]}
+  function addCost(u){const c=typeof u.cost==='number'?u.cost:((u.prompt_tokens||0)*0.15+(u.completion_tokens||0)*0.6)/1e6;if(!(c>0))return;if(!ownKey()){const o=monthObj();o.usd=+(o.usd+c).toFixed(6);lsSet('mn-or-month',JSON.stringify(o))}dayBucket().c+=c;queueSync()}
   if(!inClaude&&orKey()){sample=makeOR()}
-  function tryLink(){const base=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';return base+'#k='+encK(orKey())+'&m='+encodeURIComponent(orModel())}
+  function tryLink(){const base=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';const sb=lsGet('mn-sb');return base+'#k='+encK(lsGet(OR_LS))+'&m='+encodeURIComponent(orModel())+'&l='+encodeURIComponent(monthCap())+(sb?'&s='+encK(sb):'')}
 
   SCREENS.admin.keys=()=>{const k=orKey();
     return subhead('مفاتيح الذكاء','ai')+
@@ -3804,7 +3814,138 @@ var qrcode = function() {
     '<div class="card"><span class="lbl">رابط دعوتك</span><div class="link-row"><code style="direction:ltr">'+esc(myLink())+'</code></div><p class="fine">اللي يسجّل من رابطك يطلع لك في المجتمع ← إضافة صديق، وتاخذ نقاط الدعوة.</p></div>';};
   document.addEventListener('click',e=>{const b=e.target.closest('[data-share]');if(b){shareImg(b.dataset.share)}});
 
+  /* ---- Usage sync to Supabase (optional) so the owner sees everyone's usage ---- */
+  const devId=()=>{let d=lsGet('mn-dev');if(!d){d='d-'+Math.random().toString(36).slice(2,10);lsSet('mn-dev',d)}return d};
+  const sbCfg=()=>{try{const c=JSON.parse(lsGet('mn-sb')||'null');return c&&c.u&&c.k?c:null}catch(e){return null}};
+  let syncT=0;
+  function queueSync(){clearTimeout(syncT);syncT=setTimeout(syncUsage,20000)}
+  async function syncUsage(){
+    const c=sbCfg(); if(!c||inClaude||!S.usage||!S.usage.byDay)return;
+    const rows=Object.keys(S.usage.byDay).sort().slice(-2).map(d=>{const b=S.usage.byDay[d];return {device:devId(),day:d,screens:b.s,msgs:b.m,ai:b.a,achievements:b.h,cost:+(+b.c||0).toFixed(5),owner:!!isAdmin,updated_at:new Date().toISOString()}});
+    try{await fetch(c.u.replace(/\/$/,'')+'/rest/v1/usage_daily?on_conflict=device,day',{method:'POST',headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(rows),keepalive:true})}catch(e){}
+  }
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')syncUsage()});
+
+  /* ---- Weekly usage report for the owner ---- */
+  let report=null;
+  async function loadReport(exMe){
+    const c=sbCfg(), since=new Date(Date.now()-6*DAY).toISOString().slice(0,10);
+    let rows=null, src='local';
+    if(c&&!inClaude){try{const r=await fetch(c.u.replace(/\/$/,'')+'/rest/v1/usage_daily?select=*&day=gte.'+since,{headers:{apikey:c.k,Authorization:'Bearer '+c.k}});if(r.ok){rows=await r.json();src='all'}}catch(e){}}
+    if(!rows){const bd=(S.usage&&S.usage.byDay)||{};rows=Object.keys(bd).filter(d=>d>=since).map(d=>({device:devId(),day:d,screens:bd[d].s,msgs:bd[d].m,ai:bd[d].a,achievements:bd[d].h,cost:bd[d].c,owner:isAdmin}))}
+    if(exMe)rows=rows.filter(r=>!r.owner);
+    const days=[...Array(7)].map((_,i)=>new Date(Date.now()-(6-i)*DAY).toISOString().slice(0,10));
+    const dev=new Set(rows.map(r=>r.device)), perDay=days.map(d=>new Set(rows.filter(r=>r.day===d).map(r=>r.device)).size);
+    const scr={}; rows.forEach(r=>Object.entries(r.screens||{}).forEach(([k,v])=>{scr[k]=(scr[k]||0)+(+v||0)}));
+    const sum=k=>rows.reduce((a,r)=>a+(+r[k]||0),0);
+    const tabs={}; Object.entries(scr).forEach(([k,v])=>{const tb=k.split('/')[0];if(TAB_NAMES[tb])tabs[tb]=(tabs[tb]||0)+v});
+    report={src,since,days,devices:dev.size,perDay,msgs:sum('msgs'),ai:sum('ai'),ach:sum('achievements'),cost:sum('cost'),
+      screens:Object.entries(scr).filter(([k])=>SCR_NAMES[k]).map(([k,v])=>[SCR_NAMES[k],v]).sort((a,b)=>b[1]-a[1]),
+      tabs:Object.entries(tabs).map(([k,v])=>[TAB_NAMES[k],v]).sort((a,b)=>b[1]-a[1]),
+      unused:Object.keys(SCR_NAMES).filter(k=>!scr[k]).map(k=>SCR_NAMES[k]),rows};
+    return report;
+  }
+  function reportText(r){
+    return 'تقرير استخدام «مع نفسك» من '+r.since+' إلى '+today()+(r.src==='all'?' (كل المستخدمين)':' (هالجهاز فقط)')+'\n'+
+      'مستخدمين نشطين: '+r.devices+'\nنشاط يومي (أجهزة): '+r.days.map((d,i)=>d.slice(5)+'='+r.perDay[i]).join('، ')+'\n'+
+      'رسائل السوالف: '+r.msgs+' · ردود الذكاء الاصطناعي: '+r.ai+' · إنجازات: '+r.ach+' · تكلفة الذكاء: '+r.cost.toFixed(3)+'$\n'+
+      'الأقسام: '+r.tabs.map(x=>x[0]+' '+x[1]).join('، ')+'\n'+
+      'أكثر الشاشات: '+r.screens.slice(0,10).map(x=>x[0]+' '+x[1]).join('، ')+'\n'+
+      'شاشات ما انفتحت: '+(r.unused.join('، ')||'لا شيء');
+  }
+  SCREENS.admin.usage=()=>subhead('تقرير الاستخدام','chart')+'<div class="seg" id="repSeg"><button type="button" role="radio" data-rep="all" aria-checked="true">كل المستخدمين</button><button type="button" role="radio" data-rep="ex" aria-checked="false">بدون جهازي</button></div><div id="repBox"><p class="empty">يحمّل التقرير...</p></div>';
+  async function drawReport(exMe){
+    const box=$('#repBox'); if(!box)return; const r=await loadReport(exMe); if(!$('#repBox'))return;
+    const lbl=r.days.map(d=>String(+d.slice(8)));
+    box.innerHTML=(r.src==='local'?'<p class="fine" style="color:var(--warn)">'+(sbCfg()?'ما قدر يجيب بيانات المستخدمين، هذي بيانات هالجهاز.':'هذي بيانات هالجهاز بس. اربط Supabase من «مفاتيح الذكاء» عشان يجيك استخدام كل اللي يجربون.')+'</p>':'')+
+      '<div class="kpis"><div class="kpi"><b>'+r.devices+'</b><span>مستخدم نشط</span></div><div class="kpi"><b>'+fmt(r.msgs)+'</b><span>رسالة سوالف</span></div><div class="kpi"><b>'+r.cost.toFixed(2)+'$</b><span>تكلفة الذكاء</span></div></div>'+
+      '<div class="card"><b>المستخدمين النشطين آخر 7 أيام</b>'+colChart(r.perDay,lbl,6,'المستخدمين النشطين يومياً')+'</div>'+
+      '<div class="card"><b>الأقسام</b>'+(r.tabs.length?barList(r.tabs):'<p class="empty">ما فيه بيانات.</p>')+'</div>'+
+      '<div class="card"><b>أكثر الشاشات</b>'+(r.screens.length?barList(r.screens.slice(0,10)):'<p class="empty">ما فيه بيانات.</p>')+'<p class="fine">شاشات ما انفتحت: '+esc(r.unused.slice(0,8).join('، ')||'لا شيء')+'</p></div>'+
+      '<div class="card"><b>إجمالي الأسبوع</b><ul class="plan-ul"><li>ردود الذكاء الاصطناعي: '+fmt(r.ai)+'</li><li>إنجازات انسجلت: '+fmt(r.ach)+'</li><li>متوسط التكلفة لكل مستخدم: '+(r.devices?(r.cost/r.devices).toFixed(3):'0')+'$</li></ul></div>'+
+      '<button type="button" class="btn-brand wide" id="repCopy">'+icon('log')+'<span>انسخ تقرير الأسبوع</span></button>'+(inClaude?'':'<button type="button" class="btn-ghost wide" id="repCsv">'+icon('send')+'<span>تصدير CSV</span></button>')+
+      '<p class="fine">كل أسبوع انسخ التقرير والصقه لي في المحادثة، وأحلله لك وأقول وش نطوّر.</p>';
+  }
+  document.addEventListener('click',async e=>{
+    const rp=e.target.closest('[data-rep]'); if(rp){$$('[data-rep]').forEach(b=>b.setAttribute('aria-checked',String(b===rp)));drawReport(rp.dataset.rep==='ex');return}
+    if(e.target.closest('#repCopy')&&report){const b=e.target.closest('#repCopy');try{await navigator.clipboard.writeText(reportText(report));b.lastChild.textContent='انتسخ التقرير'}catch(err){toast('ما قدر ينسخ، جرّب من نسخة GitHub')}return}
+    if(e.target.closest('#repCsv')&&report){const head='device,day,msgs,ai,achievements,cost,screens';const csv=[head].concat(report.rows.map(r=>[r.device,r.day,r.msgs,r.ai,r.achievements,(+r.cost||0).toFixed(5),'"'+JSON.stringify(r.screens||{}).replace(/"/g,'""')+'"'].join(','))).join('\n');
+      const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));a.download='تقرير-مع-نفسك-'+today()+'.csv';document.body.appendChild(a);a.click();a.remove();return}
+  });
+
+  /* ---- Owner: keys, monthly allowance per user, analytics link ---- */
+  SCREENS.admin.keys=()=>{const k=lsGet(OR_LS), sb=sbCfg();
+    return subhead('مفاتيح الذكاء','ai')+
+    '<div class="card"><div class="plat"><span class="sh-ic">'+icon('ai')+'</span><div><b>OpenRouter للتجربة</b><small class="fine">'+(k?'مفعّل على هالجهاز · ينتهي بـ <span dir="ltr">'+esc(k.slice(-4))+'</span>':'غير مفعّل')+'</small></div><span class="chipst '+(k?'st-on':'st-idle')+'">'+(k?'شغّال':'متوقف')+'</span></div>'+
+    '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="aK" type="password" autocomplete="off" spellcheck="false" placeholder="sk-or-v1-..."></label>'+
+    '<label class="field"><span>نموذج السوالف</span><input class="inp key-in" id="aM" type="text" value="'+esc(orModel())+'" spellcheck="false"></label>'+
+    '<label class="field"><span>نموذج تحويل الصور (Nano Banana)</span><input class="inp key-in" id="aIM" type="text" value="'+esc(imgModel())+'" spellcheck="false"></label>'+
+    '<label class="field"><span>رصيد كل مستخدم شهرياً (دولار)</span><input class="inp" id="aCap" type="number" min="0.5" step="0.5" value="'+esc(monthCap())+'"></label>'+
+    '<p class="fine">تحويل الصور بالذكاء الاصطناعي: صورة وحدة لكل مستخدم في الأسبوع، وتنحسب من رصيده الشهري.</p></div>'+
+    '<div class="card"><div class="plat"><span class="sh-ic">'+icon('chart')+'</span><div><b>تجميع الاستخدام (Supabase)</b><small class="fine">'+(sb?'مربوط':'غير مربوط: التقرير يطلع من جهازك بس')+'</small></div><span class="chipst '+(sb?'st-on':'st-idle')+'">'+(sb?'مربوط':'اختياري')+'</span></div>'+
+    '<label class="field"><span>Project URL</span><input class="inp key-in" id="aSU" type="text" value="'+esc(sb?sb.u:'')+'" placeholder="https://xxxx.supabase.co" spellcheck="false"></label>'+
+    '<label class="field"><span>anon public key</span><input class="inp key-in" id="aSK" type="password" value="'+esc(sb?sb.k:'')+'" spellcheck="false"></label>'+
+    '<p class="fine">سوّ الجدول مرة وحدة من ملف <span dir="ltr">supabase/usage.sql</span> في المستودع. يتجمع عدد الشاشات والرسائل والتكلفة بس، بدون أسماء ولا محتوى السوالف.</p></div>'+
+    '<button type="button" class="btn-brand wide" id="aSave">'+icon('check')+'<span>احفظ</span></button>'+
+    (k?'<button type="button" class="btn-gold wide" id="orCopy">'+icon('send')+'<span>انسخ رابط التجربة</span></button><div class="link-row"><code id="orLink" style="direction:ltr">'+esc(tryLink().replace(/k=[^&]+/,'k=••••').replace(/s=[^&]+/,'s=••••'))+'</code></div><button type="button" class="btn-ghost wide" id="orTest">'+icon('sparkle')+'<span>اختبر الاتصال</span></button><p class="result" id="orRes"></p><button type="button" class="btn-ghost wide" id="orDel">احذف المفتاح من جهازي</button>':'')+
+    '<p class="fine" style="color:var(--warn)">رابط التجربة فيه مفتاحك مشفّر، وأي أحد يفتحه يستخدم رصيدك. أرسله بس للي يجربون، وخل حد الصرف في OpenRouter.</p>'+(inClaude?'<p class="fine">داخل Claude الذكاء الاصطناعي يشتغل على Claude. رابط التجربة يشتغل على نسخة GitHub.</p>':'');};
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('#aSave'))return;
+    const k=$('#aK').value.trim(),m=$('#aM').value.trim(),im=$('#aIM').value.trim(),cap=parseFloat($('#aCap').value),su=$('#aSU').value.trim(),sk=$('#aSK').value.trim();
+    if(k){if(!/^sk-or-/.test(k)){toast('مفتاح OpenRouter يبدأ بـ sk-or-');return}lsSet(OR_LS,k)}
+    if(m)lsSet(OR_M,m); if(im)lsSet('mn-img-model',im); if(cap>0){lsSet('mn-cap',String(cap));FLAGS.monthlyUsd=String(cap)}
+    if(su&&sk){if(!/^https:\/\/[^\s]+$/.test(su)){toast('Project URL يبدأ بـ https://');return}lsSet('mn-sb',JSON.stringify({u:su,k:sk}))}else if(!su&&!sk)lsSet('mn-sb','');
+    saveFlags(); if(orKey()&&!inClaude){sample=makeOR();aiOff=false} render();
+  });
+
+  /* ---- My keys (every user): own OpenRouter key, or the app's monthly allowance ---- */
+  const imgModel=()=>lsGet('mn-img-model')||FLAGS.imageModel||'google/gemini-2.5-flash-image';
+  const imgLast=()=>+lsGet('mn-img-week')||0;
+  const imgDaysLeft=()=>Math.max(0,Math.ceil((imgLast()+7*DAY-Date.now())/DAY));
+  SCREENS.account.keys=()=>{const own=ownKey(), sp=monthSpent(), cap=monthCap(), pct=Math.min(100,Math.round(sp/cap*100));
+    return subhead('مفاتيحي','ai')+
+    '<div class="card"><b>'+(own?'تستخدم مفتاحك الخاص':'تستخدم رصيد التطبيق')+'</b>'+
+    (own?'<p class="fine">الذكاء الاصطناعي يشتغل على حسابك في OpenRouter، بدون حد من التطبيق.</p>':
+      '<p class="fine">كل شهر لك '+cap+'$ هدية من التطبيق للسوالف والاقتراحات.</p><div class="bl"><div class="bl-row"><span class="bl-l">صرفت '+sp.toFixed(2)+'$</span><span class="bl-t"><i style="width:'+Math.max(3,pct)+'%"></i></span><b>'+pct+'%</b></div></div>'+
+      '<p class="fine">تحويل صورتك بالذكاء الاصطناعي: '+(imgDaysLeft()?'الصورة الجاية بعد '+imgDaysLeft()+' أيام':'متاح لك صورة هالأسبوع')+'.</p>')+'</div>'+
+    '<div class="card"><b>عندك مفتاح OpenRouter؟</b><p class="fine">إذا عندك مفتاح خاص فيك، أضفه هنا ويصير الذكاء الاصطناعي على حسابك بدون حد، وتحويل الصور بدون انتظار. المفتاح ينحفظ على جهازك بس، ولا أحد يشوفه حتى صاحب التطبيق.</p>'+
+    '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="uK" type="password" autocomplete="off" spellcheck="false" placeholder="'+(own?'محفوظ · ينتهي بـ '+esc(own.slice(-4)):'sk-or-v1-...')+'"></label>'+
+    '<label class="field"><span>النموذج (اختياري)</span><input class="inp key-in" id="uM" type="text" value="'+esc(lsGet('mn-or-own-m'))+'" placeholder="'+esc(orModel())+'" spellcheck="false"></label>'+
+    '<button type="button" class="btn-brand wide" id="uSave">'+icon('shield')+'<span>احفظ مفتاحي</span></button>'+(own?'<button type="button" class="btn-ghost wide" id="uDel">احذف مفتاحي وارجع لرصيد التطبيق</button>':'')+
+    '<p class="fine">تسوي المفتاح من موقع openrouter.ai ← Keys، وتشحن رصيدك هناك.</p>'+(inClaude?'<p class="fine">المفاتيح الخاصة تشتغل من نسخة GitHub.</p>':'')+'</div>';};
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#uSave')){const k=$('#uK').value.trim(),m=$('#uM').value.trim();if(k&&!/^sk-or-/.test(k)){toast('مفتاح OpenRouter يبدأ بـ sk-or-');return}if(k)lsSet('mn-or-own',k);lsSet('mn-or-own-m',m);if(!ownKey()){toast('اكتب مفتاحك');return}S.byokSet={or:true,ts:Date.now()};save();if(!inClaude){sample=makeOR();aiOff=false}toast('انحفظ مفتاحك');render();return}
+    if(e.target.closest('#uDel')){lsSet('mn-or-own','');lsSet('mn-or-own-m','');S.byokSet=null;save();if(!inClaude)sample=lsGet(OR_LS)?makeOR():null;toast('رجعت لرصيد التطبيق');render();return}
+  });
+
+  /* ---- Photo: transform with Nano Banana via OpenRouter, once a week on the app's allowance ---- */
+  const AI_STYLE={orig:'a clean, friendly cartoon illustration',cartoon:'a clean, friendly cartoon illustration',neon:'a glowing neon synthwave portrait with purple and blue light',sketch:'a detailed pencil sketch on white paper',theme:'an elegant digital painting in purple, blue and soft gold tones'};
+  async function aiImage(){
+    if(inClaude){toast('تحويل الصور يشتغل من نسخة GitHub');return}
+    if(!photoImg){toast('اختر صورة أول');return}
+    const own=ownKey(), key=orKey(); if(!key){toast('الذكاء الاصطناعي مو مفعّل في هالرابط');return}
+    if(!own&&!isAdmin){if(imgDaysLeft()){toast('الصورة الجاية بعد '+imgDaysLeft()+' أيام. أو أضف مفتاحك من مفاتيحي');return}if(monthSpent()>=monthCap()){toast('خلص رصيدك الشهري');return}}
+    const btn=$('#aiImg'), msg=$('#aiImgMsg'); btn.disabled=true; msg.style.color='var(--muted)'; msg.textContent='يحوّل صورتك... ممكن ياخذ 20 ثانية';
+    const c=document.createElement('canvas');c.width=c.height=640;const s=Math.min(photoImg.width,photoImg.height);c.getContext('2d').drawImage(photoImg,(photoImg.width-s)/2,(photoImg.height-s)/2,s,s,0,0,640,640);
+    const data=c.toDataURL('image/jpeg',.85);
+    try{
+      const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json','HTTP-Referer':location.origin+location.pathname,'X-Title':'Ma Nafsak'},
+        body:JSON.stringify({model:imgModel(),modalities:['image','text'],usage:{include:true},messages:[{role:'user',content:[{type:'text',text:'Turn this photo into '+AI_STYLE[photoStyle]+'. Keep the same person, face shape and expression recognizable. Square portrait, simple background, no text.'},{type:'image_url',image_url:{url:data}}]}]})});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      const j=await res.json(); if(j.usage)addCost(j.usage);
+      const m=j.choices&&j.choices[0]&&j.choices[0].message, url=m&&m.images&&m.images[0]&&(m.images[0].image_url&&m.images[0].image_url.url||m.images[0].url);
+      if(!url)throw new Error('ما رجعت صورة');
+      const im=await loadImg(url); if(!im)throw new Error('الصورة ما انفتحت');
+      photoImg=im; photoStyle='orig'; drawPhoto(); $$('#psPicks [data-ps]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.ps==='orig')));
+      if(!own&&!isAdmin)lsSet('mn-img-week',String(Date.now()));
+      msg.style.color='var(--ok)'; msg.textContent='تحولت! اضغط «احفظ صورتي» إذا عجبتك.'; chime(); burst();
+    }catch(err){msg.style.color='var(--warn)';msg.textContent='ما اشتغل ('+(err.message||'خطأ')+'). تأكد من اسم نموذج الصور في لوحة التحكم.'}
+    btn.disabled=false;
+  }
+  document.addEventListener('click',e=>{if(e.target.closest('#aiImg'))aiImage()});
+
   function extWire(k){
+    if(k==='admin/usage')drawReport(false);
     if(k==='account/card'){shareBlobs={};cardPNG().then(b=>{shareBlobs.card=b});qrPNG().then(b=>{shareBlobs.qr=b})}
     track(k);
     if(R.tab==='account')maybeByok();
@@ -3899,7 +4040,7 @@ var qrcode = function() {
   function logAchievement(text,forced){
     if(achBusy)return;
     const cat=forced||detect(text), l=line(cat), pr=pick(PRAISE[S.style])();
-    S.log.unshift({t:text,cat,ts:Date.now()}); S.log=S.log.slice(0,60);
+    S.log.unshift({t:text,cat,ts:Date.now()}); S.log=S.log.slice(0,60); try{dayBucket().h++;queueSync()}catch(e){}
     lastReply={text,praise:pr,note:l[0],tip:l[1]};
     celebrate(pr,30); addPoints(30,true); setTimeout(()=>task('first'),2300);
     const box=$('#replyBox'); if(box)box.innerHTML=replyHTML();
