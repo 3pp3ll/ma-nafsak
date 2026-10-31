@@ -769,7 +769,35 @@ button.row{width:100%;text-align:start;cursor:pointer}
   };
 
   /* ================= Extensions: notifications, community, meetups, account, admin ================= */
-  let isAdmin=!(window.claude&&window.claude.use), cfgRef=null;
+  let isAdmin=false, cfgRef=null;
+  /* Admin sign-in: tap the logo mark 5 times. Only a hash of email+password lives here. */
+  const ADMIN_HASH='28223bdc4fe8d4395cd07a4f8f386f3f9c05c3856f0067ca474634852878544e';
+  const ADMIN_TOKEN=ADMIN_HASH.slice(0,24);
+  try{if(localStorage.getItem('mn-admin')===ADMIN_TOKEN)isAdmin=true}catch(e){}
+  async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+  let taps=0,tapT=0,fails=0,lockUntil=0;
+  document.querySelector('.brandmark').addEventListener('click',()=>{
+    taps=Date.now()-tapT<1500?taps+1:1; tapT=Date.now();
+    if(taps>=5){taps=0; if(isAdmin){go('admin');return} openAdminLogin()}
+  });
+  function openAdminLogin(){
+    const old=$('#adminLogin'); if(old)old.remove();
+    const el=document.createElement('div'); el.className='modal'; el.id='adminLogin'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true');
+    el.innerHTML='<form class="card" id="alForm"><div style="display:flex;gap:10px;align-items:center"><span class="sh-ic">'+icon('shield')+'</span><b>دخول لوحة التحكم</b></div>'+
+      '<label class="field"><span>الإيميل</span><input class="inp key-in" id="alE" type="email" autocomplete="username" dir="ltr"></label>'+
+      '<label class="field"><span>كلمة المرور</span><input class="inp key-in" id="alP" type="password" autocomplete="current-password" dir="ltr"></label>'+
+      '<p class="fine" id="alMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">دخول</button><button type="button" class="btn-ghost" id="alX">إلغاء</button></div></form>';
+    $('#app').appendChild(el); $('#alE').focus();
+    $('#alX').addEventListener('click',()=>el.remove());
+    $('#alForm').addEventListener('submit',async e=>{
+      e.preventDefault(); const msg=$('#alMsg');
+      if(Date.now()<lockUntil){msg.style.color='var(--warn)';msg.textContent='محاولات كثيرة. جرّب بعد 30 ثانية.';return}
+      let h=''; try{h=await sha256($('#alE').value.trim().toLowerCase()+'|'+$('#alP').value+'|ma-nafsak')}catch(err){}
+      if(h===ADMIN_HASH){isAdmin=true;try{localStorage.setItem('mn-admin',ADMIN_TOKEN)}catch(err){}el.remove();toast('أهلاً بك في لوحة التحكم');go('admin')}
+      else{fails++;$('#alP').value='';msg.style.color='var(--warn)';msg.textContent='الإيميل أو كلمة المرور غلط.';if(fails>=5){fails=0;lockUntil=Date.now()+30000}}
+    });
+  }
+  document.addEventListener('click',e=>{if(e.target.closest('[data-adminout]')){isAdmin=false;try{localStorage.removeItem('mn-admin')}catch(err){}toast('طلعت من لوحة التحكم');go('account')}});
   let FLAGS={events:'soon',meetups:'on',community:'on',photo:'on',subs:'soon',pointValue:'',cities:'الرياض، جدة، الدمام',price:'',freeLimit:'20'};
   try{const f=JSON.parse(localStorage.getItem('maanafsak-flags')||'null');if(f)FLAGS=Object.assign(FLAGS,f)}catch(e){}
   const FLAG_NAMES={community:['المجتمع والأصدقاء','people'],meetups:['اللقاءات','meet'],events:['الفعاليات','ticket'],photo:['تحويل الصورة','camera'],subs:['الاشتراك المدفوع','coin']};
@@ -936,7 +964,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 
   SCREENS.admin={
     _:()=>sub2('لوحة التحكم','shield','account')+'<div class="kpis"><div class="kpi"><b>1,284</b><span>مستخدم</span></div><div class="kpi"><b>312</b><span>نشط اليوم</span></div><div class="kpi"><b>'+S.meetups.length+'</b><span>لقاءات</span></div></div><p class="fine">أعداد المستخدمين أرقام تجريبية.</p>'+
-      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+'</div>',
+      '<div class="tiles">'+tile('flag','الميزات','admin/flags',0,'','مفعّل أو قريباً')+tile('ticket','منصات الفعاليات','admin/events',1,'','قيد التواصل')+tile('idcard','سجل الحسابات','admin/accounts',2,'','IDs وحالاتها')+tile('coin','خطط الاشتراك','admin/plans',3,'','لتكاليف الذكاء')+tile('ai','مفاتيح الذكاء','admin/keys',4,'','AI و OpenRouter')+tile('people','المستخدمين','admin/users',5,'','مفاتيحهم الخاصة')+'</div><button type="button" class="btn-ghost wide" data-adminout>'+icon('back')+'<span>خروج من لوحة التحكم</span></button>',
     flags:()=>subhead('الميزات','flag')+'<div class="card"><p class="fine">اللي تخليه «قريباً» يطلع للمستخدمين بشكل باهت ومكتوب تحته قريباً.</p>'+Object.keys(FLAG_NAMES).map(k=>'<div class="flag-row"><span>'+icon(FLAG_NAMES[k][1])+FLAG_NAMES[k][0]+'</span><div class="seg"><button type="button" role="radio" data-flag="'+k+'" data-v="on" aria-checked="'+(FLAGS[k]==='on')+'">مفعّل</button><button type="button" role="radio" data-flag="'+k+'" data-v="soon" aria-checked="'+(FLAGS[k]!=='on')+'">قريباً</button></div></div>').join('')+'</div>',
     events:()=>subhead('منصات الفعاليات','ticket')+[['ويبوك','webook.com'],['روح السعودية','visitsaudi.com']].map(p=>'<div class="card plat"><span class="sh-ic">'+icon('ticket')+'</span><div><b>'+p[0]+'</b><small class="fine" dir="ltr" style="text-align:right">'+p[1]+'</small></div><span class="chipst st-idle">قيد التواصل</span></div>').join('')+
       '<div class="card"><b>ربط النقاط بالحجز</b><div class="inline-in"><span>كل 100 نقطة =</span><input class="inp" id="ptVal" type="text" inputmode="decimal" value="'+esc(FLAGS.pointValue)+'" placeholder="؟"><span>ريال خصم</span></div><label class="field"><span>المدن المفعّلة</span><input class="inp" id="evCities" type="text" value="'+esc(FLAGS.cities)+'"></label><button type="button" class="btn-brand wide" id="evSave">'+icon('check')+'<span>احفظ</span></button><p class="fine">الربط الفعلي يحتاج اتفاقية وواجهة برمجية من كل منصة.</p></div>',
@@ -1301,4 +1329,5 @@ button.row{width:100%;text-align:start;cursor:pointer}
   applyTheme(); renderChrome(); render(); load();
 })();
 </script>
+
 </html>
