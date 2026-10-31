@@ -372,7 +372,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 
 <div class="app" id="app" dir="rtl" lang="ar">
   <header class="top gut">
-    <div class="who"><img class="brandmark" src="mark.png" alt="مع نفسك"><div><small id="greet">مساء الخير</small><strong id="hName">سالم</strong></div></div>
+    <div class="who"><img class="brandmark" src="mark.png" alt="مع نفسك"><div><small id="greet">مساء الخير</small><strong id="hName">عبدالله</strong></div></div>
     <div class="top-act">
       <button type="button" class="bell" id="bellBtn" aria-label="التنبيهات"><span id="bellIc"></span><span class="badge" id="bellN" hidden></span></button>
       <button type="button" class="pts" id="ptsBtn" aria-label="نقاطي"><span id="ptsIc"></span><span id="ptsTop">0</span></button>
@@ -464,17 +464,17 @@ button.row{width:100%;text-align:start;cursor:pointer}
   function demoState(){
     return {
       demo:true,
-      profile:{name:'سالم',gender:'m',city:'الرياض',interests:['work','sport','football','outing'],team:'الهلال',goal:'أمشي 8000 خطوة يومياً لمدة شهر',about:'موظف في شركة، أحب الكورة والقهوة والطلعات البسيطة آخر الأسبوع.'},
+      profile:{name:'عبدالله',gender:'m',city:'الرياض',interests:['work','sport','football','outing'],team:'الهلال',goal:'أمشي 8000 خطوة يومياً لمدة شهر',about:'موظف في شركة، أحب الكورة والقهوة والطلعات البسيطة آخر الأسبوع.'},
       style:'hype', points:1240,
       log:[{t:'خلصت تقرير الشغل قبل الموعد بيوم',cat:'work',ts:now-DAY},{t:'مشيت 6,500 خطوة بعد العشاء',cat:'sport',ts:now-2*DAY},{t:'ذاكرت فصلين من كتاب الإدارة',cat:'study',ts:now-3*DAY}],
       memory:['يحب القهوة المختصة','يشجع الهلال','يتمشى بعد العشاء'],
       chat:[], joined:false, sound:true,
       theme:{name:'بنفسجي مع نفسك',c1:'#8B5CF6',c2:'#3B82F6',shape:'stars'}, mode:'auto', byokSet:null,
-      uid:'MN-204817', contact:'salem@example.com', status:'online', avatar:null,
+      uid:'MN-204817', contact:'abdullah@example.com', status:'online', avatar:null,
       friends:[{id:'MN-381920',name:'فهد',status:'online',msgs:[{me:false,t:'هلا! شفت إنك سجلت إنجاز أمس، كفو',ts:now-3*36e5}]},{id:'MN-417733',name:'خالد',status:'busy',msgs:[]}],
-      referred:[{id:'MN-552013',name:'عبدالله'},{id:'MN-660417',name:'ريم'}],
+      referred:[{id:'MN-552013',name:'سعود'},{id:'MN-660417',name:'ريم'}],
       meetups:[], reports:[], history:[], tasks:{profile:now-DAY},
-      notifs:[{t:'فهد أرسل لك رسالة',ic:'chat',ts:now-3*36e5,read:false},{t:'عبدالله سجّل من رابطك. تقدر تضيفه من المجتمع',ic:'people',ts:now-5*36e5,read:false}],
+      notifs:[{t:'فهد أرسل لك رسالة',ic:'chat',ts:now-3*36e5,read:false},{t:'سعود سجّل من رابطك. تقدر تضيفه من المجتمع',ic:'people',ts:now-5*36e5,read:false}],
       registry:[{id:'MN-118302',status:'محذوف',since:'2025-03-14'},{id:'MN-204817',status:'يعمل',since:'2026-10-31'}]
     };
   }
@@ -626,7 +626,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   let sample=null, aiOff=false;
   if(window.claude&&window.claude.use)claude.use('sample').then(s=>{sample=s;if(R.tab==='chat'||R.tab==='ai')render()}).catch(()=>{});
   const aiReady=()=>!!sample&&!aiOff;
-  function aiFail(e){if(e&&['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code))aiOff=true}
+  function aiFail(e){if(e&&['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code))aiOff=true;if(e&&e.code==='rate_limited')toast('خلصت رسائل الذكاء الاصطناعي لليوم')}
   const INTEREST_NAMES={study:'الدراسة',work:'الشغل',sport:'الرياضة والصحة',football:'الكورة',self:'تطوير الذات',stocks:'الأسهم',outing:'الطلعات والفعاليات',ai:'الذكاء الاصطناعي'};
   function profileText(withTime){
     const p=S.profile, st=stats(), d=new Date();
@@ -771,9 +771,10 @@ button.row{width:100%;text-align:start;cursor:pointer}
   /* ================= Extensions: notifications, community, meetups, account, admin ================= */
   let isAdmin=false, cfgRef=null;
   /* Admin sign-in: tap the logo mark 5 times. Only a hash of email+password lives here. */
-  const ADMIN_HASH='28223bdc4fe8d4395cd07a4f8f386f3f9c05c3856f0067ca474634852878544e';
+  const ADMIN_HASH='f1989c8995bbfa7d35909f9563ff1ad0a2f6038c63824528e21b41c2aa33c960';
   const ADMIN_TOKEN=ADMIN_HASH.slice(0,24);
   try{if(localStorage.getItem('mn-admin')===ADMIN_TOKEN)isAdmin=true}catch(e){}
+  async function pbkdf(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);const b=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:new TextEncoder().encode(salt),iterations:150000},k,256);return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
   async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
   let taps=0,tapT=0,fails=0,lockUntil=0;
   document.querySelector('.brandmark').addEventListener('click',()=>{
@@ -792,7 +793,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
     $('#alForm').addEventListener('submit',async e=>{
       e.preventDefault(); const msg=$('#alMsg');
       if(Date.now()<lockUntil){msg.style.color='var(--warn)';msg.textContent='محاولات كثيرة. جرّب بعد 30 ثانية.';return}
-      let h=''; try{h=await sha256($('#alE').value.trim().toLowerCase()+'|'+$('#alP').value+'|ma-nafsak')}catch(err){}
+      let h=''; try{h=await pbkdf($('#alP').value,$('#alE').value.trim().toLowerCase()+'|ma-nafsak')}catch(err){}
       if(h===ADMIN_HASH){isAdmin=true;try{localStorage.setItem('mn-admin',ADMIN_TOKEN)}catch(err){}el.remove();toast('أهلاً بك في لوحة التحكم');go('admin')}
       else{fails++;$('#alP').value='';msg.style.color='var(--warn)';msg.textContent='الإيميل أو كلمة المرور غلط.';if(fails>=5){fails=0;lockUntil=Date.now()+30000}}
     });
@@ -976,7 +977,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 
   /* ---- AI keys (admin) and bring-your-own-keys (users) ---- */
   FLAGS.byok=FLAGS.byok||{}; FLAGS.modelQuick=FLAGS.modelQuick||''; FLAGS.modelStrong=FLAGS.modelStrong||'';
-  const DEMO_USERS=[{id:'MN-300114',name:'نورة',contact:'noura@example.com',status:'online',keys:true},{id:'MN-498230',name:'فهد',contact:'05XXXXXX12',status:'busy',keys:false},{id:'MN-552013',name:'عبدالله',contact:'abdullah@example.com',status:'off',keys:false}];
+  const DEMO_USERS=[{id:'MN-300114',name:'نورة',contact:'noura@example.com',status:'online',keys:true},{id:'MN-498230',name:'فهد',contact:'05XXXXXX12',status:'busy',keys:false},{id:'MN-552013',name:'سعود',contact:'saud@example.com',status:'off',keys:false}];
   function byokCard(){
     if(!(FLAGS.byok&&FLAGS.byok[S.uid]))return '';
     return '<button type="button" class="admin-card" data-openbyok>'+icon('ai')+'<span><b>مفاتيحي</b><br><small style="color:var(--hero-muted)">'+(S.byokSet?'محفوظة ومشفرة على جهازك':'ما أضفت مفاتيحك للحين')+'</small></span></button>';
@@ -1024,6 +1025,107 @@ button.row{width:100%;text-align:start;cursor:pointer}
     const md=e.target.closest('[data-modeui]'); if(md){S.mode=md.dataset.modeui;applyMode();save();$$('[data-modeui]').forEach(b=>b.setAttribute('aria-checked',String(b===md)));return}
     if(e.target.closest('#kAdminSave')){FLAGS.modelQuick=$('#mQ').value.trim();FLAGS.modelStrong=$('#mS').value.trim();$('#aAI').value='';$('#aOR').value='';saveFlags()}
   });
+
+  /* ---- OpenRouter for the shared test link (works on the GitHub version; inside Claude the AI is Claude) ---- */
+  const OR_LS='mn-or', OR_M='mn-or-model', OR_DAY='mn-or-day';
+  const lsGet=k=>{try{return localStorage.getItem(k)||''}catch(e){return ''}}, lsSet=(k,v)=>{try{v?localStorage.setItem(k,v):localStorage.removeItem(k)}catch(e){}};
+  const inClaude=!!(window.claude&&window.claude.use);
+  const orKey=()=>lsGet(OR_LS);
+  const orModel=()=>lsGet(OR_M)||FLAGS.modelQuick||'openai/gpt-4o-mini';
+  function orBudget(){const d=today();let o=null;try{o=JSON.parse(lsGet(OR_DAY)||'null')}catch(e){}if(!o||o.d!==d)o={d,n:0};return o}
+  function orSpend(){const o=orBudget();o.n++;lsSet(OR_DAY,JSON.stringify(o))}
+  const orLimit=()=>Math.max(1,parseInt(FLAGS.freeLimit,10)||20);
+  function makeOR(){
+    async function call(input,opts,json){
+      opts=opts||{};
+      if(!isAdmin&&orBudget().n>=orLimit())throw {code:'rate_limited',message:'daily limit'};
+      const msgs=typeof input==='string'?[{role:'user',content:input}]:input.map(m=>({role:m.role,content:m.content}));
+      if(json)msgs.push({role:'user',content:'أرجع JSON فقط بدون أي نص قبله أو بعده.'});
+      const stream=!!opts.onText&&!json;
+      let res;
+      try{res=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',signal:opts.signal,headers:{'Authorization':'Bearer '+orKey(),'Content-Type':'application/json','HTTP-Referer':location.origin+location.pathname,'X-Title':'Ma Nafsak'},body:JSON.stringify({model:orModel(),messages:msgs,stream,max_tokens:800})})}
+      catch(e){throw {code:'upstream_error',message:String(e)}}
+      if(!res.ok)throw {code:(res.status===401||res.status===403)?'not_granted':(res.status===402||res.status===429)?'rate_limited':'upstream_error',message:'HTTP '+res.status};
+      orSpend();
+      if(!stream){const j=await res.json();const text=(j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';if(!text)throw {code:'empty_completion'};if(opts.onText)opts.onText({text,delta:text});return {text}}
+      const rd=res.body.getReader(),dec=new TextDecoder();let buf='',text='';
+      for(;;){const r=await rd.read();if(r.done)break;buf+=dec.decode(r.value,{stream:true});let i;
+        while((i=buf.indexOf('\n'))>-1){const ln=buf.slice(0,i).trim();buf=buf.slice(i+1);if(ln.indexOf('data:')!==0)continue;const d=ln.slice(5).trim();if(d==='[DONE]')continue;
+          try{const c=JSON.parse(d).choices[0].delta.content;if(c){text+=c;opts.onText({text,delta:c})}}catch(e){}}}
+      if(!text)throw {code:'empty_completion'};return {text};
+    }
+    const f=(i,o)=>call(i,o,false);
+    f.json=async(i,o)=>{const r=await call(i,o,true),t=r.text,m=t.match(/```(?:json)?\s*([\s\S]*?)```/);const s=m?m[1]:t.slice(Math.max(0,t.search(/[\[{]/)),Math.max(t.lastIndexOf('}'),t.lastIndexOf(']'))+1);try{return JSON.parse(s)}catch(e){throw {code:'invalid_json',text:t}}};
+    return f;
+  }
+  (function readTryLink(){
+    const h=location.hash.slice(1); if(!h||h.indexOf('try=')<0)return;
+    const q=new URLSearchParams(h), k=q.get('try'), m=q.get('m');
+    try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+    if(k){lsSet(OR_LS,k);if(m)lsSet(OR_M,m);setTimeout(()=>toast('انفعّل الذكاء الاصطناعي للتجربة'),600)}
+  })();
+  if(!inClaude&&orKey()){sample=makeOR()}
+  function tryLink(){const base=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';return base+'#try='+encodeURIComponent(orKey())+'&m='+encodeURIComponent(orModel())}
+
+  SCREENS.admin.keys=()=>{const k=orKey();
+    return subhead('مفاتيح الذكاء','ai')+
+    '<div class="card"><div class="plat"><span class="sh-ic">'+icon('ai')+'</span><div><b>OpenRouter للتجربة</b><small class="fine">'+(k?'مفعّل على هالجهاز · ينتهي بـ <span dir="ltr">'+esc(k.slice(-4))+'</span>':'غير مفعّل')+'</small></div><span class="chipst '+(k?'st-on':'st-idle')+'">'+(k?'شغّال':'متوقف')+'</span></div>'+
+    '<label class="field"><span>مفتاح OpenRouter</span><input class="inp key-in" id="orK" type="password" autocomplete="off" spellcheck="false" placeholder="sk-or-v1-..."></label>'+
+    '<label class="field"><span>النموذج</span><input class="inp key-in" id="orMod" type="text" value="'+esc(orModel())+'" spellcheck="false"></label>'+
+    '<label class="field"><span>رسائل الذكاء لكل زائر يومياً</span><input class="inp" id="orLim" type="number" min="1" value="'+esc(FLAGS.freeLimit)+'"></label>'+
+    '<button type="button" class="btn-brand wide" id="orSave">'+icon('check')+'<span>احفظ وفعّل على جهازي</span></button>'+
+    (k?'<button type="button" class="btn-gold wide" id="orCopy">'+icon('send')+'<span>انسخ رابط التجربة</span></button><div class="link-row"><code id="orLink" style="direction:ltr">'+esc(tryLink().replace(/try=[^&]+/,'try=••••'))+'</code></div><button type="button" class="btn-ghost wide" id="orTest">'+icon('sparkle')+'<span>اختبر الاتصال</span></button><p class="result" id="orRes"></p><button type="button" class="btn-ghost wide" id="orDel">احذف المفتاح من جهازي</button>':'')+
+    '<p class="fine" style="color:var(--warn)">أي أحد يفتح رابط التجربة يقدر يستخدم المفتاح ويشوفه لو عنده خبرة. سوّ مفتاح خاص للتجربة في OpenRouter وحط له حد صرف (Credit limit) صغير، وغيّره بعد التجربة.</p>'+
+    (inClaude?'<p class="fine">داخل Claude الذكاء الاصطناعي يشتغل على Claude. رابط التجربة يشتغل على نسخة GitHub.</p>':'')+'</div>';};
+
+  document.addEventListener('click',async e=>{
+    if(e.target.closest('#orSave')){const k=$('#orK').value.trim(),m=$('#orMod').value.trim(),l=$('#orLim').value.trim();
+      if(k){if(!/^sk-or-/.test(k)){toast('مفتاح OpenRouter يبدأ بـ sk-or-');return}lsSet(OR_LS,k)}
+      if(m)lsSet(OR_M,m); if(l)FLAGS.freeLimit=l; FLAGS.modelQuick=m||FLAGS.modelQuick; saveFlags();
+      if(orKey()&&!inClaude){sample=makeOR();aiOff=false} render(); return}
+    if(e.target.closest('#orCopy')){const link=tryLink(),b=e.target.closest('#orCopy');
+      try{await navigator.clipboard.writeText(link);b.lastChild.textContent='انتسخ الرابط'}catch(err){const c=$('#orLink');c.textContent=link;const r=document.createRange();r.selectNodeContents(c);const s=getSelection();s.removeAllRanges();s.addRange(r);b.lastChild.textContent='حدده وانسخه'}return}
+    if(e.target.closest('#orTest')){const out=$('#orRes');out.textContent='يجرب...';try{const f=inClaude?makeOR():(sample||makeOR());const r=await f('رد بكلمة وحدة: تمام');out.style.color='var(--ok)';out.textContent='الاتصال شغّال: '+r.text.slice(0,60)}catch(err){out.style.color='var(--warn)';out.textContent=inClaude?'داخل Claude ما يقدر يتصل بـ OpenRouter. جرّبه من نسخة GitHub.':'ما اشتغل ('+(err&&err.message||err&&err.code||'خطأ')+'). تأكد من المفتاح والرصيد واسم النموذج.'}return}
+    if(e.target.closest('#orDel')){lsSet(OR_LS,'');if(!inClaude)sample=null;toast('انحذف المفتاح من جهازك');render();return}
+  });
+
+  /* ---- Welcome: create an account on first open ---- */
+  function showWelcome(){
+    if(!S.demo||lsGet('mn-welcomed')||$('#welcome'))return;
+    const cities=['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الأحساء','الطائف','أبها','تبوك','بريدة','حائل','جازان','نجران','العلا'];
+    const el=document.createElement('div'); el.className='modal'; el.id='welcome'; el.setAttribute('role','dialog'); el.setAttribute('aria-modal','true');
+    const home=()=>'<div class="card" style="text-align:center"><img class="logo-big" src="logo.png" alt="مع نفسك"><b style="font-size:1.15rem">سولف مع نفسك، واحتفل بكل إنجاز</b>'+
+      '<button type="button" class="btn-brand wide" data-w="new">'+icon('plus')+'<span>إنشاء حساب</span></button><button type="button" class="btn-ghost wide" data-w="have">'+icon('idcard')+'<span>عندي حساب</span></button><button type="button" class="btn-ghost wide" data-w="skip" style="border:0;color:var(--muted)">أجرب بدون حساب</button></div>';
+    const form=()=>'<form class="card" id="wForm"><b style="font-size:1.1rem">إنشاء حساب</b>'+
+      '<label class="field"><span>اسمك</span><input class="inp" id="wN" type="text" maxlength="30" autocomplete="name"></label>'+
+      '<label class="field"><span>الإيميل أو رقم الجوال</span><input class="inp key-in" id="wC" type="text" maxlength="60" autocomplete="email" dir="ltr"></label>'+
+      '<div class="field"><span>أخاطبك بصيغة</span><div class="seg" id="wG"><button type="button" role="radio" data-wg="m" aria-checked="true">مذكر</button><button type="button" role="radio" data-wg="f" aria-checked="false">مؤنث</button></div></div>'+
+      '<label class="field"><span>مدينتك</span><select class="inp" id="wCity">'+cities.map(c=>'<option>'+c+'</option>').join('')+'</select></label>'+
+      '<p class="fine" id="wMsg"></p><div style="display:flex;gap:8px"><button type="submit" class="btn-brand" style="flex:1">'+icon('check')+'<span>أنشئ حسابي</span></button><button type="button" class="btn-ghost" data-w="back">رجوع</button></div></form>';
+    const have=()=>'<div class="card"><b style="font-size:1.1rem">عندي حساب</b><p class="fine">استعادة الحساب بالإيميل أو الجوال تشتغل لما نربط التطبيق بالسيرفر. الحين تقدر تسوي حساب جديد بنفس الإيميل، وأول ما يجهز السيرفر تطلع لك حساباتك وتختار.</p><button type="button" class="btn-brand wide" data-w="new">إنشاء حساب</button><button type="button" class="btn-ghost wide" data-w="back">رجوع</button></div>';
+    el.innerHTML=home(); $('#app').appendChild(el);
+    let g='m';
+    el.addEventListener('click',ev=>{
+      const w=ev.target.closest('[data-w]'); const wg=ev.target.closest('[data-wg]');
+      if(wg){g=wg.dataset.wg;el.querySelectorAll('[data-wg]').forEach(b=>b.setAttribute('aria-checked',String(b===wg)));return}
+      if(!w)return; const v=w.dataset.w;
+      if(v==='skip'){lsSet('mn-welcomed','1');el.remove();return}
+      if(v==='back'){el.innerHTML=home();return}
+      if(v==='have'){el.innerHTML=have();return}
+      if(v==='new'){el.innerHTML=form();g='m';setTimeout(()=>{const n=$('#wN');if(n)n.focus()},50)}
+    });
+    el.addEventListener('submit',ev=>{
+      ev.preventDefault(); const name=$('#wN').value.trim(), contact=$('#wC').value.trim();
+      if(!name){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب اسمك';return}
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)&&!/^\+?[0-9\s]{9,15}$/.test(contact)){$('#wMsg').style.color='var(--warn)';$('#wMsg').textContent='اكتب إيميل صحيح أو رقم جوال';return}
+      S.profile={name,gender:g,city:$('#wCity').value,interests:[],team:'',goal:'',about:''}; S.contact=contact;
+      S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
+      S.uid=newId();S.registry=[{id:S.uid,status:'يعمل',since:today()}];S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
+      lsSet('mn-welcomed','1'); el.remove(); store.ready=true; renderChrome(); flush(); go('home');
+      celebrate(G('أهلاً '+name+'! حسابك جاهز','أهلاً '+name+'! حسابك جاهز'),100); addPoints(100,true);
+      setTimeout(()=>{notify('رقم حسابك '+S.uid+'. كمّل ملفك واهتماماتك من حسابي','idcard');go('account/profile')},2300);
+    });
+  }
 
   function extWire(k){
     if(R.tab==='account')maybeByok();
@@ -1326,7 +1428,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
   }
 
   /* ---------- Boot ---------- */
-  applyTheme(); renderChrome(); render(); load();
+  applyTheme(); renderChrome(); render(); load(); setTimeout(showWelcome,900);
 })();
 </script>
 
