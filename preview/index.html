@@ -548,6 +548,30 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .wd-letters .wl{width:52px;height:52px;border-radius:14px;border:0;background:#8B5CF6;color:#FFFFFF;font-size:1.5rem;font-weight:700;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2)}
 .wd-letters .wl:nth-child(3n+2){background:#3B82F6}.wd-letters .wl:nth-child(3n){background:#D8952F}
 .wd-letters .wl:disabled{opacity:.25}
+
+/* v28 block puzzle + voice */
+.bk-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.bk-best,.bk-score{display:flex;gap:6px;align-items:center;border-radius:16px;padding:6px 16px;font-family:var(--f-display);font-size:1.5rem}
+.bk-best{background:#8B5CF6;color:#FCE7B5}.bk-best .i{width:20px;height:20px}
+.bk-score{background:var(--frame,#262046);color:#FFFFFF;min-width:96px;justify-content:center}
+.bk-wrap{position:relative;width:100%;max-width:360px;margin-inline:auto}
+.bk-board{direction:ltr;display:grid;grid-template-columns:repeat(8,1fr);gap:3px;padding:6px;border-radius:18px;background:var(--frame,#262046);box-shadow:0 0 0 4px color-mix(in srgb,#8B5CF6 35%,transparent)}
+.bk-board .bc{aspect-ratio:1;border-radius:5px;background:rgba(255,255,255,.06)}
+.bk-board .bc.hint{background:rgba(255,255,255,.32)}
+.gem,.bk-board .bc.gem{display:block;border-radius:5px;background:linear-gradient(145deg,color-mix(in srgb,var(--gc) 55%,#fff) 0%,var(--gc) 45%,color-mix(in srgb,var(--gc) 70%,#000) 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),inset 0 -3px 0 rgba(0,0,0,.18)}
+.bk-board .bc.gem{aspect-ratio:1}
+.bk-board .bc.pop{animation:bkpop .26s ease-in forwards}
+@keyframes bkpop{to{transform:scale(.2);opacity:0}}
+.bk-tray{direction:ltr;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;min-height:120px;align-items:center;justify-items:center;--ps:20px}
+.bk-slot{display:grid;place-items:center;width:100%;height:110px}
+.bk-pc{display:grid;gap:2px;touch-action:none;cursor:grab;padding:8px;border-radius:12px}
+.bk-pc .gem{width:var(--ps);height:var(--ps)}
+.bk-pc.no{opacity:.35}
+.bk-ghost{position:fixed;left:0;top:0;z-index:60;display:grid;gap:3px;pointer-events:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35))}
+.bk-over{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:8px;border-radius:18px;background:rgba(20,14,50,.82);color:#FFFFFF;text-align:center}
+.bk-over b{font-family:var(--f-display);font-size:1.6rem;font-weight:400}
+.wake-dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(46,156,115,.25);color:#7CF0BE}
+.wake-dot .i{width:17px;height:17px}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="ar">
@@ -3178,7 +3202,7 @@ var qrcode = function() {
 
   /* ---------- Router ---------- */
   const R={tab:'home',sub:null,arg:null};
-  const PARENT={'home/quiz':'home/challenges','home/catch':'home/challenges','home/jig':'home/challenges','home/slide':'home/challenges','home/word':'home/challenges'};
+  const PARENT={'home/quiz':'home/challenges','home/catch':'home/challenges','home/jig':'home/challenges','home/slide':'home/challenges','home/word':'home/challenges','home/blocks':'home/challenges'};
   function go(path){const p=path.split('/');R.tab=p[0];R.sub=p[1]||null;R.arg=p[2]||null;render();$('#main').scrollTop=0}
   function back(){const k=R.tab+'/'+R.sub;go(PARENT[k]||R.tab)}
 
@@ -3203,7 +3227,7 @@ var qrcode = function() {
           '<div class="chips">'+ex.map(e=>'<button type="button" class="chip" data-ex="'+esc(e)+'">'+esc(e)+'</button>').join('')+'</div>'+
           '<div id="replyBox">'+replyHTML()+'</div>';},
       log:()=>subhead('سجلي','log')+(S.log.length?'<ul class="list">'+S.log.slice(0,40).map((x,i)=>'<li class="row" style="animation:popin .35s both;animation-delay:'+(i*40)+'ms"><span class="ric">'+icon(CAT_IC(x.cat))+'</span><span class="t">'+esc(x.t)+'</span><span class="w">'+when(x.ts)+'</span></li>').join('')+'</ul>':'<p class="empty">'+G('سجلك فاضي. أول إنجاز تكتبه بيظهر هنا.','سجلك فاضي. أول إنجاز تكتبينه بيظهر هنا.')+'</p>'),
-      challenges:()=>subhead('تحديات','trophy')+'<div class="tiles">'+tile('question','أسئلة سريعة','home/quiz',0,'','3 مراحل')+tile('star','امسك النجمة','home/catch',1,'','20 ثانية')+tile('puzzle','تركيب الصورة','home/jig',2,'','رتّب القطع')+tile('grid9','البلاطات','home/slide',3,'','حرّك الأرقام')+tile('letters','رتّب الكلمة','home/word',4,'','حروف مبعثرة')+'</div>',
+      challenges:()=>subhead('تحديات','trophy')+'<div class="tiles">'+tile('question','أسئلة سريعة','home/quiz',0,'','3 مراحل')+tile('star','امسك النجمة','home/catch',1,'','20 ثانية')+tile('puzzle','تركيب الصورة','home/jig',2,'','رتّب القطع')+tile('grid9','البلاطات','home/slide',3,'','حرّك الأرقام')+tile('letters','رتّب الكلمة','home/word',4,'','حروف مبعثرة')+tile('blocks','المكعبات','home/blocks',5,'','كمّل الصفوف')+'</div>',
       quiz:()=>subhead('أسئلة سريعة','question')+'<div id="game" class="card"></div>',
       catch:()=>subhead('امسك النجمة','star')+'<div class="game-head"><span class="lbl" id="catchInfo">'+G('امسكها قبل تهرب! عندك 20 ثانية','امسكيها قبل تهرب! عندك 20 ثانية')+'</span><b class="score" id="catchScore">0</b></div><div class="arena" id="arena"><canvas class="ambient" id="amb"></canvas><button type="button" class="runner" id="runner" aria-label="النجمة">'+icon('star')+'</button></div><button type="button" class="btn-brand wide" id="catchStart">ابدأ</button><p class="game-msg" id="catchMsg"></p>',
       daily:()=>subhead('تحفيز اليوم','sun')+'<div class="int-hero">'+icon('sun')+'<b id="dTitle" style="font-size:1.2rem"></b><p class="result" id="dText"></p></div><div class="card"><span class="lbl">خطوة اليوم</span><p id="dAct"></p></div><button type="button" class="btn-ghost wide" id="dMore">'+icon('sparkle')+'<span>فكرة ثانية</span></button>'
@@ -3853,7 +3877,7 @@ var qrcode = function() {
   });
 
   /* ---- Usage analytics: for the user, and for the owner to improve the app ---- */
-  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/jig':'تركيب الصورة','home/slide':'البلاطات','home/word':'رتّب الكلمة','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
+  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/jig':'تركيب الصورة','home/slide':'البلاطات','home/word':'رتّب الكلمة','home/blocks':'المكعبات','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
   const TAB_NAMES={home:'الرئيسية',chat:'دردشة',interests:'اهتماماتي',ai:'AI',account:'حسابي'};
   function track(k){
     const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0}), d=today(), h=new Date().getHours();
@@ -4406,7 +4430,102 @@ var qrcode = function() {
     if(e.target.closest('#wdClear')){wdRound();return}
   });
 
+  /* ---- Block puzzle: drag pieces onto an 8x8 board, full rows/columns clear ---- */
+  Object.assign(ICONS,{blocks:'<rect x="3.5" y="12.5" width="8" height="8" rx="1.5"/><rect class="soft" x="12.5" y="12.5" width="8" height="8" rx="1.5"/><rect x="12.5" y="3.5" width="8" height="8" rx="1.5"/><path class="acs" d="M5 5l3 3M8 5L5 8"/>',
+    mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/><circle class="ac pulse" cx="18.5" cy="5" r="1.6"/>'});
+  const BN=8, BCOL=['','#8B5CF6','#3B82F6','#E6A93A'];
+  const BSH=[[[0,0]],[[0,0],[0,1]],[[0,0],[1,0]],[[0,0],[0,1],[0,2]],[[0,0],[1,0],[2,0]],[[0,0],[0,1],[0,2],[0,3]],[[0,0],[1,0],[2,0],[3,0]],
+    [[0,0],[0,1],[0,2],[0,3],[0,4]],[[0,0],[1,0],[2,0],[3,0],[4,0]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],
+    [[0,0],[1,0],[1,1]],[[0,1],[1,0],[1,1]],[[0,0],[0,1],[1,0]],[[0,0],[0,1],[1,1]],
+    [[0,0],[1,0],[2,0],[2,1]],[[0,1],[1,1],[2,1],[2,0]],[[0,0],[0,1],[0,2],[1,0]],[[0,0],[0,1],[0,2],[1,2]],
+    [[0,0],[0,1],[0,2],[1,1]],[[0,1],[1,0],[1,1],[1,2]],[[0,0],[0,1],[1,1],[1,2]],[[0,1],[0,2],[1,0],[1,1]],
+    [[0,0],[1,1]],[[0,1],[1,0]],[[0,0],[1,1],[2,2]],[[0,2],[1,1],[2,0]],[[0,0],[1,0],[2,0],[2,1],[2,2]],[[0,2],[1,2],[2,2],[2,1],[2,0]]];
+  let bk={b:[],tray:[],score:0,over:false,drag:null};
+  const bkBest=()=>+lsGet('mn-blk-best')||0;
+  const bkPiece=()=>({cells:BSH[Math.floor(Math.random()*BSH.length)],col:1+Math.floor(Math.random()*3)});
+  const bkFits=(cells,r,c)=>cells.every(([dr,dc])=>{const R=r+dr,C=c+dc;return R>=0&&C>=0&&R<BN&&C<BN&&!bk.b[R*BN+C]});
+  const bkAny=cells=>{for(let r=0;r<BN;r++)for(let c=0;c<BN;c++)if(bkFits(cells,r,c))return true;return false};
+  function bkNew(){bk.b=Array(BN*BN).fill(0);bk.tray=[bkPiece(),bkPiece(),bkPiece()];bk.score=0;bk.over=false;bkDraw()}
+  function bkDraw(){const g=$('#bkBoard');if(!g)return;
+    g.innerHTML=bk.b.map((v,i)=>'<span class="bc'+(v?' gem':'')+'" data-bi="'+i+'"'+(v?' style="--gc:'+BCOL[v]+'"':'')+'></span>').join('');
+    $('#bkTray').innerHTML=bk.tray.map((p,i)=>{if(!p)return '<span class="bk-slot"></span>';const h=Math.max(...p.cells.map(x=>x[0]))+1,w=Math.max(...p.cells.map(x=>x[1]))+1,ok=bkAny(p.cells);
+      return '<span class="bk-slot"><span class="bk-pc'+(ok?'':' no')+'" data-bp="'+i+'" style="grid-template-columns:repeat('+w+',var(--ps));grid-template-rows:repeat('+h+',var(--ps))">'+p.cells.map(([r,c])=>'<span class="gem" style="grid-row:'+(r+1)+';grid-column:'+(c+1)+';--gc:'+BCOL[p.col]+'"></span>').join('')+'</span></span>'}).join('');
+    $('#bkScore').textContent=fmt(bk.score);$('#bkBest').textContent=fmt(Math.max(bkBest(),bk.score));}
+  function bkPlace(i,r,c){const p=bk.tray[i];p.cells.forEach(([dr,dc])=>bk.b[(r+dr)*BN+c+dc]=p.col);bk.tray[i]=null;bk.score+=p.cells.length;
+    const rows=[],cols=[];for(let k=0;k<BN;k++){let fr=true,fc=true;for(let j=0;j<BN;j++){if(!bk.b[k*BN+j])fr=false;if(!bk.b[j*BN+k])fc=false}if(fr)rows.push(k);if(fc)cols.push(k)}
+    const clr=new Set();rows.forEach(k=>{for(let j=0;j<BN;j++)clr.add(k*BN+j)});cols.forEach(k=>{for(let j=0;j<BN;j++)clr.add(j*BN+k)});
+    const lines=rows.length+cols.length;
+    if(bk.tray.every(x=>!x))bk.tray=[bkPiece(),bkPiece(),bkPiece()];
+    if(lines){bk.score+=lines*10*lines;bkDraw();clr.forEach(ix=>{const e=$('[data-bi="'+ix+'"]');if(e)e.classList.add('pop')});chime('pop');if(lines>1)toast(lines+' خطوط مرة وحدة! +'+(lines*10*lines));
+      setTimeout(()=>{clr.forEach(ix=>bk.b[ix]=0);bkDraw();bkCheck()},260)}
+    else{bkDraw();bkCheck()}}
+  function bkCheck(){if(bk.over)return;const left=bk.tray.filter(Boolean);if(left.length&&!left.some(p=>bkAny(p.cells))){bk.over=true;
+      const best=bkBest();if(bk.score>best)lsSet('mn-blk-best',String(bk.score));
+      const ov=$('#bkOver');if(ov){ov.hidden=false;$('#bkOverTxt').textContent='نتيجتك '+fmt(bk.score)+(bk.score>best?' · رقم قياسي جديد!':'')}
+      if(bk.score>=150)gameWin('blocks',20,G('لعبت','لعبتي')+' '+fmt(bk.score)+' نقطة في المكعبات!')}}
+  SCREENS.home.blocks=()=>subhead('المكعبات','blocks')+
+    '<div class="bk-top"><span class="bk-best">'+icon('trophy')+'<b id="bkBest">0</b></span><span class="bk-score"><b id="bkScore">0</b></span></div>'+
+    '<div class="bk-wrap"><div class="bk-board" id="bkBoard"></div><div class="bk-over" id="bkOver" hidden><b>ما فيه مكان!</b><span id="bkOverTxt"></span><button type="button" class="btn-gold" id="bkAgain">'+icon('restore')+'<span>العب من جديد</span></button></div></div>'+
+    '<div class="bk-tray" id="bkTray"></div><p class="fine" style="text-align:center;margin:0">'+G('اسحب القطعة للوح. كمّل صف أو عمود ويختفي.','اسحبي القطعة للوح. كمّلي صف أو عمود ويختفي.')+'</p>';
+  function bkHint(cells,r,c,on){$$('.bk-board .bc.hint').forEach(x=>x.classList.remove('hint'));if(!on)return;cells.forEach(([dr,dc])=>{const e=$('[data-bi="'+((r+dr)*BN+c+dc)+'"]');if(e)e.classList.add('hint')})}
+  document.addEventListener('pointerdown',e=>{const pc=e.target.closest('[data-bp]');if(!pc||bk.over)return;e.preventDefault();
+    const i=+pc.dataset.bp,p=bk.tray[i],board=$('#bkBoard').getBoundingClientRect(),cs=board.width/BN;
+    const h=Math.max(...p.cells.map(x=>x[0]))+1,w=Math.max(...p.cells.map(x=>x[1]))+1;
+    const gh=document.createElement('div');gh.className='bk-ghost';gh.style.cssText='width:'+(w*cs)+'px;height:'+(h*cs)+'px;grid-template-columns:repeat('+w+',1fr);grid-template-rows:repeat('+h+',1fr)';
+    gh.innerHTML=p.cells.map(([r,c])=>'<span class="gem" style="grid-row:'+(r+1)+';grid-column:'+(c+1)+';--gc:'+BCOL[p.col]+'"></span>').join('');document.body.appendChild(gh);
+    pc.style.visibility='hidden';bk.drag={i,p,gh,cs,w,h,pc,r:-1,c:-1,ok:false};bkMove(e)});
+  function bkMove(e){const d=bk.drag;if(!d)return;const x=e.clientX-d.w*d.cs/2,y=e.clientY-d.h*d.cs-34;d.gh.style.transform='translate('+x+'px,'+y+'px)';
+    const b=$('#bkBoard').getBoundingClientRect();const c=Math.round((x-b.left)/d.cs),r=Math.round((y-b.top)/d.cs);
+    if(r!==d.r||c!==d.c){d.r=r;d.c=c;d.ok=bkFits(d.p.cells,r,c);bkHint(d.p.cells,r,c,d.ok)}}
+  document.addEventListener('pointermove',e=>{if(bk.drag){e.preventDefault();bkMove(e)}},{passive:false});
+  function bkDrop(){const d=bk.drag;if(!d)return;bk.drag=null;d.gh.remove();bkHint(null,0,0,false);
+    if(d.ok)bkPlace(d.i,d.r,d.c);else d.pc.style.visibility=''}
+  document.addEventListener('pointerup',bkDrop);document.addEventListener('pointercancel',bkDrop);
+  document.addEventListener('click',e=>{if(e.target.closest('#bkAgain'))bkNew()});
+
+  /* ---- Voice call: say «مع نفسك» and the app answers ---- */
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  let wake={rec:null,on:false,busy:false,after:false};
+  const wakeOn=()=>lsGet('mn-wake')==='1';
+  const voiceG=()=>lsGet('mn-voice')||(S.profile&&S.profile.gender==='f'?'f':'m');
+  function speak(text,cb){try{const s=window.speechSynthesis;if(!s){cb&&cb();return}s.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';
+    const vs=s.getVoices().filter(v=>/^ar/i.test(v.lang));const fem=/(female|woman|zeina|laila|salma|hoda|mariam|amira|fatima|zariyah|noura)/i,mal=/(male|man|maged|tarik|naayf|hamed|fahed|shakir|omar|hamdan)/i;
+    const want=voiceG()==='f'?fem:mal;const v=vs.find(x=>want.test(x.name))||vs[0];if(v)u.voice=v;
+    if(!v||!want.test(v.name)){u.pitch=voiceG()==='f'?1.25:.8}u.rate=1;u.onend=()=>cb&&cb();u.onerror=()=>cb&&cb();s.speak(u)}catch(e){cb&&cb()}}
+  const isWake=s=>/مع\s*نفس(ك|ي)|معنفسك|ما\s*نفسك/.test(s);
+  function wakeStart(){if(!SR||!wakeOn()||wake.rec||document.hidden)return;
+    try{const r=new SR();r.lang='ar-SA';r.continuous=true;r.interimResults=false;wake.rec=r;
+      r.onresult=ev=>{for(let k=ev.resultIndex;k<ev.results.length;k++){if(!ev.results[k].isFinal)continue;const txt=ev.results[k][0].transcript.trim();
+        if(wake.after){wake.after=false;const rest=txt.replace(/مع\s*نفسك/g,'').trim();if(rest){if(R.tab!=='chat'||R.sub)go('chat');setTimeout(()=>sendChat(rest),250)}continue}
+        if(isWake(txt)&&!wake.busy){wake.busy=true;const rest=txt.split(/مع\s*نفس(?:ك|ي)|معنفسك/).pop().trim();
+          speak(G('أنا موجود هنا. وش تبي؟','أنا موجودة هنا. وش تبين؟'),()=>{wake.busy=false});
+          if(R.tab!=='chat'||R.sub)go('chat');
+          if(rest.length>3)setTimeout(()=>sendChat(rest),300);else wake.after=true;
+          setTimeout(()=>{wake.after=false},12000)}}};
+      r.onerror=ev=>{if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){lsSet('mn-wake','');toast('ما عطيت التطبيق إذن المايك. فعّله من إعدادات المتصفح وجرّب مرة ثانية');wakeUI()}};
+      r.onend=()=>{wake.rec=null;if(wakeOn()&&!document.hidden)setTimeout(wakeStart,400)};
+      r.start();wakeUI()}catch(e){wake.rec=null}}
+  function wakeStop(){const r=wake.rec;wake.rec=null;if(r){r.onend=null;try{r.stop()}catch(e){}}wakeUI()}
+  function wakeUI(){let b=$('#wakeDot');if(!b){b=document.createElement('span');b.id='wakeDot';b.className='wake-dot';b.title='يسمعك: قل «مع نفسك»';b.innerHTML=icon('mic');const a=$('.top-act');if(a)a.insertBefore(b,a.firstChild)}b.hidden=!(wakeOn()&&wake.rec)}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)wakeStop();else wakeStart()});
+  async function wakeEnable(){if(!SR){toast('جوالك أو متصفحك ما يدعم السماع. جرّب Chrome');return false}
+    try{const st=await navigator.mediaDevices.getUserMedia({audio:true});st.getTracks().forEach(x=>x.stop())}catch(e){toast('لازم تسمح للتطبيق يستخدم المايك');return false}
+    lsSet('mn-wake','1');wakeStart();speak(G('تمام، إذا ناديتني «مع نفسك» برد عليك.','تمام، إذا ناديتيني «مع نفسك» برد عليك.'));return true}
+  function wakeCard(){const on=wakeOn(),v=voiceG();
+    return '<div class="card"><div class="flag-row"><span>'+icon('mic')+'<b>النداء الصوتي</b></span><button type="button" class="sw" id="wakeSw" role="switch" aria-checked="'+on+'" aria-label="تفعيل النداء"></button></div>'+
+      '<p class="fine">'+(SR?'قل «مع نفسك» والتطبيق يرد عليك «أنا موجود هنا» ويفتح السوالف، وتكمّل كلامك على طول. يشتغل والتطبيق مفتوح قدامك، وأول مرة يطلب إذن المايك.':'جوالك أو متصفحك ما يدعم السماع. يشتغل على Chrome في أندرويد والكمبيوتر.')+'</p>'+
+      '<div class="field"><span>صوت الرد</span><div class="seg" id="voiceSeg"><button type="button" role="radio" data-voice="m" aria-checked="'+(v==='m')+'">ذكر</button><button type="button" role="radio" data-voice="f" aria-checked="'+(v==='f')+'">أنثى</button></div></div>'+
+      '<button type="button" class="btn-ghost wide" id="voiceTest">'+icon('mic')+'<span>اسمع الصوت</span></button></div>';}
+  const _settings2=SCREENS.account.settings; SCREENS.account.settings=()=>_settings2()+wakeCard();
+  document.addEventListener('click',async e=>{
+    const sw=e.target.closest('#wakeSw');if(sw){if(wakeOn()){lsSet('mn-wake','');wakeStop();toast('وقّفت النداء')}else{await wakeEnable()}render();return}
+    const vb=e.target.closest('[data-voice]');if(vb){lsSet('mn-voice',vb.dataset.voice);render();speak(vb.dataset.voice==='f'?'أنا موجودة هنا':'أنا موجود هنا');return}
+    if(e.target.closest('#voiceTest'))speak(voiceG()==='f'?'أنا موجودة هنا. وش تبين؟':'أنا موجود هنا. وش تبي؟');
+  });
+  setTimeout(()=>{if(wakeOn())wakeStart()},1500);
+
   function extWire(k){
+    if(k==='home/blocks')bkNew();
     if(k==='home/jig')jigNew(); if(k==='home/slide')slNew(); if(k==='home/word')wdNew();
     if(k==='admin/usage')drawReport(false);
     if(k==='account/card'){shareBlobs={};cardPNG().then(b=>{shareBlobs.card=b});qrPNG().then(b=>{shareBlobs.qr=b})}
