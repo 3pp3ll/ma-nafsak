@@ -594,6 +594,12 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .room-msg{display:grid;gap:2px}.room-msg b{font-size:.78rem}
 .wake-dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(46,156,115,.25);color:#7CF0BE}
 .wake-dot .i{width:17px;height:17px}
+
+/* v31 */
+.btn-pick{border:0;border-radius:14px;padding:11px 16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;background:#B83A72;color:#FFFFFF;cursor:pointer}
+.btn-pick .i{width:20px;height:20px}
+.mc-brand img.mc-av{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #E6B370}
+.mycard.mini .mc-brand img.mc-av{width:26px;height:26px}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="ar">
@@ -3261,7 +3267,7 @@ var qrcode = function() {
         '<form class="chat-input" id="chatForm"><textarea id="chatInput" class="msgbox" rows="5" placeholder="سولف مع نفسك..." aria-label="رسالتك"></textarea><button type="submit" class="send" id="chatSend" aria-label="إرسال">'+icon('send')+'</button></form></div>'
     },
     interests:{
-      _:()=>'<div class="tiles">'+Object.keys(INT).map((k,i)=>tile(INT[k][1],INT[k][0],'interests/topic/'+k,i,(S.profile.interests||[]).includes(k)?' on':'')).join('')+tile('edit','عدّل اهتماماتي','account/profile',7)+'</div><p class="fine">النقطة الملوّنة تعني إنها من اهتماماتك.</p>',
+      _:()=>'<div class="tiles">'+Object.keys(INT).filter(k=>k!=='ai').map((k,i)=>tile(INT[k][1],INT[k][0],'interests/topic/'+k,i,(S.profile.interests||[]).includes(k)?' on':'')).join('')+tile('edit','عدّل اهتماماتي','account/profile',7)+'</div><p class="fine">النقطة الملوّنة تعني إنها من اهتماماتك.</p>',
       topic:()=>{const k=INT[R.arg]?R.arg:'study', on=(S.profile.interests||[]).includes(k), l=line(k), items=S.log.filter(x=>x.cat===k);
         return subhead(INT[k][0],INT[k][1])+'<div class="int-hero">'+icon(INT[k][1])+'<b>'+l[0]+'</b><p class="fine">'+esc(l[1])+'</p><button type="button" class="'+(on?'btn-ghost':'btn-gold')+'" id="togInt">'+(on?'من اهتماماتي ✓':'أضفها لاهتماماتي')+'</button></div>'+
           '<div class="tiles">'+tile('plus','سجّل إنجاز','home/new/'+k,0)+'</div>'+
@@ -3269,7 +3275,7 @@ var qrcode = function() {
     },
     ai:{
       _:()=>'<div class="card" style="grid-template-columns:auto 1fr;align-items:center"><span class="sh-ic" style="width:52px;height:52px">'+icon('ai')+'</span><div><b>رفيقك الذكي</b><p class="fine">'+(aiReady()?'شغّال ويعرف ملفك وسجلك.':'غير مفعّل هنا. يشتغل على OpenRouter من نسخة GitHub.')+'</p></div></div>'+
-        '<div class="tiles">'+tile('compass','طلعة على مزاجي','ai/outing',0)+tile('plan','خطة هدفي','ai/plan',1)+tile('calendar','ملخص أسبوعي','ai/week',2)+(themeOn()?tile('palette','مظهري المتحرك','ai/theme',3):'')+'</div>'+(isAdmin?'<button type="button" class="admin-card" data-go="ai/dev">'+icon('shield')+'<span><b>مساعد المطوّر</b><br><small style="color:var(--hero-muted)">قل له وش تبي تعدّل في التطبيق · خاص فيك</small></span></button>':''),
+        byokCard()+'<div class="tiles">'+tile('compass','طلعة على مزاجي','ai/outing',0)+tile('ai','عالم الذكاء','interests/topic/ai',4,(S.profile.interests||[]).includes('ai')?' on':'','اهتمامك بالـ AI')+tile('plan','خطة هدفي','ai/plan',1)+tile('calendar','ملخص أسبوعي','ai/week',2)+(themeOn()?tile('palette','مظهري المتحرك','ai/theme',3):'')+'</div>'+(isAdmin?'<button type="button" class="admin-card" data-go="ai/dev">'+icon('shield')+'<span><b>مساعد المطوّر</b><br><small style="color:var(--hero-muted)">قل له وش تبي تعدّل في التطبيق · خاص فيك</small></span></button>':''),
       outing:()=>subhead('طلعة على مزاجي','compass')+'<div class="card"><span class="lbl">مزاجك الحين</span><div class="chips" id="moods">'+[['هادي','cloud'],['حماس','flame'],['مع الربع','people'],['طبيعة','seedling'],['أكل وقهوة','cup'],['ثقافة','book']].map((m,i)=>'<button type="button" class="chip" data-mood="'+m[0]+'" aria-pressed="'+(i===0)+'">'+icon(m[1])+m[0]+'</button>').join('')+'</div><span class="lbl">متى؟</span><div class="seg" id="whenSeg">'+['الحين','الليلة','الويكند'].map((w,i)=>'<button type="button" role="radio" data-w="'+w+'" aria-checked="'+(i===1)+'">'+w+'</button>').join('')+'</div><button type="button" class="btn-brand wide" id="outBtn">'+icon('sparkle')+'<span>اقترح عليّ في '+esc(S.profile.city)+'</span></button></div><div class="card"><p class="result" id="outRes">اختر مزاجك واضغط اقترح.</p></div>',
       plan:()=>subhead('خطة هدفي','plan')+'<div class="card"><span class="lbl">هدفك</span><input class="inp" id="goalIn" type="text" maxlength="80" value="'+esc(S.profile.goal)+'" placeholder="اكتب هدفك"><button type="button" class="btn-brand wide" id="planBtn">'+icon('sparkle')+'<span>سوّ لي خطة</span></button></div><div class="card"><p class="result" id="planRes">الخطة بتظهر هنا.</p></div>',
       week:()=>{const st=stats();return subhead('ملخص أسبوعي','calendar')+'<div class="tiles"><div class="tile" style="--i:0"><span class="ic">'+icon('check')+'</span><span>'+st.week+' إنجاز</span></div><div class="tile" style="--i:1"><span class="ic">'+icon('flame')+'</span><span>'+st.streak+' أيام متتالية</span></div></div><button type="button" class="btn-brand wide" id="weekBtn">'+icon('sparkle')+'<span>لخّص أسبوعي</span></button><div class="card"><p class="result" id="weekRes">الملخص بيظهر هنا.</p></div>';},
@@ -3473,7 +3479,6 @@ var qrcode = function() {
   SCREENS.account._=()=>{const done=taskKeys().filter(k=>S.tasks[k]).length;
     return cardHTML(true)+
     '<div class="status-row" role="group" aria-label="حالتك">'+Object.keys(STATUS).map(k=>'<button type="button" class="chip" data-status="'+k+'" aria-pressed="'+(S.status===k)+'"><i class="sdot-inline '+STATUS[k][1]+'"></i>'+STATUS[k][0]+'</button>').join('')+'</div>'+
-    byokCard()+
     (isAdmin?'<button type="button" class="admin-card" data-go="admin">'+icon('shield')+'<span><b>لوحة التحكم</b><br><small style="color:var(--hero-muted)">تظهر لك أنت بس كصاحب التطبيق</small></span></button>':'')+
     (S.demo?'<button type="button" class="btn-ghost wide" data-login>'+icon('idcard')+'<span>تسجيل الدخول</span></button>':'')+
     (S.demo?'<button type="button" class="btn-gold wide" data-go="account/profile">'+icon('idcard')+'<span>هذا ملف تجريبي، سوّ ملفك</span></button>':'')+
@@ -3494,7 +3499,7 @@ var qrcode = function() {
         '<label class="field"><span>هدفك الحالي</span><input id="pGoal" type="text" maxlength="80" value="'+esc(p.goal)+'"></label>'+
         '<label class="field"><span>عرّفني عليك أكثر</span><textarea id="pAbout" rows="3" maxlength="400" placeholder="شغلك، دراستك، وش تحب تسوي، وش يضايقك...">'+esc(p.about)+'</textarea></label>'+
         '<button type="submit" class="btn-brand wide">'+icon('check')+'<span>احفظ ملفي</span></button>'+(S.demo?'<p class="fine">حفظ ملفك لأول مرة يمسح الأمثلة ويعطيك رقم ID خاص فيك.</p>':'')+'</form>';},
-    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-ghost wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><span class="lbl">حوّلها</span><div class="picks" id="psPicks">'+Object.keys(PSTYLES).map(k=>'<button type="button" data-ps="'+k+'" aria-pressed="'+(k===photoStyle)+'">'+PSTYLES[k]+'</button>').join('')+'</div><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':imgStatus())+'</p><div id="editBox" hidden><label class="field"><span>وش تبي تعدّل في الصورة؟</span><input class="inp" id="aiEditIn" type="text" maxlength="160" placeholder="مثلاً: خلي الخلفية بحر، أو لبّسني شماغ"></label><button type="button" class="btn-ghost wide" id="aiEdit">'+icon('edit')+'<span>عدّل الصورة</span></button></div><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div><p class="fine">في هالعرض التحويل فلاتر مرسومة بالكود على جهازك، والصورة ما تطلع لأي مكان. في التطبيق الحقيقي يتحول بنموذج Nano Banana من Google.</p>',
+    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-pick wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':imgStatus())+'</p><div id="editBox" hidden><label class="field"><span>وش تبي تعدّل في الصورة؟</span><input class="inp" id="aiEditIn" type="text" maxlength="160" placeholder="مثلاً: خلي الخلفية بحر، أو لبّسني شماغ"></label><button type="button" class="btn-ghost wide" id="aiEdit">'+icon('edit')+'<span>عدّل الصورة</span></button></div><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div>',
     tasks:()=>subhead('مهامي','tasks')+'<p class="fine">كل مهمة تسويها على حسابك تعطيك نقاط.</p><div class="list">'+taskKeys().map(k=>{const t=TASKS[k],d=S.tasks[k];return '<button type="button" class="row" '+(d?'disabled':'data-go="'+t[3]+'"')+'><span class="ric">'+icon(t[1])+'</span><span class="t">'+t[0]+'</span><span class="chipst '+(d?'st-on':'st-idle')+'">'+(d?'تمت ✓':'+'+t[2])+'</span></button>'}).join('')+'</div>',
     history:()=>{const days=[],idx={};S.history.forEach(m=>{const k=new Date(m.ts).toLocaleDateString('ar-SA-u-ca-gregory',{weekday:'long',day:'numeric',month:'long'});if(!(k in idx)){idx[k]=days.length;days.push([k,[]])}days[idx[k]][1].push(m)});
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
@@ -3795,7 +3800,7 @@ var qrcode = function() {
   /* ---- Custom interests: everyone writes their own ---- */
   function parseCustom(s){return Array.from(new Set(String(s||'').split(/[،,\n]/).map(x=>x.trim()).filter(Boolean).map(x=>x.slice(0,24)))).slice(0,12)}
   SCREENS.interests._=()=>{const C=S.profile.custom||[];
-    return '<div class="tiles">'+Object.keys(INT).map((k,i)=>tile(INT[k][1],INT[k][0],'interests/topic/'+k,i,(S.profile.interests||[]).includes(k)?' on':'')).join('')+
+    return '<div class="tiles">'+Object.keys(INT).filter(k=>k!=='ai').map((k,i)=>tile(INT[k][1],INT[k][0],'interests/topic/'+k,i,(S.profile.interests||[]).includes(k)?' on':'')).join('')+
       C.map((c,i)=>tile('sparkle',esc(c),'interests/custom/'+i,Object.keys(INT).length+i,' on')).join('')+'</div>'+
       '<form class="card" id="ciForm"><b>اكتب اهتماماتك</b><p class="fine">أي شي تحبه ومو موجود فوق: تصوير، طبخ، برمجة، خيل... ويصير له قسم خاص فيك، والذكاء الاصطناعي يعرفه.</p><div class="link-row"><input class="inp" id="ciIn" type="text" maxlength="24" placeholder="اهتمام جديد" style="flex:1;min-width:0"><button type="submit" class="btn-brand">'+icon('plus')+'<span>أضف</span></button></div>'+
       (C.length?'<div class="chips">'+C.map((c,i)=>'<button type="button" class="chip" data-delci="'+i+'" aria-label="احذف '+esc(c)+'">'+esc(c)+' ✕</button>').join('')+'</div>':'')+'</form>'+
@@ -3805,7 +3810,7 @@ var qrcode = function() {
     const items=S.log.filter(x=>x.custom===c);
     return subhead(esc(c),'sparkle')+'<div class="int-hero">'+icon('sparkle')+'<b>'+esc(c)+'</b><p class="fine">'+G('كل خطوة في اللي تحبه تنحسب، سجّلها وخلني أحتفل معك.','كل خطوة في اللي تحبينه تنحسب، سجّليها وخليني أحتفل معك.')+'</p></div>'+
       '<form class="card" id="ciLog"><label class="big-l" for="ciLogIn">وش سويت في '+esc(c)+'؟</label><textarea id="ciLogIn" rows="2"></textarea><button type="submit" class="btn-brand wide">'+icon('check')+'<span>احتفل معي</span></button></form>'+
-      '<div class="tiles"><button type="button" class="tile" style="--i:0" data-askci="'+(+R.arg)+'"><span class="ic">'+icon('ai')+'</span><span>اسأل AI</span></button><button type="button" class="tile" style="--i:1" data-delci="'+(+R.arg)+'"><span class="ic">'+icon('back')+'</span><span>احذف الاهتمام</span></button></div>'+
+      '<div class="tiles"><button type="button" class="tile" style="--i:0" data-delci="'+(+R.arg)+'"><span class="ic">'+icon('back')+'</span><span>احذف الاهتمام</span></button></div>'+
       '<h3 style="font-size:1rem">إنجازاتك هنا</h3>'+(items.length?'<ul class="list">'+items.slice(0,10).map(x=>'<li class="row"><span class="ric">'+icon('sparkle')+'</span><span class="t">'+esc(x.t)+'</span><span class="w">'+when(x.ts)+'</span></li>').join('')+'</ul>':'<p class="empty">ما فيه إنجازات هنا للحين.</p>');};
   document.addEventListener('submit',e=>{
     if(e.target.id==='ciForm'){e.preventDefault();const v=$('#ciIn').value.trim();if(!v)return;S.profile.custom=parseCustom((S.profile.custom||[]).concat(v).join('،'));save();toast('انضاف «'+v+'» لاهتماماتك');chime('pop');render()}
@@ -4000,7 +4005,7 @@ var qrcode = function() {
     toast(inClaude?'انتسخ الرابط. حفظ الصورة ومشاركتها يشتغل من نسخة GitHub':'انحفظت الصورة وانتسخ الرابط');
   }
   function cardHTML(mini){const st=stats(),tags=cardTags();
-    return '<div class="mycard'+(mini?' mini':'')+'"'+(mini?' role="button" tabindex="0" data-go="account/card" aria-label="بطاقتي، اضغط للمشاركة"':' id="myCard"')+'><div class="mc-top"><span class="mc-brand"><img src="mark.png" alt="">مع نفسك</span><span style="display:flex;gap:6px;align-items:center"><span class="mc-id">ID: '+esc(S.uid)+'</span>'+(mini?'<span class="mc-share">'+icon('share')+'شارك</span>':'')+'</span></div>'+
+    return '<div class="mycard'+(mini?' mini':'')+'"'+(mini?' role="button" tabindex="0" data-go="account/card" aria-label="بطاقتي، اضغط للمشاركة"':' id="myCard"')+'><div class="mc-top"><span class="mc-brand">'+(S.avatar?'<img class="mc-av" src="'+S.avatar+'" alt="صورتك">':'<img src="mark.png" alt="">')+'مع نفسك</span><span style="display:flex;gap:6px;align-items:center"><span class="mc-id">ID: '+esc(S.uid)+'</span>'+(mini?'<span class="mc-share">'+icon('share')+'شارك</span>':'')+'</span></div>'+
     '<div class="mc-body"><div class="mc-who"><span class="nm">'+esc(S.profile.name)+'</span><span class="sub">'+esc(S.profile.city)+' · عضو في مع نفسك</span>'+
     '<div class="mc-stats"><span><b>'+fmt(S.points)+'</b>نقطة</span><span><b>'+S.log.length+'</b>إنجاز</span><span><b>'+st.streak+'</b>أيام متتالية</span></div>'+
     (tags.length?'<div class="mc-tags">'+tags.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div>':'')+'</div>'+
