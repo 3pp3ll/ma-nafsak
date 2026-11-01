@@ -11,7 +11,6 @@
 <meta property="og:locale" content="ar_SA">
 <meta property="og:title" content="مع نفسك">
 <meta property="og:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
-<meta property="og:url" content="https://3pp3ll.github.io/ma-nafsak/">
 <meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.jpg">
 <meta property="og:image:secure_url" content="https://3pp3ll.github.io/ma-nafsak/icons/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -598,6 +597,9 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .wake-dot .i{width:17px;height:17px}
 
 /* v31 */
+.pick-row{display:flex;gap:8px}.pick-row .btn-pick{flex:1}
+.btn-trash{flex:none;width:52px;border:0;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,#E5484D 14%,var(--surface));color:#E5484D;border:1px solid color-mix(in srgb,#E5484D 35%,transparent)}
+.btn-trash .i{width:22px;height:22px}.btn-trash:disabled{opacity:.35}
 .btn-pick{border:0;border-radius:14px;padding:11px 16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;background:#B83A72;color:#FFFFFF;cursor:pointer}
 .btn-pick .i{width:20px;height:20px}
 .mc-brand img.mc-av{width:44px;height:44px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #E6B370}
@@ -3030,7 +3032,7 @@ var qrcode = function() {
 
   /* ---------- Persistence (private per viewer; this browser as fallback) ---------- */
   const store={ref:null,ready:false,busy:false,again:false,t:0}; const LS='maanafsak-state-v3';
-  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,bg:S.bg,refBy:S.refBy,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
+  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,bg:S.bg,refBy:S.refBy,invCode:S.invCode,invFor:S.invFor,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
   function save(){if(!store.ready||S.demo)return;clearTimeout(store.t);store.t=setTimeout(flush,700)}
   function flush(){
     const d=snap(); try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}
@@ -3504,7 +3506,7 @@ var qrcode = function() {
         '<label class="field"><span>هدفك الحالي</span><input id="pGoal" type="text" maxlength="80" value="'+esc(p.goal)+'"></label>'+
         '<label class="field"><span>عرّفني عليك أكثر</span><textarea id="pAbout" rows="3" maxlength="400" placeholder="شغلك، دراستك، وش تحب تسوي، وش يضايقك...">'+esc(p.about)+'</textarea></label>'+
         '<button type="submit" class="btn-brand wide">'+icon('check')+'<span>احفظ ملفي</span></button>'+(S.demo?'<p class="fine">حفظ ملفك لأول مرة يمسح الأمثلة ويعطيك رقم ID خاص فيك.</p>':'')+'</form>';},
-    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><label class="btn-pick wide" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><input id="photoIn" type="file" accept="image/*" hidden><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':imgStatus())+'</p><div id="editBox" hidden><label class="field"><span>وش تبي تعدّل في الصورة؟</span><input class="inp" id="aiEditIn" type="text" maxlength="160" placeholder="مثلاً: خلي الخلفية بحر، أو لبّسني شماغ"></label><button type="button" class="btn-ghost wide" id="aiEdit">'+icon('edit')+'<span>عدّل الصورة</span></button></div><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div>',
+    photo:()=>subhead('صورتي','camera')+'<canvas id="photoCv" class="photo-cv" width="240" height="240"></canvas><div class="card"><div class="pick-row"><label class="btn-pick" for="photoIn">'+icon('camera')+'<span>اختر صورة</span></label><button type="button" class="btn-trash" id="photoDel" aria-label="احذف الصورة"'+((S.avatar||photoImg)?'':' disabled')+'>'+icon('trash')+'</button></div><input id="photoIn" type="file" accept="image/*" hidden><button type="button" class="btn-gold wide" id="aiImg">'+icon('sparkle')+'<span>حوّلها بالذكاء الاصطناعي</span></button><p class="fine" id="aiImgMsg">'+(ownKey()?'تستخدم مفتاحك الخاص.':imgStatus())+'</p><div id="editBox" hidden><label class="field"><span>وش تبي تعدّل في الصورة؟</span><input class="inp" id="aiEditIn" type="text" maxlength="160" placeholder="مثلاً: خلي الخلفية بحر، أو لبّسني شماغ"></label><button type="button" class="btn-ghost wide" id="aiEdit">'+icon('edit')+'<span>عدّل الصورة</span></button></div><button type="button" class="btn-brand wide" id="photoSave">'+icon('check')+'<span>احفظ صورتي</span></button></div>',
     tasks:()=>subhead('مهامي','tasks')+'<p class="fine">كل مهمة تسويها على حسابك تعطيك نقاط.</p><div class="list">'+taskKeys().map(k=>{const t=TASKS[k],d=S.tasks[k];return '<button type="button" class="row" '+(d?'disabled':'data-go="'+t[3]+'"')+'><span class="ric">'+icon(t[1])+'</span><span class="t">'+t[0]+'</span><span class="chipst '+(d?'st-on':'st-idle')+'">'+(d?'تمت ✓':'+'+t[2])+'</span></button>'}).join('')+'</div>',
     history:()=>{const days=[],idx={};S.history.forEach(m=>{const k=new Date(m.ts).toLocaleDateString('ar-SA-u-ca-gregory',{weekday:'long',day:'numeric',month:'long'});if(!(k in idx)){idx[k]=days.length;days.push([k,[]])}days[idx[k]][1].push(m)});
       return subhead('سجل السوالف','history')+(days.length?days.reverse().map(d=>'<p class="day-h">'+d[0]+'</p><div class="hist">'+d[1].map(m=>'<div class="msg '+(m.role==='user'?'me':'bot')+'">'+esc(m.content)+'</div>').join('')+'</div>').join(''):'<p class="empty">ما فيه سوالف محفوظة للحين.</p>')+'<button type="button" class="btn-ghost wide" data-go="chat">'+icon('chat')+'<span>كمّل السالفة</span></button>';},
@@ -3698,7 +3700,7 @@ var qrcode = function() {
   function createNew(p,recognized){
     S.profile={name:p.name,gender:p.g,city:p.city,interests:[],team:'',goal:'',about:''}; S.contact=p.contact;
     S.demo=false;S.log=[];S.memory=[];S.chat=[];S.points=0;S.joined=false;lastReply=null;
-    S.uid=p.uid||newId();S.refBy=null;{const rf=lsGet('mn-ref');if(rf&&/^MN-\d{6}$/.test(rf)&&rf!==S.uid){S.refBy=rf;S.points+=100}}S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
+    S.uid=p.uid||newId();S.refBy=null;S.invCode=null;{const rf=lsGet('mn-ref');if(rf&&(/^MN-\d{6}$/.test(rf)||/^[A-HJ-NP-Z2-9]{7}$/.test(rf))&&rf!==S.uid){S.refBy=rf;S.points+=100}}S.friends=[];S.referred=[];S.meetups=[];S.reports=[];S.history=[];S.notifs=[];S.tasks={};S.avatar=null;
     S.marketing=!!p.mk; S.termsAt=p.terms||Date.now(); S.emailVerified=p.verify?false:(p.verified?true:undefined);
     S.usage={days:{},hours:[],screens:{},ai:0,msgs:0};
     S.restoreUntil=recognized?Date.now()+7*DAY:0; recordAccount(); if(p.pw)setPw(p.pw); setRemember(p.rem!==false);
@@ -3959,9 +3961,12 @@ var qrcode = function() {
   SCREENS.admin.usage=()=>subhead('تحليلات الاستخدام','chart')+usageHTML(true);
 
   /* ---- My card: share it with a QR, or share the QR with a link ---- */
-  (function readRef(){try{const qh=new URLSearchParams(location.hash.slice(1)),qs=new URLSearchParams(location.search),r=qs.get('ref')||qh.get('ref');if(r&&/^MN-\d{6}$/.test(r)){lsSet('mn-ref',r);history.replaceState(null,'',location.pathname)}}catch(e){}})();
+  (function readRef(){try{const qh=new URLSearchParams(location.hash.slice(1)),qs=new URLSearchParams(location.search),r=(qs.get('i')||qs.get('ref')||qh.get('ref')||'').toUpperCase();if(r&&(/^MN-\d{6}$/.test(r)||/^[A-HJ-NP-Z2-9]{7}$/.test(r))){lsSet('mn-ref',r);history.replaceState(null,'',location.pathname)}}catch(e){}})();
   const appBase=()=>/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';
-  const myLink=()=>appBase()+'?ref='+encodeURIComponent(S.uid);
+  const INV_AB='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  function invCode(){if(!S.invCode){let c='';const a=new Uint32Array(7);try{crypto.getRandomValues(a)}catch(e){for(let i=0;i<7;i++)a[i]=Math.floor(Math.random()*1e9)}for(let i=0;i<7;i++)c+=INV_AB[a[i]%INV_AB.length];S.invCode=c;S.invFor=S.uid;save()}return S.invCode}
+  const isCode=v=>/^MN-\d{6}$/.test(v)||/^[A-HJ-NP-Z2-9]{7}$/.test(v);
+  const myLink=()=>appBase()+'?i='+invCode();
   function qrMatrix(text){const q=qrcode(0,'M');q.addData(text);q.make();const n=q.getModuleCount(),m=[];for(let r=0;r<n;r++){m.push([]);for(let c=0;c<n;c++)m[r].push(q.isDark(r,c))}return m}
   function qrSVG(text){const m=qrMatrix(text),n=m.length,pad=2;let d='';m.forEach((row,r)=>row.forEach((v,c)=>{if(v)d+='M'+(c+pad)+' '+(r+pad)+'h1v1h-1z'}));return '<svg viewBox="0 0 '+(n+pad*2)+' '+(n+pad*2)+'" shape-rendering="crispEdges" aria-label="رمز QR لرابط دعوتك" role="img"><rect width="100%" height="100%" fill="#FFFFFF"/><path d="'+d+'" fill="#1E1B38"/></svg>'}
   function drawQR(c,text,x,y,size){const m=qrMatrix(text),n=m.length+4,s=size/n;c.fillStyle='#FFFFFF';c.fillRect(x,y,size,size);c.fillStyle='#1E1B38';m.forEach((row,r)=>row.forEach((v,cc)=>{if(v)c.fillRect(Math.floor(x+(cc+2)*s),Math.floor(y+(r+2)*s),Math.ceil(s),Math.ceil(s))}))}
@@ -4653,11 +4658,13 @@ var qrcode = function() {
   /* ---- Invite code typed by hand: once only, then it disappears ---- */
   function refCard(){if(S.demo||S.refBy)return '';
     return '<div class="card"><b>'+icon('gift')+' عندك كود دعوة؟</b><p class="fine">إذا أحد دعاك وما فتحت رابطه، اكتب كوده هنا وتاخذ 100 نقطة. تقدر تضيفه مرة وحدة بس.</p>'+
-      '<div class="inline-in"><input class="inp" id="refIn" type="text" inputmode="numeric" dir="ltr" placeholder="MN-123456" maxlength="9" style="text-transform:uppercase"><button type="button" class="btn-brand" id="refGo">أضف</button></div><p class="fine" id="refMsg"></p></div>';}
+      '<div class="inline-in"><input class="inp" id="refIn" type="text" dir="ltr" placeholder="مثل: K7F3QZ8" maxlength="9" style="text-transform:uppercase"><button type="button" class="btn-brand" id="refGo">أضف</button></div><p class="fine" id="refMsg"></p></div>';}
   document.addEventListener('click',e=>{if(!e.target.closest('#refGo'))return;const m=$('#refMsg');let v=($('#refIn').value||'').trim().toUpperCase().replace(/\s/g,'');if(/^\d{6}$/.test(v))v='MN-'+v;
-    if(!/^MN-\d{6}$/.test(v)){m.style.color='var(--warn)';m.textContent='الكود شكله كذا: MN-123456';return}
-    if(v===S.uid){m.style.color='var(--warn)';m.textContent='هذا كودك أنت 😄';return}
+    if(!isCode(v)){m.style.color='var(--warn)';m.textContent='الكود 7 حروف وأرقام، تلقاه في آخر رابط الدعوة';return}
+    if(v===S.uid||v===S.invCode){m.style.color='var(--warn)';m.textContent='هذا كودك أنت 😄';return}
     if(S.refBy)return; S.refBy=v; addPoints(100,true); save(); celebrate(G('انضاف كود الدعوة','انضاف كود الدعوة'),100); render()});
+  Object.assign(ICONS,{trash:'<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/><path class="acs" d="M10 11v6M14 11v6"/>'});
+  document.addEventListener('click',e=>{if(!e.target.closest('#photoDel'))return;photoImg=null;S.avatar=null;save();renderChrome&&renderChrome();render();toast('انحذفت صورتك')});
   function extWire(k){
     if(k==='chat/room')roomDraw();
     if(k==='home/free')bkStart('free'); if(k==='home/crush')bkStart('crush');
