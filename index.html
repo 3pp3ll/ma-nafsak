@@ -11,14 +11,16 @@
 <meta property="og:title" content="مع نفسك">
 <meta property="og:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
 <meta property="og:url" content="https://3pp3ll.github.io/ma-nafsak/">
-<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.png">
+<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.jpg">
+<meta property="og:image:secure_url" content="https://3pp3ll.github.io/ma-nafsak/icons/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="شعار مع نفسك">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="مع نفسك">
 <meta name="twitter:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
-<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.png">
+<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og.jpg">
 <title>مع نفسك</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
@@ -3956,9 +3958,9 @@ var qrcode = function() {
   SCREENS.admin.usage=()=>subhead('تحليلات الاستخدام','chart')+usageHTML(true);
 
   /* ---- My card: share it with a QR, or share the QR with a link ---- */
-  (function readRef(){try{const q=new URLSearchParams(location.hash.slice(1)),r=q.get('ref');if(r&&/^MN-\d{6}$/.test(r)){lsSet('mn-ref',r);history.replaceState(null,'',location.pathname+location.search)}}catch(e){}})();
+  (function readRef(){try{const qh=new URLSearchParams(location.hash.slice(1)),qs=new URLSearchParams(location.search),r=qs.get('ref')||qh.get('ref');if(r&&/^MN-\d{6}$/.test(r)){lsSet('mn-ref',r);history.replaceState(null,'',location.pathname)}}catch(e){}})();
   const appBase=()=>/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://3pp3ll.github.io/ma-nafsak/';
-  const myLink=()=>appBase()+'#ref='+encodeURIComponent(S.uid);
+  const myLink=()=>appBase()+'?ref='+encodeURIComponent(S.uid);
   function qrMatrix(text){const q=qrcode(0,'M');q.addData(text);q.make();const n=q.getModuleCount(),m=[];for(let r=0;r<n;r++){m.push([]);for(let c=0;c<n;c++)m[r].push(q.isDark(r,c))}return m}
   function qrSVG(text){const m=qrMatrix(text),n=m.length,pad=2;let d='';m.forEach((row,r)=>row.forEach((v,c)=>{if(v)d+='M'+(c+pad)+' '+(r+pad)+'h1v1h-1z'}));return '<svg viewBox="0 0 '+(n+pad*2)+' '+(n+pad*2)+'" shape-rendering="crispEdges" aria-label="رمز QR لرابط دعوتك" role="img"><rect width="100%" height="100%" fill="#FFFFFF"/><path d="'+d+'" fill="#1E1B38"/></svg>'}
   function drawQR(c,text,x,y,size){const m=qrMatrix(text),n=m.length+4,s=size/n;c.fillStyle='#FFFFFF';c.fillRect(x,y,size,size);c.fillStyle='#1E1B38';m.forEach((row,r)=>row.forEach((v,cc)=>{if(v)c.fillRect(Math.floor(x+(cc+2)*s),Math.floor(y+(r+2)*s),Math.ceil(s),Math.ceil(s))}))}
