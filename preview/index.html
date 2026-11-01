@@ -598,8 +598,9 @@ button.row{width:100%;text-align:start;cursor:pointer}
 /* v31 */
 .btn-pick{border:0;border-radius:14px;padding:11px 16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;background:#B83A72;color:#FFFFFF;cursor:pointer}
 .btn-pick .i{width:20px;height:20px}
-.mc-brand img.mc-av{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #E6B370}
-.mycard.mini .mc-brand img.mc-av{width:26px;height:26px}
+.mc-brand img.mc-av{width:44px;height:44px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #E6B370}
+.mycard.mini .mc-brand img.mc-av{width:36px;height:36px}
+.tile>span.lng{font-size:.68rem;white-space:nowrap;letter-spacing:-.2px}
 .mc-emo{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:1.3rem;background:rgba(255,255,255,.14);box-shadow:0 0 0 2px #E6B370}
 .mycard.mini .mc-emo{width:26px;height:26px;font-size:1rem}
 </style>
@@ -3236,7 +3237,7 @@ var qrcode = function() {
   function go(path){const p=path.split('/');R.tab=p[0];R.sub=p[1]||null;R.arg=p[2]||null;render();$('#main').scrollTop=0}
   function back(){const k=R.tab+'/'+R.sub;go(PARENT[k]||R.tab)}
 
-  const tile=(ic,label,to,i,extra,sub)=>'<button type="button" class="tile'+(extra||'')+'" data-go="'+to+'" style="--i:'+i+'"><span class="ic">'+icon(ic)+'</span><span>'+label+'</span>'+(sub?'<span class="sub">'+sub+'</span>':'')+'</button>';
+  const tile=(ic,label,to,i,extra,sub)=>'<button type="button" class="tile'+(extra||'')+'" data-go="'+to+'" style="--i:'+i+'"><span class="ic">'+icon(ic)+'</span><span'+(String(label).replace(/<[^>]*>/g,'').length>11?' class="lng"':'')+'>'+label+'</span>'+(sub?'<span class="sub">'+sub+'</span>':'')+'</button>';
   const subhead=(title,ic)=>'<div class="subhead"><button type="button" class="back" data-back aria-label="رجوع">'+icon('back')+'</button><span class="sh-ic">'+icon(ic)+'</span><h2>'+title+'</h2></div>';
 
   /* ---------- Screens ---------- */
