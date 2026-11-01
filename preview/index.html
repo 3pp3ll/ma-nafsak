@@ -4174,7 +4174,7 @@ var qrcode = function() {
   document.addEventListener('click',e=>{if(e.target.closest('#aiImg'))aiImage(false);else if(e.target.closest('#aiEdit'))aiImage(true)});
 
   /* ---- Supabase sign-up, email confirmation, login, consent ---- */
-  const SB_DEFAULT=null; /* {u:'https://xxxx.supabase.co',k:'anon key'} لما يجهز، يشتغل للكل بدون رابط */
+  const SB_DEFAULT={u:'https://tefqkwyyyxyeviagrryr.supabase.co',k:'sb_publishable_PVNaPHPTkQ2X87uLOuufuQ_rEc6D6MD'}; /* {u:'https://xxxx.supabase.co',k:'anon key'} لما يجهز، يشتغل للكل بدون رابط */
   const sbBase=()=>{const c=sbCfg()||SB_DEFAULT;return c?{u:c.u.replace(/\/$/,''),k:c.k}:null};
   function sbErr(j){const m=String((j&&(j.msg||j.error_description||j.message||j.error))||'');
     if(/already|registered|exists/i.test(m))return 'هالإيميل مسجّل من قبل. اضغط «عندي حساب» وسجّل دخول.';
