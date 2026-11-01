@@ -591,6 +591,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .lose b{font-family:var(--f-display);font-weight:400;font-size:2rem;color:var(--ink)}
 .lose .lose-pts{direction:ltr;font-family:var(--f-display);font-size:2.4rem;color:#E5484D}
 .lose p{margin:0;color:var(--muted);text-align:center;padding-inline:24px}
+.room-msg{display:grid;gap:2px}.room-msg b{font-size:.78rem}
 .wake-dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(46,156,115,.25);color:#7CF0BE}
 .wake-dot .i{width:17px;height:17px}
 </style>
@@ -3223,7 +3224,7 @@ var qrcode = function() {
 
   /* ---------- Router ---------- */
   const R={tab:'home',sub:null,arg:null};
-  const PARENT={'home/quiz':'home/challenges','home/catch':'home/challenges','home/jig':'home/challenges','home/slide':'home/challenges','home/word':'home/challenges','home/blocks':'home/challenges','home/crush':'home/blocks','home/free':'home/blocks'};
+  const PARENT={'home/quiz':'home/challenges','home/catch':'home/challenges','home/jig':'home/challenges','home/slide':'home/challenges','home/word':'home/challenges','home/blocks':'home/challenges','home/crush':'home/blocks','home/free':'home/blocks','chat/room':'chat/community'};
   function go(path){const p=path.split('/');R.tab=p[0];R.sub=p[1]||null;R.arg=p[2]||null;render();$('#main').scrollTop=0}
   function back(){const k=R.tab+'/'+R.sub;go(PARENT[k]||R.tab)}
 
@@ -3334,9 +3335,9 @@ var qrcode = function() {
     });
   }
   document.addEventListener('click',e=>{if(e.target.closest('[data-adminout]')){isAdmin=false;try{localStorage.removeItem('mn-admin')}catch(err){}toast('طلعت من لوحة التحكم');go('account')}});
-  let FLAGS={events:'soon',meetups:'on',community:'on',photo:'on',subs:'soon',pointValue:'',cities:'الرياض، جدة، الدمام',price:'',freeLimit:'20'};
+  let FLAGS={events:'soon',meetups:'on',community:'on',photo:'on',subs:'soon',room:'soon',pointValue:'',cities:'الرياض، جدة، الدمام',price:'',freeLimit:'20'};
   try{const f=JSON.parse(localStorage.getItem('maanafsak-flags')||'null');if(f)FLAGS=Object.assign(FLAGS,f)}catch(e){}
-  const FLAG_NAMES={community:['المجتمع والأصدقاء','people'],meetups:['اللقاءات','meet'],events:['الفعاليات','ticket'],photo:['تحويل الصورة','camera'],subs:['الاشتراك المدفوع','coin']};
+  const FLAG_NAMES={community:['المجتمع والأصدقاء','people'],meetups:['اللقاءات','meet'],events:['الفعاليات','ticket'],photo:['تحويل الصورة','camera'],subs:['الاشتراك المدفوع','coin'],room:['دردشة المجتمع','chat']};
   const isOn=k=>FLAGS[k]==='on';
   const soonTile=(ic,label,to,i,key,sub)=>isOn(key)?tile(ic,label,to,i,'',sub):'<button type="button" class="tile dim" data-soon style="--i:'+i+'"><span class="ic">'+icon(ic)+'</span><span>'+label+'</span><span class="sub soon">قريباً</span></button>';
   const sub2=(title,ic,to)=>'<div class="subhead"><button type="button" class="back" data-go="'+to+'" aria-label="رجوع">'+icon('back')+'</button><span class="sh-ic">'+icon(ic)+'</span><h2>'+title+'</h2></div>';
@@ -3439,7 +3440,7 @@ var qrcode = function() {
     '</div><span class="chat-state'+(aiReady()?' ai':'')+'">'+(aiReady()?'ذكاء اصطناعي: يعرفك ويتذكرك':'وضع تجريبي: ردود جاهزة')+'</span><div class="chat" id="chatList" aria-live="polite"></div>'+
     '<form class="chat-input" id="chatForm"><textarea id="chatInput" class="msgbox" rows="5" placeholder="سولف مع نفسك..." aria-label="رسالتك"></textarea><button type="submit" class="send" id="chatSend" aria-label="إرسال">'+icon('send')+'</button></form></div>';
   Object.assign(SCREENS.chat,{
-    community:()=>sub2('المجتمع','people','chat')+'<div class="tiles">'+tile('people','أصدقائي','chat/friends',0,'',S.friends.length+' أصدقاء')+tile('plus','إضافة صديق','chat/add',1,'','من رابطك فقط')+soonTile('meet','اللقاءات','chat/meetups',2,'meetups',S.meetups.length?S.meetups.length+' لقاء':'طلعات تعارف')+soonTile('ticket','الفعاليات','chat/events',3,'events','حسب مدينتك')+'</div>',
+    community:()=>sub2('المجتمع','people','chat')+'<div class="tiles">'+tile('people','أصدقائي','chat/friends',0,'',S.friends.length+' أصدقاء')+tile('plus','إضافة صديق','chat/add',1,'','من رابطك فقط')+soonTile('meet','اللقاءات','chat/meetups',2,'meetups',S.meetups.length?S.meetups.length+' لقاء':'طلعات تعارف')+soonTile('ticket','الفعاليات','chat/events',3,'events','حسب مدينتك')+(isAdmin?tile('chat','الدردشة','chat/room',4,'',isOn('room')?'مفتوحة للكل':'مفعّلة لك بس'):soonTile('chat','الدردشة','chat/room',4,'room','سوالف المجتمع'))+'</div>',
     friends:()=>subhead('أصدقائي','people')+(S.friends.length?'<div class="list">'+S.friends.map(f=>'<button type="button" class="row" data-go="chat/friend/'+f.id+'"><span class="fav">'+esc(f.name.charAt(0))+'<i class="sdot '+stCls(f.status)+'"></i></span><span class="t"><b>'+esc(f.name)+'</b><br><small style="color:var(--muted)">'+(STATUS[f.status]||STATUS.online)[0]+' · '+esc(f.msgs.length?f.msgs[f.msgs.length-1].t:'ابدأ السالفة')+'</small></span><span class="w">'+icon('chat')+'</span></button>').join('')+'</div>':'<p class="empty">ما عندك أصدقاء للحين.</p>')+'<button type="button" class="btn-gold wide" data-go="chat/add">'+icon('plus')+'<span>إضافة صديق</span></button>',
     add:()=>subhead('إضافة صديق','plus')+'<div class="card"><b>تضيف بس اللي سجّلوا من رابطك</b><p class="fine">ما فيه بحث عن أشخاص غرباء. أرسل رابطك، ولما أحد يسجّل منه يطلع لك هنا.</p><div class="link-row"><code id="invLink2">maanafsak.app/i/'+esc(S.uid)+'</code><button type="button" class="btn-ghost" id="copyBtn2">نسخ</button></div></div>'+
       (S.referred.length?'<div class="list">'+S.referred.map(p=>'<div class="row"><span class="fav">'+esc(p.name.charAt(0))+'</span><span class="t"><b>'+esc(p.name)+'</b><br><small style="color:var(--muted)">سجّل من رابطك</small></span><button type="button" class="btn-brand" data-addf="'+p.id+'">إضافة</button></div>').join('')+'</div>':'<p class="empty">ما فيه أحد سجّل من رابطك للحين.</p>'),
@@ -3898,7 +3899,7 @@ var qrcode = function() {
   });
 
   /* ---- Usage analytics: for the user, and for the owner to improve the app ---- */
-  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/jig':'تركيب الصورة','home/slide':'البلاطات','home/word':'رتّب الكلمة','home/blocks':'المكعبات','home/crush':'بلوك كراش','home/free':'المكعبات الحرة','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
+  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/jig':'تركيب الصورة','home/slide':'البلاطات','home/word':'رتّب الكلمة','home/blocks':'المكعبات','home/crush':'بلوك كراش','home/free':'المكعبات الحرة','chat/room':'دردشة المجتمع','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
   const TAB_NAMES={home:'الرئيسية',chat:'دردشة',interests:'اهتماماتي',ai:'AI',account:'حسابي'};
   function track(k){
     const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0}), d=today(), h=new Date().getHours();
@@ -4612,7 +4613,23 @@ var qrcode = function() {
   });
 
   (function(){const of=window.fetch;window.fetch=function(u,o){try{if(o&&o.headers&&!(o.headers instanceof Headers)){const a=o.headers.Authorization||o.headers.authorization;if(a&&/^Bearer sb_publishable_/.test(a)){o=Object.assign({},o,{headers:Object.assign({},o.headers)});delete o.headers.Authorization;delete o.headers.authorization}}}catch(e){}return of.call(this,u,o)}})();
+  /* ---- Community room: everyone in the community chats together (demo until the server is linked) ---- */
+  const ROOM_COL=['#8B5CF6','#3B82F6','#D8952F','#2E9C73','#E5484D'];
+  function roomMsgs(){let L=null;try{L=JSON.parse(lsGet('mn-room')||'null')}catch(e){}
+    if(!L){const now=Date.now();L=[{n:'نورة',t:'صباح الخير يا مجتمع ☀️ أحد سجّل إنجاز اليوم؟',ts:now-3600e3*3},{n:'فهد',t:'أنا خلصت تمريني الصباح، 5 كيلو 💪',ts:now-3600e3*2.5},{n:'ريم',t:'كفو! أنا بديت كتاب جديد',ts:now-3600e3*2}];lsSet('mn-room',JSON.stringify(L))}return L}
+  const roomCol=n=>ROOM_COL[[...String(n)].reduce((a,c)=>a+c.charCodeAt(0),0)%ROOM_COL.length];
+  function roomDraw(){const box=$('#roomList');if(!box)return;const me=S.profile.name;
+    box.innerHTML=roomMsgs().slice(-80).map(m=>m.me?'<div class="msg me">'+esc(m.t)+'</div>':'<div class="msg bot room-msg"><b style="color:'+roomCol(m.n)+'">'+esc(m.n)+'</b>'+esc(m.t)+'</div>').join('');
+    box.lastElementChild&&box.lastElementChild.scrollIntoView({block:'end'})}
+  SCREENS.chat.room=()=>{if(!isAdmin&&!isOn('room'))return subhead('الدردشة','chat')+'<p class="empty">قريباً.</p>';
+    return '<div class="chat-screen">'+subhead('دردشة المجتمع','chat')+'<p class="fine" style="margin:0">'+(isAdmin&&!isOn('room')?'مفعّلة لك بس. تفتحها للكل من لوحة التحكم ← الميزات. ':'')+'الرسائل هنا تجريبية لين نربط السيرفر.</p><div class="chat" id="roomList"></div>'+
+      '<form class="chat-input" id="roomForm"><textarea id="roomIn" class="msgbox" rows="5" placeholder="اكتب للمجتمع..." aria-label="رسالتك"></textarea><button type="submit" class="send" aria-label="إرسال">'+icon('send')+'</button></form></div>';};
+  document.addEventListener('submit',e=>{if(e.target.id!=='roomForm')return;e.preventDefault();const i=$('#roomIn'),v=i.value.trim();if(!v)return;i.value='';
+    const L=roomMsgs();L.push({n:S.profile.name,t:v,ts:Date.now(),me:true});lsSet('mn-room',JSON.stringify(L.slice(-200)));roomDraw();
+    const who=DEMO_USERS[Math.floor(Math.random()*DEMO_USERS.length)];
+    setTimeout(()=>{const L2=roomMsgs();L2.push({n:who.name,t:pick(FRIEND_LINES),ts:Date.now()});lsSet('mn-room',JSON.stringify(L2.slice(-200)));if(R.tab==='chat'&&R.sub==='room')roomDraw();else notify(who.name+' كتب في دردشة المجتمع','chat')},1500+Math.random()*2000)});
   function extWire(k){
+    if(k==='chat/room')roomDraw();
     if(k==='home/free')bkStart('free'); if(k==='home/crush')bkStart('crush');
     if(k==='home/jig')jigNew(); if(k==='home/slide')slNew(); if(k==='home/word')wdNew();
     if(k==='admin/usage')drawReport(false);
