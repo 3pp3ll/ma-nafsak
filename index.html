@@ -581,7 +581,10 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .cr-level small{font-variant-numeric:tabular-nums;color:var(--muted);direction:ltr}
 .rec-box{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
 .rec-box>b{display:flex;gap:6px;align-items:center}.rec-box>b .i{width:20px;height:20px}
-.rec-row{grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center}
+.rec-row{grid-template-columns:minmax(0,1fr) auto auto!important;align-items:center;gap:6px}
+.rec-row .t{font-size:.86rem}.rec-btn{padding:6px 10px!important;font-size:.8rem;gap:4px!important}.rec-btn .i{width:16px;height:16px}
+.rec-row.recording{background:color-mix(in srgb,#B83A72 10%,transparent);border-radius:12px}
+.rec-n{margin-inline-start:auto;font-weight:500;color:var(--muted);font-size:.75rem}
 .rec-row .chip .i{width:16px;height:16px}
 .bk-kinds{display:grid;gap:12px}
 .bk-kind{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;text-align:start;border:1px solid var(--line);background:var(--surface);border-radius:22px;padding:14px;color:var(--ink)}
@@ -4593,10 +4596,7 @@ var qrcode = function() {
   let wake={rec:null,on:false,busy:false,after:false};
   const wakeOn=()=>lsGet('mn-wake')==='1';
   const voiceG=()=>lsGet('mn-voice')||(S.profile&&S.profile.gender==='f'?'f':'m');
-  function speak(text,cb){try{const s=window.speechSynthesis;if(!s){cb&&cb();return}s.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';
-    const vs=s.getVoices().filter(v=>/^ar/i.test(v.lang));const fem=/(female|woman|zeina|laila|salma|hoda|mariam|amira|fatima|zariyah|noura)/i,mal=/(male|man|maged|tarik|naayf|hamed|fahed|shakir|omar|hamdan)/i;
-    const want=voiceG()==='f'?fem:mal;const v=vs.find(x=>want.test(x.name))||vs[0];if(v)u.voice=v;
-    if(!v||!want.test(v.name)){u.pitch=voiceG()==='f'?1.25:.8}u.rate=1;u.onend=()=>cb&&cb();u.onerror=()=>cb&&cb();s.speak(u)}catch(e){cb&&cb()}}
+  function speak(t,cb){cb&&cb()}
   const isWake=s=>/مع\s*نفس(ك|ي)|معنفسك|ما\s*نفسك/.test(s);
   function wakeStart(){if(!SR||!wakeOn()||wake.rec||document.hidden)return;
     try{const r=new SR();r.lang='ar-SA';r.continuous=true;r.interimResults=false;wake.rec=r;
@@ -4615,14 +4615,13 @@ var qrcode = function() {
   document.addEventListener('visibilitychange',()=>{if(document.hidden)wakeStop();else wakeStart()});
   async function wakeEnable(){if(!SR){toast('جوالك أو متصفحك ما يدعم السماع. جرّب Chrome');return false}
     try{const st=await navigator.mediaDevices.getUserMedia({audio:true});st.getTracks().forEach(x=>x.stop())}catch(e){toast('لازم تسمح للتطبيق يستخدم المايك');return false}
-    lsSet('mn-wake','1');wakeStart();speak(G('تمام، إذا ناديتني «مع نفسك» برد عليك.','تمام، إذا ناديتيني «مع نفسك» برد عليك.'));return true}
+    lsSet('mn-wake','1');wakeStart();toast(G('تمام، إذا ناديتني «مع نفسك» برد عليك.','تمام، إذا ناديتيني «مع نفسك» برد عليك.'));return true}
   function wakeCard(){const on=wakeOn(),v=voiceG();
     return '<div class="card"><div class="flag-row"><span>'+icon('mic')+'<b>النداء الصوتي</b></span><button type="button" class="sw" id="wakeSw" role="switch" aria-checked="'+on+'" aria-label="تفعيل النداء"></button></div>'+
-      '<p class="fine">'+(SR?'قل «مع نفسك» والتطبيق يرد عليك «أنا موجود هنا» ويفتح السوالف، وتكمّل كلامك على طول. يشتغل والتطبيق مفتوح قدامك، وأول مرة يطلب إذن المايك.':'جوالك أو متصفحك ما يدعم السماع. يشتغل على Chrome في أندرويد والكمبيوتر.')+'</p>'+
-      '<div class="field"><span>صوت الرد</span><div class="seg" id="voiceSeg"><button type="button" role="radio" data-voice="m" aria-checked="'+(v==='m')+'">ذكر</button><button type="button" role="radio" data-voice="f" aria-checked="'+(v==='f')+'">أنثى</button></div></div>'+
-      '<button type="button" class="btn-ghost wide" id="voiceTest">'+icon('sound')+'<span>اسمع رد عشوائي</span></button>'+recCard()+'</div>';}
+      '<p class="fine">'+(SR?'قل «مع نفسك» والتطبيق يرد عليك بصوتك ويفتح السوالف، وتكمّل كلامك على طول. يشتغل والتطبيق مفتوح قدامك، وأول مرة يطلب إذن المايك.':'جوالك أو متصفحك ما يدعم السماع. يشتغل على Chrome في أندرويد والكمبيوتر.')+'</p>'+
+      recCard()+'</div>';}
   const _settings2=SCREENS.account.settings; SCREENS.account.settings=()=>_settings2()+wakeCard();
-  const APP_VER='24';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
+  const APP_VER='25';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
   document.addEventListener('click',async e=>{
     const sw=e.target.closest('#wakeSw');if(sw){if(wakeOn()){lsSet('mn-wake','');wakeStop();toast('وقّفت النداء')}else{await wakeEnable()}render();return}
     const vb=e.target.closest('[data-voice]');if(vb){lsSet('mn-voice',vb.dataset.voice);render();speak(vb.dataset.voice==='f'?'أنا موجودة هنا':'أنا موجود هنا');return}
@@ -4630,38 +4629,41 @@ var qrcode = function() {
   });
   setTimeout(()=>{if(wakeOn())wakeStart()},1500);
 
-  /* varied replies + the user's own recorded replies */
+  /* replies in the user's own voice: they read each line once, the app plays them back */
   const WAKE_M=['أنا موجود هنا. وش تبي؟','هلا! سامعك، تفضّل','موجود، قول وش عندك','لبيه، وش في خاطرك؟','حاضر، أنا معك','هلا والله، وش السالفة؟','أسمعك، كمّل','موجود دايماً، وش تبي نسوي؟'];
   const WAKE_F=['أنا موجودة هنا. وش تبين؟','هلا! سامعتك، تفضّلي','موجودة، قولي وش عندك','لبيه، وش في خاطرك؟','حاضرة، أنا معك','هلا والله، وش السالفة؟','أسمعك، كمّلي','موجودة دايماً، وش تبين نسوي؟'];
-  const myVoices=()=>{try{return JSON.parse(lsGet('mn-voices')||'[]')}catch(e){return []}};
-  function wakeReply(cb){const txt=voiceG()==='f'?WAKE_F:WAKE_M, recs=myVoices().filter(x=>x.on!==false);
-    const pool=txt.map((s,i)=>'t'+i).concat(recs.map(x=>'r'+x.id),recs.map(x=>'r'+x.id));let last=lsGet('mn-wake-last'),k,g=0;
-    do{k=pool[Math.floor(Math.random()*pool.length)]}while(k===last&&pool.length>1&&g++<20);lsSet('mn-wake-last',k);
-    if(k[0]==='r'){const r=recs.find(x=>'r'+x.id===k);try{const a=new Audio(r.data);a.onended=()=>cb&&cb();a.onerror=()=>cb&&cb();a.play().catch(()=>cb&&cb())}catch(e){cb&&cb()}return}
-    speak(txt[+k.slice(1)],cb)}
+  const wakeLines=()=>S.profile&&S.profile.gender==='f'?WAKE_F:WAKE_M;
+  const vKey=()=>'mn-myvoice-'+(S.uid||'x');
+  const myVoices=()=>{try{const o=JSON.parse(lsGet(vKey())||'{}');return o&&typeof o==='object'&&!Array.isArray(o)?o:{}}catch(e){return {}}};
+  function wakeReply(cb){const V=myVoices(),keys=Object.keys(V).filter(k=>V[k]&&V[k].data);
+    if(!keys.length){chime('pop');toast(G('أنا موجود هنا 🙋 سجّل ردودك بصوتك من الإعدادات','أنا موجودة هنا 🙋 سجّلي ردودك بصوتك من الإعدادات'));cb&&cb();return}
+    let last=lsGet('mn-wake-last'),k,g=0;do{k=keys[Math.floor(Math.random()*keys.length)]}while(k===last&&keys.length>1&&g++<20);lsSet('mn-wake-last',k);
+    try{const a=new Audio(V[k].data);a.onended=()=>cb&&cb();a.onerror=()=>cb&&cb();a.play().catch(()=>cb&&cb())}catch(e){cb&&cb()}}
   let recState=null;
-  function recCard(){const L=myVoices();
-    return '<div class="rec-box"><b>'+icon('mic')+'ردودك بصوتك</b><p class="fine">سجّل جملة بصوتك (لين 5 ثواني)، والتطبيق يرد عليك فيها أحياناً بدل الصوت الآلي.</p>'+
-      (L.length?'<div class="list">'+L.map((x,i)=>'<div class="row rec-row"><button type="button" class="chip" data-vplay="'+x.id+'">'+icon('play')+'</button><span class="t">تسجيل '+(i+1)+' <small style="color:var(--muted)">'+new Date(x.ts).toLocaleDateString('ar-SA')+'</small></span><button type="button" class="chip" data-vdel="'+x.id+'" aria-label="احذف">✕</button></div>').join('')+'</div>':'')+
-      (L.length<5?'<button type="button" class="btn-brand wide" id="recBtn">'+icon('mic')+'<span>'+(recState?'يسجّل... اضغط للإيقاف':'سجّل جملة جديدة')+'</span></button>':'<p class="fine">وصلت 5 تسجيلات. احذف واحد عشان تسجّل جديد.</p>')+'</div>';}
-  async function recToggle(){
+  function recCard(){const V=myVoices(),L=wakeLines(),n=L.filter((_,i)=>V[i]&&V[i].data).length;
+    return '<div class="rec-box"><b>'+icon('mic')+'ردودك بصوتك <small class="rec-n">'+n+' من '+L.length+'</small></b><p class="fine">'+G('اقرأ كل جملة بصوتك مرة وحدة. لما تنادي «مع نفسك» يرد عليك التطبيق بوحدة منها، وكل مرة جملة غير اللي قبلها.','اقرئي كل جملة بصوتك مرة وحدة. لما تنادين «مع نفسك» يرد عليك التطبيق بوحدة منها، وكل مرة جملة غير اللي قبلها.')+'</p>'+
+      '<div class="list">'+L.map((s,i)=>{const has=V[i]&&V[i].data,rec=recState&&recState.idx===i;
+        return '<div class="row rec-row'+(rec?' recording':'')+'"><span class="t">«'+esc(s)+'»</span>'+(has?'<button type="button" class="chip" data-vplay="'+i+'" aria-label="اسمع">'+icon('play')+'</button>':'<span></span>')+
+          '<button type="button" class="'+(rec?'btn-pick':has?'btn-ghost':'btn-brand')+' rec-btn" data-vrec="'+i+'">'+icon('mic')+'<span>'+(rec?'إيقاف':has?'أعد':'سجّل')+'</span></button></div>'}).join('')+'</div>'+
+      (n?'<button type="button" class="btn-ghost wide" id="voiceTest">'+icon('sound')+'<span>اسمع رد عشوائي</span></button>':'')+'</div>';}
+  async function recToggle(idx){
     if(recState){try{recState.mr.stop()}catch(e){}return}
     if(!window.MediaRecorder){toast('جوالك ما يدعم التسجيل');return}
     let st;try{st=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast('لازم تسمح للتطبيق يستخدم المايك');return}
     const was=!!wake.rec;if(was)wakeStop();
     const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg'].find(m=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(m))||'';
-    const mr=new MediaRecorder(st,mime?{mimeType:mime,audioBitsPerSecond:24000}:undefined),ch=[];recState={mr};
+    const mr=new MediaRecorder(st,mime?{mimeType:mime,audioBitsPerSecond:24000}:undefined),ch=[];recState={mr,idx};
     mr.ondataavailable=ev=>{if(ev.data&&ev.data.size)ch.push(ev.data)};
     mr.onstop=()=>{st.getTracks().forEach(x=>x.stop());clearTimeout(recState&&recState.to);recState=null;
       const blob=new Blob(ch,{type:mr.mimeType||'audio/webm'});if(blob.size<800){toast('التسجيل قصير، جرّب مرة ثانية');render();if(was)wakeStart();return}
-      const fr=new FileReader();fr.onload=()=>{const L=myVoices();L.push({id:Date.now().toString(36),ts:Date.now(),data:fr.result});lsSet('mn-voices',JSON.stringify(L));
-        if(lsGet('mn-voices')!==JSON.stringify(L))toast('ما فيه مساحة كافية للتسجيل');else toast('انحفظ تسجيلك');render();if(was)wakeStart()};fr.readAsDataURL(blob)};
+      const fr=new FileReader();fr.onload=()=>{const V=myVoices();V[idx]={data:fr.result,ts:Date.now()};const s=JSON.stringify(V);lsSet(vKey(),s);
+        if(lsGet(vKey())!==s)toast('ما فيه مساحة كافية للتسجيل');else{toast('انحفظ صوتك');chime('pop')}render();if(was)wakeStart()};fr.readAsDataURL(blob)};
     mr.start();recState.to=setTimeout(()=>{try{mr.stop()}catch(e){}},5000);render();}
   document.addEventListener('click',e=>{
-    if(e.target.closest('#recBtn')){recToggle();return}
-    const pl=e.target.closest('[data-vplay]');if(pl){const r=myVoices().find(x=>x.id===pl.dataset.vplay);if(r)new Audio(r.data).play().catch(()=>{});return}
-    const dl=e.target.closest('[data-vdel]');if(dl){lsSet('mn-voices',JSON.stringify(myVoices().filter(x=>x.id!==dl.dataset.vdel)));render();return}
+    const rb=e.target.closest('[data-vrec]');if(rb){recToggle(+rb.dataset.vrec);return}
+    const pl=e.target.closest('[data-vplay]');if(pl){const r=myVoices()[pl.dataset.vplay];if(r)new Audio(r.data).play().catch(()=>{});return}
   });
+
 
   (function(){const of=window.fetch;window.fetch=function(u,o){try{if(o&&o.headers&&!(o.headers instanceof Headers)){const a=o.headers.Authorization||o.headers.authorization;if(a&&/^Bearer sb_publishable_/.test(a)){o=Object.assign({},o,{headers:Object.assign({},o.headers)});delete o.headers.Authorization;delete o.headers.authorization}}}catch(e){}return of.call(this,u,o)}})();
   /* ---- Community room: everyone in the community chats together (demo until the server is linked) ---- */
