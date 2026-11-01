@@ -10,8 +10,8 @@
 <meta property="og:locale" content="ar_SA">
 <meta property="og:title" content="مع نفسك">
 <meta property="og:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
-<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og2.jpg">
-<meta property="og:image:secure_url" content="https://3pp3ll.github.io/ma-nafsak/icons/og2.jpg">
+<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og3.jpg">
+<meta property="og:image:secure_url" content="https://3pp3ll.github.io/ma-nafsak/icons/og3.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="مع نفسك">
 <meta name="twitter:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
-<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og2.jpg">
+<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og3.jpg">
 <title>مع نفسك</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
@@ -606,6 +606,37 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .tile>span.lng{font-size:.68rem;white-space:nowrap;letter-spacing:-.2px}
 .mc-emo{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:1.3rem;background:rgba(255,255,255,.14);box-shadow:0 0 0 2px #E6B370}
 .mycard.mini .mc-emo{width:26px;height:26px;font-size:1rem}
+
+/* v34 */
+.card>b:has(.i){display:flex;gap:6px;align-items:center}
+#fidIn,#refIn{flex:1;min-width:0;width:auto}
+.card>b .i,.card>b>.i{width:20px;height:20px;vertical-align:-4px}
+.chat .msg{scroll-margin-bottom:190px}
+.past{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:8px 12px}
+.past>summary{display:flex;gap:8px;align-items:center;cursor:pointer;font-weight:700;font-size:.88rem;color:var(--muted);list-style:none}
+.past>summary .i{width:18px;height:18px}
+.past-day{border-top:1px solid var(--line);padding:6px 0}
+.past-day>summary{display:flex;justify-content:space-between;gap:8px;cursor:pointer;font-size:.8rem;list-style:none}
+.past-day>summary small{color:var(--muted);font-size:.7rem}
+.past-msgs{display:grid;gap:4px;padding:6px 0}
+.pm{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;padding:5px 9px;border-radius:10px;background:var(--bubble)}
+.pm.me{background:var(--me);color:var(--me-ink)}.pm small{opacity:.6;font-size:.65rem;white-space:nowrap}
+.road{direction:ltr;position:relative;height:430px;border-radius:22px;overflow:hidden;background-color:#2D2A3E;background-image:linear-gradient(90deg,#4B4763 0 6px,transparent 6px calc(100% - 6px),#4B4763 calc(100% - 6px));touch-action:manipulation;user-select:none}
+.road .ln{position:absolute;top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.55) 0 30px,transparent 30px 80px);background-position-y:inherit}
+.road .l1{left:calc(33.33% - 2px)}.road .l2{left:calc(66.66% - 2px)}
+.pcar{position:absolute;left:0;top:0;width:44px;border:0;background:none;padding:0;display:grid;justify-items:center;transition:transform .08s linear}
+.pcar svg{width:44px;height:76px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+.pcar span{position:absolute;top:-16px;white-space:nowrap;font-size:.62rem;font-weight:700;color:#fff;background:rgba(0,0,0,.45);border-radius:6px;padding:0 5px;direction:rtl}
+.pcar.me{transition:transform .12s ease-out;z-index:2}.pcar.me span{background:#8B5CF6;top:auto;bottom:-14px}
+.rc-over,.rc-pop{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:10px;background:rgba(20,14,50,.72);color:#fff;text-align:center;direction:rtl;z-index:5}
+.rc-over b{font-family:var(--f-display);font-weight:400;font-size:1.8rem}
+.rc-pop{inset:auto 20px 30% 20px;border-radius:18px;padding:16px;background:rgba(20,14,50,.92)}
+.rc-pop b{font-size:1.2rem}.rc-pop .idtag{font-size:.85rem}
+.rc-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:10px;direction:ltr}.rc-ctrl button{font-size:1.4rem;padding:14px}
+.inv-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.inv-row .t{display:grid}.inv-row small{color:var(--muted);font-size:.72rem}.inv-row .cd{color:#E5484D;font-weight:700;direction:ltr;text-align:right}
+.inv-row .btn-brand,.inv-row .btn-ghost{padding:7px 12px;font-size:.82rem}
+.chipst.st-wait{background:var(--gold-soft);color:var(--gold-ink)}.chipst.st-no{background:color-mix(in srgb,#E5484D 15%,transparent);color:#E5484D}.chipst.st-off{opacity:.6}
 </style>
 
 <div class="app" id="app" dir="rtl" lang="ar">
@@ -2935,6 +2966,7 @@ var qrcode = function() {
 <script>
 (function(){
   const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  const toBottom=()=>{const m=document.getElementById('main');if(m)requestAnimationFrame(()=>{m.scrollTop=m.scrollHeight})};
   const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmt=n=>Number(n||0).toLocaleString('en-US');
   const pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -3031,7 +3063,7 @@ var qrcode = function() {
 
   /* ---------- Persistence (private per viewer; this browser as fallback) ---------- */
   const store={ref:null,ready:false,busy:false,again:false,t:0}; const LS='maanafsak-state-v3';
-  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,bg:S.bg,refBy:S.refBy,invCode:S.invCode,invFor:S.invFor,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
+  const snap=()=>JSON.parse(JSON.stringify({demo:S.demo,profile:S.profile,style:S.style,points:S.points,log:S.log.slice(0,60),memory:S.memory.slice(0,30),chat:S.chat.slice(-30),joined:S.joined,sound:S.sound,theme:S.theme,bg:S.bg,refBy:S.refBy,finv:S.finv,invCode:S.invCode,invFor:S.invFor,uid:S.uid,contact:S.contact,status:S.status,avatar:S.avatar,friends:S.friends,referred:S.referred,meetups:S.meetups.slice(0,20),reports:S.reports.slice(0,30),history:S.history.slice(-200),tasks:S.tasks,notifs:S.notifs.slice(0,50),registry:S.registry,mode:S.mode,byokSet:S.byokSet,restoreUntil:S.restoreUntil||0,usage:S.usage,marketing:!!S.marketing,termsAt:S.termsAt||0,emailVerified:S.emailVerified}));
   function save(){if(!store.ready||S.demo)return;clearTimeout(store.t);store.t=setTimeout(flush,700)}
   function flush(){
     const d=snap(); try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}
@@ -3220,7 +3252,7 @@ var qrcode = function() {
     if(I.includes('football'))ideas.push(G('شوف ملخص آخر مباراة','شوفي ملخص آخر مباراة')+(S.profile.team?' لـ'+S.profile.team:''));
     if(I.includes('self')||I.includes('study'))ideas.push(G('اقرأ 10 صفحات من كتاب تحبه','اقرئي 10 صفحات من كتاب تحبينه'));
     if(I.includes('outing')||ideas.length<2)ideas.push('طلعة قصيرة لـ'+spot());
-    ideas.push(G('العب «امسك النجمة» في التحديات','العبي «امسك النجمة» في التحديات'));
+    ideas.push(G('العب «سباق السيارات» في التحديات','العبي «سباق السيارات» في التحديات'));
     return ideas.slice(0,3).map((x,i)=>(i+1)+'. '+x).join('\n');
   }
   function fallback(t){
@@ -3236,9 +3268,9 @@ var qrcode = function() {
 
   /* ---------- Router ---------- */
   const R={tab:'home',sub:null,arg:null};
-  const PARENT={'home/quiz':'home/challenges','home/catch':'home/challenges','home/jig':'home/challenges','home/slide':'home/challenges','home/word':'home/challenges','home/blocks':'home/challenges','home/crush':'home/blocks','home/free':'home/blocks','chat/room':'chat/community'};
-  function go(path){const p=path.split('/');R.tab=p[0];R.sub=p[1]||null;R.arg=p[2]||null;render();$('#main').scrollTop=0}
-  function back(){const k=R.tab+'/'+R.sub;go(PARENT[k]||R.tab)}
+  const PARENT={'home/quiz':'home/challenges','home/catch':'home/challenges','home/race':'home/challenges','home/jig':'home/challenges','home/slide':'home/challenges','home/word':'home/challenges','home/blocks':'home/challenges','home/crush':'home/blocks','home/free':'home/blocks','chat/room':'chat/community'};
+  function go(path){const p=path.split('/');R.tab=p[0];R.sub=p[1]||null;R.arg=p[2]||null;render();$('#main').scrollTop=0;if(typeof navLock!=='undefined'&&!navLock){try{history.pushState({mn:path},'',location.pathname);navDepth++}catch(e){}}}
+  function back(){if(navDepth>0){history.back();return}const k=R.tab+'/'+R.sub;go(PARENT[k]||R.tab)}
 
   const tile=(ic,label,to,i,extra,sub)=>'<button type="button" class="tile'+(extra||'')+'" data-go="'+to+'" style="--i:'+i+'"><span class="ic">'+icon(ic)+'</span><span'+(String(label).replace(/<[^>]*>/g,'').length>11?' class="lng"':'')+'>'+label+'</span>'+(sub?'<span class="sub">'+sub+'</span>':'')+'</button>';
   const subhead=(title,ic)=>'<div class="subhead"><button type="button" class="back" data-back aria-label="رجوع">'+icon('back')+'</button><span class="sh-ic">'+icon(ic)+'</span><h2>'+title+'</h2></div>';
@@ -3261,7 +3293,7 @@ var qrcode = function() {
           '<div class="chips">'+ex.map(e=>'<button type="button" class="chip" data-ex="'+esc(e)+'">'+esc(e)+'</button>').join('')+'</div>'+
           '<div id="replyBox">'+replyHTML()+'</div>';},
       log:()=>subhead('سجلي','log')+(S.log.length?'<ul class="list">'+S.log.slice(0,40).map((x,i)=>'<li class="row" style="animation:popin .35s both;animation-delay:'+(i*40)+'ms"><span class="ric">'+icon(CAT_IC(x.cat))+'</span><span class="t">'+esc(x.t)+'</span><span class="w">'+when(x.ts)+'</span></li>').join('')+'</ul>':'<p class="empty">'+G('سجلك فاضي. أول إنجاز تكتبه بيظهر هنا.','سجلك فاضي. أول إنجاز تكتبينه بيظهر هنا.')+'</p>'),
-      challenges:()=>subhead('تحديات','trophy')+'<div class="tiles">'+tile('question','أسئلة سريعة','home/quiz',0,'','3 مراحل')+tile('star','امسك النجمة','home/catch',1,'','20 ثانية')+tile('puzzle','تركيب الصورة','home/jig',2,'','رتّب القطع')+tile('grid9','البلاطات','home/slide',3,'','حرّك الأرقام')+tile('letters','رتّب الكلمة','home/word',4,'','حروف مبعثرة')+tile('blocks','المكعبات','home/blocks',5,'','نوعين')+'</div>',
+      challenges:()=>subhead('تحديات','trophy')+'<div class="tiles">'+tile('question','أسئلة سريعة','home/quiz',0,'','3 مراحل')+tile('car','سباق السيارات','home/race',1,'','سابق أصدقاءك')+tile('puzzle','تركيب الصورة','home/jig',2,'','رتّب القطع')+tile('grid9','البلاطات','home/slide',3,'','حرّك الأرقام')+tile('letters','رتّب الكلمة','home/word',4,'','حروف مبعثرة')+tile('blocks','المكعبات','home/blocks',5,'','نوعين')+'</div>',
       quiz:()=>subhead('أسئلة سريعة','question')+'<div id="game" class="card"></div>',
       catch:()=>subhead('امسك النجمة','star')+'<div class="game-head"><span class="lbl" id="catchInfo">'+G('امسكها قبل تهرب! عندك 20 ثانية','امسكيها قبل تهرب! عندك 20 ثانية')+'</span><b class="score" id="catchScore">0</b></div><div class="arena" id="arena"><canvas class="ambient" id="amb"></canvas><button type="button" class="runner" id="runner" aria-label="النجمة">'+icon('star')+'</button></div><button type="button" class="btn-brand wide" id="catchStart">ابدأ</button><p class="game-msg" id="catchMsg"></p>',
       daily:()=>subhead('تحفيز اليوم','sun')+'<div class="int-hero">'+icon('sun')+'<b id="dTitle" style="font-size:1.2rem"></b><p class="result" id="dText"></p></div><div class="card"><span class="lbl">خطوة اليوم</span><p id="dAct"></p></div><button type="button" class="btn-ghost wide" id="dMore">'+icon('sparkle')+'<span>فكرة ثانية</span></button>'
@@ -3910,7 +3942,7 @@ var qrcode = function() {
   });
 
   /* ---- Usage analytics: for the user, and for the owner to improve the app ---- */
-  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/jig':'تركيب الصورة','home/slide':'البلاطات','home/word':'رتّب الكلمة','home/blocks':'المكعبات','home/crush':'بلوك كراش','home/free':'المكعبات الحرة','chat/room':'دردشة المجتمع','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
+  const SCR_NAMES={'home/':'الرئيسية','home/new':'تسجيل إنجاز','home/log':'سجلي','home/challenges':'التحديات','home/quiz':'الأسئلة','home/catch':'امسك النجمة','home/race':'سباق السيارات','home/jig':'تركيب الصورة','home/slide':'البلاطات','home/word':'رتّب الكلمة','home/blocks':'المكعبات','home/crush':'بلوك كراش','home/free':'المكعبات الحرة','chat/room':'دردشة المجتمع','home/daily':'تحفيز اليوم','chat/':'السوالف','chat/community':'المجتمع','chat/friends':'الأصدقاء','chat/friend':'سوالف صديق','chat/add':'إضافة صديق','chat/meetups':'اللقاءات','chat/meetnew':'لقاء جديد','chat/meet':'تفاصيل لقاء','chat/events':'الفعاليات','interests/':'اهتماماتي','interests/topic':'صفحة اهتمام','interests/custom':'اهتمام خاص','ai/':'AI','ai/outing':'طلعة على مزاجي','ai/plan':'خطة هدفي','ai/week':'ملخص أسبوعي','ai/theme':'مظهري المتحرك','account/':'حسابي','account/photo':'صورتي','account/tasks':'مهامي','account/history':'سجل السوالف','account/usage':'تحليل استخدامي'};
   const TAB_NAMES={home:'الرئيسية',chat:'دردشة',interests:'اهتماماتي',ai:'AI',account:'حسابي'};
   function track(k){
     const u=S.usage||(S.usage={days:{},hours:[],screens:{},ai:0,msgs:0}), d=today(), h=new Date().getHours();
@@ -4329,7 +4361,7 @@ var qrcode = function() {
     if(devBusy||!txt)return;
     if(!aiReady()){toast(inClaude?'الذكاء الاصطناعي يشتغل من نسخة GitHub على OpenRouter':'فعّل مفتاح OpenRouter من مفاتيح الذكاء');return}
     devBusy=true; devTurns.push({role:'user',content:txt}); render();
-    const list=$('#devList'); if(list){const m=document.createElement('div');m.className='msg bot typing';m.textContent='يفكر...';list.appendChild(m);m.scrollIntoView({block:'end'})}
+    const list=$('#devList'); if(list){const m=document.createElement('div');m.className='msg bot typing';m.textContent='يفكر...';list.appendChild(m);toBottom()}
     try{
       const j=await sample.json([{role:'user',content:devSys()}].concat(devTurns.slice(-10).map(x=>({role:x.role,content:x.content}))),{modelTier:'default',cache:false});
       const reply=String((j&&j.reply)||'تمام.'); devTurns.push({role:'assistant',content:JSON.stringify(j),show:reply});
@@ -4586,7 +4618,7 @@ var qrcode = function() {
       '<div class="field"><span>صوت الرد</span><div class="seg" id="voiceSeg"><button type="button" role="radio" data-voice="m" aria-checked="'+(v==='m')+'">ذكر</button><button type="button" role="radio" data-voice="f" aria-checked="'+(v==='f')+'">أنثى</button></div></div>'+
       '<button type="button" class="btn-ghost wide" id="voiceTest">'+icon('sound')+'<span>اسمع رد عشوائي</span></button>'+recCard()+'</div>';}
   const _settings2=SCREENS.account.settings; SCREENS.account.settings=()=>_settings2()+wakeCard();
-  const APP_VER='22';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
+  const APP_VER='23';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
   document.addEventListener('click',async e=>{
     const sw=e.target.closest('#wakeSw');if(sw){if(wakeOn()){lsSet('mn-wake','');wakeStop();toast('وقّفت النداء')}else{await wakeEnable()}render();return}
     const vb=e.target.closest('[data-voice]');if(vb){lsSet('mn-voice',vb.dataset.voice);render();speak(vb.dataset.voice==='f'?'أنا موجودة هنا':'أنا موجود هنا');return}
@@ -4635,7 +4667,7 @@ var qrcode = function() {
   const roomCol=n=>ROOM_COL[[...String(n)].reduce((a,c)=>a+c.charCodeAt(0),0)%ROOM_COL.length];
   function roomDraw(){const box=$('#roomList');if(!box)return;const me=S.profile.name;
     box.innerHTML=roomMsgs().slice(-80).map(m=>m.me?'<div class="msg me">'+esc(m.t)+'</div>':'<div class="msg bot room-msg"><b style="color:'+roomCol(m.n)+'">'+esc(m.n)+'</b>'+esc(m.t)+'</div>').join('');
-    box.lastElementChild&&box.lastElementChild.scrollIntoView({block:'end'})}
+    box.lastElementChild&&toBottom()}
   SCREENS.chat.room=()=>{if(!isAdmin&&!isOn('room'))return subhead('الدردشة','chat')+'<p class="empty">قريباً.</p>';
     return '<div class="chat-screen">'+subhead('دردشة المجتمع','chat')+'<p class="fine" style="margin:0">'+(isAdmin&&!isOn('room')?'مفعّلة لك بس. تفتحها للكل من لوحة التحكم ← الميزات. ':'')+'الرسائل هنا تجريبية لين نربط السيرفر.</p><div class="chat" id="roomList"></div>'+
       '<form class="chat-input" id="roomForm"><textarea id="roomIn" class="msgbox" rows="5" placeholder="اكتب للمجتمع..." aria-label="رسالتك"></textarea><button type="submit" class="send" aria-label="إرسال">'+icon('send')+'</button></form></div>';};
@@ -4665,7 +4697,107 @@ var qrcode = function() {
     if(S.refBy)return; S.refBy=v; addPoints(100,true); save(); celebrate(G('انضاف كود الدعوة','انضاف كود الدعوة'),100); render()});
   Object.assign(ICONS,{trash:'<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/><path class="acs" d="M10 11v6M14 11v6"/>'});
   document.addEventListener('click',e=>{if(!e.target.closest('#photoDel'))return;photoImg=null;S.avatar=null;save();renderChrome&&renderChrome();render();toast('انحذفت صورتك')});
+  /* ---- Phone back button: go back inside the app ---- */
+  let navDepth=0, navLock=false;
+  window.addEventListener('popstate',e=>{const p=e.state&&e.state.mn;navDepth=Math.max(0,navDepth-1);navLock=true;try{go(p||'home')}finally{navLock=false}});
+  setTimeout(()=>{try{history.replaceState({mn:R.tab+(R.sub?'/'+R.sub:'')+(R.arg?'/'+R.arg:'')},'',location.pathname)}catch(e){}},50);
+
+  /* ---- Daily fresh chat, older chats folded under the box ---- */
+  const chatDay=ts=>new Date(ts).toDateString();
+  function freshChat(){const last=[...S.chat].reverse().find(m=>m.ts);if(last&&chatDay(last.ts)!==chatDay(Date.now())){S.chat=[];save()}}
+  function pastHTML(){const tday=chatDay(Date.now()),days=[],idx={};
+    (S.history||[]).forEach(m=>{if(!m.ts||chatDay(m.ts)===tday)return;const k=chatDay(m.ts);if(!(k in idx)){idx[k]=days.length;days.push({ts:m.ts,msgs:[]})}days[idx[k]].msgs.push(m)});
+    if(!days.length)return '';days.reverse();
+    const fd=ts=>new Date(ts).toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),ft=ts=>new Date(ts).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'});
+    return '<details class="past"><summary>'+icon('history')+'<span>السوالف السابقة ('+days.length+')</span></summary>'+days.map(d=>'<details class="past-day"><summary><b>'+fd(d.ts)+'</b><small>'+d.msgs.length+' رسالة · '+ft(d.msgs[0].ts)+'</small></summary><div class="past-msgs">'+
+      d.msgs.map(m=>'<div class="pm '+(m.role==='user'?'me':'bot')+'"><span>'+esc(m.content)+'</span><small>'+ft(m.ts)+'</small></div>').join('')+'</div></details>').join('')+'</details>';}
+  const _chatHome=SCREENS.chat._; SCREENS.chat._=()=>{freshChat();return _chatHome().replace(/<\/form><\/div>$/,'</form>'+pastHTML()+'</div>')};
+
+  /* ---- Car race: rival cars are friends and other users ---- */
+  Object.assign(ICONS,{car:'<path d="M7 4.5h10l1.5 4v9.5a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 18V8.5z"/><path class="acs" d="M8 9h8l-.8 3H8.8z"/><path d="M4 9h1.5M18.5 9H20M4 16h1.5M18.5 16H20"/>'});
+  const carSVG=(c,me)=>'<svg viewBox="0 0 40 70" aria-hidden="true"><rect x="2" y="10" width="5" height="12" rx="2" fill="#111"/><rect x="33" y="10" width="5" height="12" rx="2" fill="#111"/><rect x="2" y="48" width="5" height="12" rx="2" fill="#111"/><rect x="33" y="48" width="5" height="12" rx="2" fill="#111"/>'+
+    '<rect x="5" y="3" width="30" height="64" rx="11" fill="'+c+'"/><path d="M10 20h20l-3 10H13z" fill="#CFE6FF" opacity=".9"/><path d="M12 50h16l2 8H10z" fill="#CFE6FF" opacity=".6"/><rect x="18" y="5" width="4" height="60" rx="2" fill="#fff" opacity="'+(me?'.55':'.25')+'"/></svg>';
+  const RC_NAMES=['ريم','خالد','سارة','ناصر','هيا','تركي','جود','بندر','لينا','ماجد','دانة','سلطان'];
+  function rcRivals(){const L=(S.friends||[]).map(f=>({name:f.name,id:f.id})).concat(DEMO_USERS.map(u=>({name:u.name,id:u.id})));
+    RC_NAMES.forEach((n,i)=>L.push({name:n,id:'MN-'+(610000+((i*7919)%89999))}));return L}
+  let rc={run:false,raf:0,lane:1,cars:[],dist:0,speed:0,t:0,spawn:0,paused:false,W:0,H:0,off:0,pool:[]};
+  const rcBest=()=>+lsGet('mn-race-best')||0;
+  SCREENS.home.race=()=>subhead('سباق السيارات','car')+
+    '<div class="game-head"><span class="lbl">'+G('تفادى السيارات. اضغط أي سيارة تشوف صاحبها','تفادي السيارات. اضغطي أي سيارة تشوفين صاحبها')+'</span><span class="gm-stats"><span>'+icon('trophy')+'<b id="rcBest">'+fmt(rcBest())+'</b></span><span><b id="rcDist">0</b> م</span></span></div>'+
+    '<div class="road" id="road"><i class="ln l1"></i><i class="ln l2"></i><div class="pcar me" id="rcMe">'+carSVG('#8B5CF6',1)+'<span>'+esc(S.profile.name)+'</span></div>'+
+    '<div class="rc-over" id="rcOver"><b id="rcT">جاهز؟</b><span id="rcTx">'+G('حرّك سيارتك يمين ويسار','حرّكي سيارتك يمين ويسار')+'</span><button type="button" class="btn-gold" id="rcGo">'+icon('play')+'<span>انطلق</span></button></div>'+
+    '<div class="rc-pop" id="rcPop" hidden></div></div>'+
+    '<div class="rc-ctrl"><button type="button" class="btn-brand" id="rcLeft" aria-label="يسار">◀</button><button type="button" class="btn-brand" id="rcRight" aria-label="يمين">▶</button></div>';
+  function rcLaneX(l){return (l+.5)*rc.W/3}
+  function rcPlace(el,l,y){el.style.transform='translate('+(rcLaneX(l)-22)+'px,'+y+'px)'}
+  function rcInit(){const road=$('#road');if(!road)return;rc.W=road.clientWidth;rc.H=road.clientHeight;rc.lane=1;rc.cars.forEach(c=>c.el.remove());rc.cars=[];rc.dist=0;rc.speed=230;rc.spawn=0;rc.off=0;rc.pool=rcRivals();rcPlace($('#rcMe'),1,rc.H-96);$('#rcDist').textContent='0'}
+  function rcStart(){rcInit();rc.run=true;rc.paused=false;$('#rcOver').hidden=true;$('#rcPop').hidden=true;rc.t=performance.now();cancelAnimationFrame(rc.raf);rc.raf=requestAnimationFrame(rcTick)}
+  function rcTick(now){if(!rc.run||!$('#road')){rc.run=false;return}const dt=Math.min(.05,(now-rc.t)/1000);rc.t=now;
+    if(!rc.paused){rc.speed=Math.min(620,rc.speed+9*dt);rc.dist+=rc.speed*dt/9;rc.off=(rc.off+rc.speed*dt)%80;$('#road').style.backgroundPositionY=rc.off+'px';
+      rc.spawn-=dt;if(rc.spawn<=0){const busy=new Set(rc.cars.filter(c=>c.y<90).map(c=>c.lane));const free=[0,1,2].filter(l=>!busy.has(l));if(free.length>1){const l=free[Math.floor(Math.random()*free.length)],who=rc.pool[Math.floor(Math.random()*rc.pool.length)],col=['#3B82F6','#E6A93A','#22B07D','#E5484D','#EC4899'][Math.floor(Math.random()*5)];
+          const el=document.createElement('button');el.type='button';el.className='pcar rv';el.innerHTML=carSVG(col)+'<span>'+esc(who.name)+'</span>';el.dataset.rcid=who.id;el.dataset.rcname=who.name;$('#road').appendChild(el);rc.cars.push({lane:l,y:-80,el,v:.35+Math.random()*.25})}
+        rc.spawn=Math.max(.45,1.25-rc.speed/900)}
+      const py=rc.H-96;rc.cars=rc.cars.filter(c=>{c.y+=rc.speed*dt*c.v*1.6;rcPlace(c.el,c.lane,c.y);if(c.y>rc.H+20){c.el.remove();return false}
+        if(c.lane===rc.lane&&c.y+66>py+6&&c.y<py+60){rcCrash();}return true});
+      $('#rcDist').textContent=fmt(Math.floor(rc.dist))}
+    if(rc.run)rc.raf=requestAnimationFrame(rcTick)}
+  function rcCrash(){rc.run=false;chime('soft');const d=Math.floor(rc.dist),best=rcBest();if(d>best)lsSet('mn-race-best',String(d));$('#rcBest').textContent=fmt(Math.max(d,best));
+    $('#rcT').textContent='اصطدمت!';$('#rcTx').textContent='قطعت '+fmt(d)+' م'+(d>best?' · رقم قياسي!':'');$('#rcGo').innerHTML=icon('restore')+'<span>مرة ثانية</span>';$('#rcOver').hidden=false;
+    if(d>=500)gameWin('race',20,G('سابقت','سابقتي')+' '+fmt(d)+' متر!')}
+  function rcMove(dir){if(!rc.run||rc.paused)return;rc.lane=Math.max(0,Math.min(2,rc.lane+dir));rcPlace($('#rcMe'),rc.lane,rc.H-96)}
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#rcGo')){rcStart();return}
+    if(e.target.closest('#rcLeft')){rcMove(-1);return} if(e.target.closest('#rcRight')){rcMove(1);return}
+    const car=e.target.closest('.pcar.rv');if(car&&rc.run){rc.paused=true;const p=$('#rcPop');const isF=(S.friends||[]).some(f=>f.id===car.dataset.rcid);
+      p.innerHTML='<b>'+esc(car.dataset.rcname)+'</b><span class="idtag" dir="ltr">'+esc(car.dataset.rcid)+'</span>'+(isF?'<small>صديقك</small>':'<button type="button" class="btn-gold" data-rcadd="'+esc(car.dataset.rcid)+'">'+icon('plus')+'<span>أضفه صديق</span></button>')+'<button type="button" class="btn-ghost" id="rcResume">كمّل السباق</button>';p.hidden=false;return}
+    if(e.target.closest('#rcResume')){$('#rcPop').hidden=true;rc.paused=false;rc.t=performance.now();return}
+    const ad=e.target.closest('[data-rcadd]');if(ad){rc.run=false;lsSet('mn-fid-pre',ad.dataset.rcadd);go('chat/add');return}
+    const rd=e.target.closest('#road');if(rd&&rc.run&&!rc.paused&&!e.target.closest('.pcar,.rc-over,.rc-pop')){const r=rd.getBoundingClientRect();rcMove(e.clientX<r.left+r.width/2?-1:1)}
+  });
+  document.addEventListener('keydown',e=>{if(!$('#road'))return;if(e.key==='ArrowLeft')rcMove(-1);if(e.key==='ArrowRight')rcMove(1)});
+
+  /* ---- Friend invites by ID ---- */
+  const H24=24*3600e3, D3=3*24*3600e3, D30=30*24*3600e3;
+  function finv(){if(!S.finv)S.finv={out:[],in:[],seeded:false};const now=Date.now();
+    S.finv.in=S.finv.in.filter(x=>now-x.ts<D30||x.status==='accepted');S.finv.out.forEach(x=>{if(x.status==='pending'&&now-x.ts>D30)x.status='expired'});
+    S.finv.in.forEach(x=>{if(x.status==='new'&&x.openedAt&&now-x.openedAt>H24)x.status='waiting';if(x.status==='rejected'&&now-x.decidedAt>D3)x.final=true});
+    if(!S.finv.seeded&&!S.demo){S.finv.seeded=true;S.finv.in.push({id:'fi'+now,from:'MN-731552',name:'ريم',ts:now,status:'new'});notify('ريم ترسل لك دعوة صداقة','people')}
+    return S.finv}
+  const userName=id=>{const d=DEMO_USERS.find(u=>u.id===id)||rcRivals().find(u=>u.id===id);return d?d.name:('مستخدم '+id)};
+  const cdTxt=ms=>{ms=Math.max(0,ms);const h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3),s=Math.floor(ms%60e3/1e3);return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
+  function invitesHTML(){const F=finv(),now=Date.now();
+    const inc=F.in.filter(x=>x.status==='new'||x.status==='waiting'),rej=F.in.filter(x=>x.status==='rejected'),out=F.out.filter(x=>x.status!=='accepted').slice(-10).reverse();
+    inc.forEach(x=>{if(x.status==='new'&&!x.openedAt)x.openedAt=now});save();
+    let h='';
+    if(inc.length)h+='<div class="card"><b>'+icon('bell')+' دعوات وصلتك</b>'+inc.map(x=>'<div class="inv-row"><span class="fav">'+esc(x.name.charAt(0))+'</span><span class="t"><b>'+esc(x.name)+'</b><small dir="ltr">'+esc(x.from)+'</small>'+
+      (x.status==='new'?'<small class="cd" data-cd="'+(x.openedAt+H24)+'">'+cdTxt(x.openedAt+H24-now)+'</small>':'<small>في قائمة الانتظار · تبقى '+Math.max(1,Math.ceil((x.ts+D30-now)/864e5))+' يوم</small>')+
+      '</span><button type="button" class="btn-brand" data-inv-ok="'+x.id+'">قبول</button><button type="button" class="btn-ghost" data-inv-no="'+x.id+'">رفض</button></div>').join('')+'</div>';
+    if(rej.length)h+='<div class="card"><b>دعوات رفضتها</b><p class="fine">تقدر تغيّر رأيك خلال 3 أيام من الرفض، وبعدها يصير الرفض نهائي.</p>'+rej.map(x=>'<div class="inv-row"><span class="fav">'+esc(x.name.charAt(0))+'</span><span class="t"><b>'+esc(x.name)+'</b><small>'+(x.final?'رفض نهائي':'باقي '+cdTxt(x.decidedAt+D3-now)+' لتغيير رأيك')+'</small></span>'+(x.final?'':'<button type="button" class="btn-brand" data-inv-ok="'+x.id+'">قبول</button>')+'</div>').join('')+'</div>';
+    if(out.length)h+='<div class="card"><b>دعوات أرسلتها</b>'+out.map(x=>'<div class="inv-row"><span class="fav">'+esc(x.name.charAt(0))+'</span><span class="t"><b>'+esc(x.name)+'</b><small dir="ltr">'+esc(x.to)+'</small></span><span class="chipst '+(x.status==='pending'?'st-wait':x.status==='rejected'?'st-no':'st-off')+'">'+({pending:'بانتظار الرد',rejected:'رفض',expired:'انتهت'}[x.status]||x.status)+'</span></div>').join('')+'</div>';
+    return h}
+  function idCard(){const pre=lsGet('mn-fid-pre');if(pre)lsSet('mn-fid-pre','');
+    return '<div class="card"><b>'+icon('idcard')+' أضف برقم الـ ID</b><p class="fine">اكتب رقم حساب صديقك (تلقاه في بطاقته) ونرسل له دعوة. توصله في التنبيهات، وعنده 24 ساعة يرد.</p><div class="inline-in"><input class="inp" id="fidIn" type="text" dir="ltr" placeholder="MN-123456" maxlength="9" value="'+esc(pre||'')+'" style="text-transform:uppercase"><button type="button" class="btn-brand" id="fidGo">'+icon('send')+'<span>أرسل دعوة</span></button></div><p class="fine" id="fidMsg"></p></div>'}
+  const _add=SCREENS.chat.add; SCREENS.chat.add=()=>{const h=_add(),cut=h.indexOf('</div></div>')+12;return h.slice(0,cut)+idCard()+invitesHTML()+h.slice(cut)};
+  function sendInvite(){const m=$('#fidMsg');let v=($('#fidIn').value||'').trim().toUpperCase().replace(/\s/g,'');if(/^\d{6}$/.test(v))v='MN-'+v;const F=finv();
+    const say=(t,c)=>{m.style.color=c||'var(--warn)';m.textContent=t};
+    if(!/^MN-\d{6}$/.test(v))return say('رقم الـ ID شكله كذا: MN-123456');
+    if(v===S.uid)return say('هذا رقمك أنت 😄');
+    if((S.friends||[]).some(f=>f.id===v))return say('هذا صديقك من قبل');
+    const prev=F.out.filter(x=>x.to===v);
+    if(prev.some(x=>x.status==='pending'))return say('أرسلت له دعوة من قبل، وهي بانتظار رده');
+    if(prev.some(x=>x.status==='rejected')&&lsGet('mn-plus')!=='1')return say('رفض دعوتك قبل، فما تقدر ترسل له مرة ثانية. تقدر تتواصل مع الدعم أو تفعّل باقة بلس.');
+    const name=userName(v),inv={id:'fo'+Date.now(),to:v,name,ts:Date.now(),status:'pending'};F.out.push(inv);save();say('انرسلت الدعوة لـ'+name+'. بتوصله في التنبيهات.','var(--ok)');chime('pop');
+    if(DEMO_USERS.some(u=>u.id===v))setTimeout(()=>{inv.status='accepted';S.friends.push({id:v,name,status:'online',msgs:[{me:false,t:'هلا! قبلت دعوتك',ts:Date.now()}]});notify(name+' قبل دعوتك وصار صديقك','people');save();if(R.tab==='chat'&&R.sub==='add')render()},5000);
+    setTimeout(()=>{if(R.tab==='chat'&&R.sub==='add')render()},1200)}
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#fidGo')){sendInvite();return}
+    const ok=e.target.closest('[data-inv-ok]');if(ok){const x=finv().in.find(y=>y.id===ok.dataset.invOk);if(x){x.status='accepted';x.decidedAt=Date.now();if(!(S.friends||[]).some(f=>f.id===x.from))S.friends.push({id:x.from,name:x.name,status:'online',msgs:[{me:false,t:'هلا! صرنا أصدقاء',ts:Date.now()}]});save();celebrate('صار '+x.name+' صديقك',0);render()}return}
+    const no=e.target.closest('[data-inv-no]');if(no){const x=finv().in.find(y=>y.id===no.dataset.invNo);if(x){x.status='rejected';x.decidedAt=Date.now();save();toast('رفضت الدعوة. تقدر تغيّر رأيك خلال 3 أيام');render()}return}
+  });
+  setInterval(()=>{const L=$$('[data-cd]');if(!L.length)return;const now=Date.now();L.forEach(el=>{const left=+el.dataset.cd-now;el.textContent=left>0?cdTxt(left)+' للرد':'انتهى الوقت';if(left<=0)setTimeout(()=>{if(R.tab==='chat'&&R.sub==='add')render()},500)})},1000);
+
   function extWire(k){
+    if(k==='home/race')rcInit();
     if(k==='chat/room')roomDraw();
     if(k==='home/free')bkStart('free'); if(k==='home/crush')bkStart('crush');
     if(k==='home/jig')jigNew(); if(k==='home/slide')slNew(); if(k==='home/word')wdNew();
@@ -4674,7 +4806,7 @@ var qrcode = function() {
     track(k);
     if(R.tab==='account')maybeByok();
     if(k==='chat/friend'){const f=S.friends.find(x=>x.id===R.arg);if(!f)return;const list=$('#fList');
-      const draw=()=>{list.innerHTML=f.msgs.map(m=>'<div class="msg '+(m.me?'me':'bot')+'">'+esc(m.t)+'</div>').join('')||'<p class="empty">ابدأ السالفة مع '+esc(f.name)+'.</p>';const l=list.lastElementChild;if(l)l.scrollIntoView({block:'end'})};
+      const draw=()=>{list.innerHTML=f.msgs.map(m=>'<div class="msg '+(m.me?'me':'bot')+'">'+esc(m.t)+'</div>').join('')||'<p class="empty">ابدأ السالفة مع '+esc(f.name)+'.</p>';const l=list.lastElementChild;toBottom()};
       draw();
       $('#fForm').addEventListener('submit',e=>{e.preventDefault();const i=$('#fIn'),t=i.value.trim();if(!t)return;i.value='';f.msgs.push({me:true,t,ts:Date.now()});draw();save();
         if(f.status!=='off')setTimeout(()=>{f.msgs.push({me:false,t:pick(FRIEND_LINES),ts:Date.now()});save();if(R.sub==='friend'&&R.arg===f.id)draw();else notify(f.name+' رد عليك','chat')},1300)});}
@@ -4836,7 +4968,7 @@ var qrcode = function() {
   }
 
   /* ---------- Chat ---------- */
-  function addMsg(who,text){const c=$('#chatList');if(!c)return null;const m=document.createElement('div');m.className='msg '+who;m.textContent=text;c.appendChild(m);m.scrollIntoView({block:'end'});return m}
+  function addMsg(who,text){const c=$('#chatList');if(!c)return null;const m=document.createElement('div');m.className='msg '+who;m.textContent=text;c.appendChild(m);toBottom();return m}
   function greeting(){
     const st=stats(), p=S.profile; let g='هلا '+p.name+'! ';
     if(st.last&&st.gap>=2)g+=G('وحشتنا، صار لك '+st.gap+' أيام. وش أخبارك؟','وحشتينا، صار لك '+st.gap+' أيام. وش أخبارك؟');
@@ -4864,21 +4996,22 @@ var qrcode = function() {
   function sendChat(t){
     if(chatBusy||!t)return;
     addMsg('me',t); pushChat('user',t);
-    const bored=/(طفش|زهق|ملل|مليت|روتين)/.test(t), userTurns=S.chat.filter(x=>x.role==='user').length;
+    const bored=/(طفش|زهق|ملل|مليت|روتين|ضايق|ضيق|حزين|زعلان|تعبان|تعبت|مقهور|قهر|مكتئب|كآبة|ضغط|متوتر|توتر|يأس|محبط|خايف|قلق|وحيد)/.test(t);
     chatBusy=true; const sb=$('#chatSend'); if(sb)sb.disabled=true;
     const bubble=addMsg('bot typing',aiReady()?'يفكر...':'يكتب...');
     function finish(text){
-      if(bubble){bubble.className='msg bot';bubble.textContent=text}
+      if(bubble){bubble.className='msg bot';bubble.textContent=text};toBottom()
       pushChat('assistant',text);
-      if((bored||userTurns>=3)&&!offered){
-        offered=true; const m=addMsg('bot',G('وإذا تبي تكسر الروتين، جرّب «امسك النجمة».','وإذا تبين تكسرين الروتين، جرّبي «امسك النجمة».'));
-        if(m){const b=document.createElement('button');b.type='button';b.className='btn-gold';b.dataset.go='home/catch';b.innerHTML=icon('star')+'<span>يلا نلعب</span>';m.appendChild(b)}
+      if(bored&&lsGet('mn-gameoffer')!==today()){
+        lsSet('mn-gameoffer',today()); const gm=pick([['home/race','سباق السيارات','car'],['home/crush','بلوك كراش','crush'],['home/jig','تركيب الصورة','puzzle'],['home/word','رتّب الكلمة','letters']]);
+        const m=addMsg('bot',G('وإذا تبي تغيّر جوّك شوي، جرّب «'+gm[1]+'».','وإذا تبين تغيّرين جوّك شوي، جرّبي «'+gm[1]+'».'));
+        if(m){const b=document.createElement('button');b.type='button';b.className='btn-gold';b.dataset.go=gm[0];b.innerHTML=icon(gm[2])+'<span>يلا نلعب</span>';m.appendChild(b)}
       }
       chatBusy=false; const s2=$('#chatSend'); if(s2)s2.disabled=false;
     }
     if(!aiReady()){setTimeout(()=>finish(fallback(t)),650);return}
     const turns=[{role:'user',content:chatRules()}].concat(S.chat.slice(-16).map(x=>({role:x.role,content:x.content})));
-    sample(turns,{modelTier:'quick',cache:false,onText:u=>{if(bubble){bubble.className='msg bot';bubble.textContent=clean(u.text)||'...';bubble.scrollIntoView({block:'end'})}}})
+    sample(turns,{modelTier:'quick',cache:false,onText:u=>{if(bubble){bubble.className='msg bot';bubble.textContent=clean(u.text)||'...';toBottom()}}})
       .then(r=>{const s=splitMemo(r.text);finish(s.clean||fallback(t));remember(s.memo)},e=>{aiFail(e);finish((e&&e.text?clean(e.text):'')||fallback(t))});
   }
 

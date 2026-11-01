@@ -11,8 +11,8 @@
 <meta property="og:locale" content="ar_SA">
 <meta property="og:title" content="مع نفسك">
 <meta property="og:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
-<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og2.jpg">
-<meta property="og:image:secure_url" content="https://3pp3ll.github.io/ma-nafsak/icons/og2.jpg">
+<meta property="og:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og3.jpg">
+<meta property="og:image:secure_url" content="https://3pp3ll.github.io/ma-nafsak/icons/og3.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="مع نفسك">
 <meta name="twitter:description" content="سولف مع نفسك، واحتفل بكل إنجاز.">
-<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og2.jpg">
+<meta name="twitter:image" content="https://3pp3ll.github.io/ma-nafsak/icons/og3.jpg">
 <title>مع نفسك</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
@@ -4619,7 +4619,7 @@ var qrcode = function() {
       '<div class="field"><span>صوت الرد</span><div class="seg" id="voiceSeg"><button type="button" role="radio" data-voice="m" aria-checked="'+(v==='m')+'">ذكر</button><button type="button" role="radio" data-voice="f" aria-checked="'+(v==='f')+'">أنثى</button></div></div>'+
       '<button type="button" class="btn-ghost wide" id="voiceTest">'+icon('sound')+'<span>اسمع رد عشوائي</span></button>'+recCard()+'</div>';}
   const _settings2=SCREENS.account.settings; SCREENS.account.settings=()=>_settings2()+wakeCard();
-  const APP_VER='22';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
+  const APP_VER='23';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
   document.addEventListener('click',async e=>{
     const sw=e.target.closest('#wakeSw');if(sw){if(wakeOn()){lsSet('mn-wake','');wakeStop();toast('وقّفت النداء')}else{await wakeEnable()}render();return}
     const vb=e.target.closest('[data-voice]');if(vb){lsSet('mn-voice',vb.dataset.voice);render();speak(vb.dataset.voice==='f'?'أنا موجودة هنا':'أنا موجود هنا');return}
