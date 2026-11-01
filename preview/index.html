@@ -4628,6 +4628,18 @@ var qrcode = function() {
     const L=roomMsgs();L.push({n:S.profile.name,t:v,ts:Date.now(),me:true});lsSet('mn-room',JSON.stringify(L.slice(-200)));roomDraw();
     const who=DEMO_USERS[Math.floor(Math.random()*DEMO_USERS.length)];
     setTimeout(()=>{const L2=roomMsgs();L2.push({n:who.name,t:pick(FRIEND_LINES),ts:Date.now()});lsSet('mn-room',JSON.stringify(L2.slice(-200)));if(R.tab==='chat'&&R.sub==='room')roomDraw();else notify(who.name+' كتب في دردشة المجتمع','chat')},1500+Math.random()*2000)});
+  /* ---- Owner: link this device to the server account (shared with عقود, so its own password) ---- */
+  const srvLinked=()=>!!lsGet('mn-sbtok');
+  function srvCard(){if(!sbBase()||inClaude)return '';
+    return '<div class="card"><b>'+icon('shield')+' ربط لوحة التحكم بالسيرفر</b>'+(srvLinked()?'<p class="fine" style="color:var(--ok)">مربوط. أي تعديل تحفظه يوصل لكل المستخدمين.</p><button type="button" class="btn-ghost wide" id="srvOff">فك الربط</button>':
+      '<p class="fine">حسابك في Supabase مشترك مع عقود. اكتب كلمة مرور حسابك هناك (مو كلمة مرور لوحة التحكم) عشان تعديلاتك توصل للكل.</p><div class="pw-wrap"><input class="inp" id="srvPw" type="password" autocomplete="current-password" placeholder="كلمة مرور حسابك في Supabase"></div><button type="button" class="btn-brand wide" id="srvGo">'+icon('check')+'<span>اربط</span></button><p class="fine" id="srvMsg"></p>')+'</div>';}
+  const _admHome=SCREENS.admin._; SCREENS.admin._=()=>_admHome()+srvCard();
+  document.addEventListener('click',async e=>{
+    if(e.target.closest('#srvOff')){lsSet('mn-sbtok','');lsSet('mn-sbref','');render();return}
+    if(!e.target.closest('#srvGo'))return;const pw=$('#srvPw').value,m=$('#srvMsg');if(!pw){$('#srvPw').focus();return}
+    m.style.color='var(--muted)';m.textContent='يتأكد...';const r=await sbLogin((S.contact||'instastart.co@gmail.com').toLowerCase(),pw);
+    if(r.ok){lsSet('mn-sbtok',r.token);lsSet('mn-sbref',r.refresh||'');toast('انربطت لوحة التحكم بالسيرفر');render()}
+    else{m.style.color='var(--warn)';m.textContent='ما ضبط. تأكد من كلمة المرور، أو غيّرها من صفحة دخول عقود.'}});
   function extWire(k){
     if(k==='chat/room')roomDraw();
     if(k==='home/free')bkStart('free'); if(k==='home/crush')bkStart('crush');
