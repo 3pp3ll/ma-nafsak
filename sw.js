@@ -1,5 +1,5 @@
 /* مع نفسك: يخلي التطبيق قابل للتثبيت ويشتغل لو النت ضعيف. يجيب الجديد من النت أول، وإذا ما فيه نت يفتح المحفوظ. */
-const C = "ma-nafsak-v19";
+const C = "ma-nafsak-v20";
 const SHELL = ["./", "index.html", "logo.png", "mark.png", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png"];
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(C).then((c) => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener("activate", (e) => e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== C).map((k) => caches.delete(k)))).then(() => self.clients.claim())));
