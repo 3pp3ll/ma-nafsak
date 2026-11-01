@@ -340,6 +340,7 @@ button.row{width:100%;text-align:start;cursor:pointer}
 .tbl th,.tbl td{text-align:start;padding:9px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
 .tbl th{color:var(--muted);font-weight:500}
 .tbl .idtag{font-size:.74rem}
+.tbl{font-size:.76rem;table-layout:auto}.tbl th,.tbl td{padding:8px 4px}.tbl th,.tbl td{white-space:normal}.tbl td:first-child{word-break:break-all;min-width:80px}.tbl .idtag{white-space:nowrap}
 .flag-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .flag-row > span{display:flex;gap:8px;align-items:center;font-weight:700;font-size:.9rem;min-width:0}
 .flag-row .i{width:24px;height:24px;flex:none}
@@ -610,7 +611,10 @@ button.row{width:100%;text-align:start;cursor:pointer}
 
 /* v34 */
 .card>b:has(.i){display:flex;gap:6px;align-items:center}
-#fidIn,#refIn{flex:1;min-width:0;width:auto}
+.irow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.irow .inp{width:100%;min-width:0;box-sizing:border-box;padding:9px 12px}
+.irow .btn-brand{padding:9px 14px;font-size:.88rem;white-space:nowrap}
+.irow .btn-brand .i{width:18px;height:18px}
 .card>b .i,.card>b>.i{width:20px;height:20px;vertical-align:-4px}
 .chat .msg{scroll-margin-bottom:190px}
 .past{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:8px 12px}
@@ -4619,7 +4623,7 @@ var qrcode = function() {
       '<div class="field"><span>صوت الرد</span><div class="seg" id="voiceSeg"><button type="button" role="radio" data-voice="m" aria-checked="'+(v==='m')+'">ذكر</button><button type="button" role="radio" data-voice="f" aria-checked="'+(v==='f')+'">أنثى</button></div></div>'+
       '<button type="button" class="btn-ghost wide" id="voiceTest">'+icon('sound')+'<span>اسمع رد عشوائي</span></button>'+recCard()+'</div>';}
   const _settings2=SCREENS.account.settings; SCREENS.account.settings=()=>_settings2()+wakeCard();
-  const APP_VER='23';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
+  const APP_VER='24';const _settings3=SCREENS.account.settings; SCREENS.account.settings=()=>_settings3()+'<p class="fine" style="text-align:center">الإصدار '+APP_VER+'</p>';
   document.addEventListener('click',async e=>{
     const sw=e.target.closest('#wakeSw');if(sw){if(wakeOn()){lsSet('mn-wake','');wakeStop();toast('وقّفت النداء')}else{await wakeEnable()}render();return}
     const vb=e.target.closest('[data-voice]');if(vb){lsSet('mn-voice',vb.dataset.voice);render();speak(vb.dataset.voice==='f'?'أنا موجودة هنا':'أنا موجود هنا');return}
@@ -4691,7 +4695,7 @@ var qrcode = function() {
   /* ---- Invite code typed by hand: once only, then it disappears ---- */
   function refCard(){if(S.demo||S.refBy)return '';
     return '<div class="card"><b>'+icon('gift')+' عندك كود دعوة؟</b><p class="fine">إذا أحد دعاك وما فتحت رابطه، اكتب كوده هنا وتاخذ 100 نقطة. تقدر تضيفه مرة وحدة بس.</p>'+
-      '<div class="inline-in"><input class="inp" id="refIn" type="text" dir="ltr" placeholder="مثل: K7F3QZ8" maxlength="9" style="text-transform:uppercase"><button type="button" class="btn-brand" id="refGo">أضف</button></div><p class="fine" id="refMsg"></p></div>';}
+      '<div class="irow"><input class="inp" id="refIn" type="text" dir="ltr" placeholder="مثل: K7F3QZ8" maxlength="9" style="text-transform:uppercase"><button type="button" class="btn-brand" id="refGo">أضف</button></div><p class="fine" id="refMsg"></p></div>';}
   document.addEventListener('click',e=>{if(!e.target.closest('#refGo'))return;const m=$('#refMsg');let v=($('#refIn').value||'').trim().toUpperCase().replace(/\s/g,'');if(/^\d{6}$/.test(v))v='MN-'+v;
     if(!isCode(v)){m.style.color='var(--warn)';m.textContent='الكود 7 حروف وأرقام، تلقاه في آخر رابط الدعوة';return}
     if(v===S.uid||v===S.invCode){m.style.color='var(--warn)';m.textContent='هذا كودك أنت 😄';return}
@@ -4777,7 +4781,7 @@ var qrcode = function() {
     if(out.length)h+='<div class="card"><b>دعوات أرسلتها</b>'+out.map(x=>'<div class="inv-row"><span class="fav">'+esc(x.name.charAt(0))+'</span><span class="t"><b>'+esc(x.name)+'</b><small dir="ltr">'+esc(x.to)+'</small></span><span class="chipst '+(x.status==='pending'?'st-wait':x.status==='rejected'?'st-no':'st-off')+'">'+({pending:'بانتظار الرد',rejected:'رفض',expired:'انتهت'}[x.status]||x.status)+'</span></div>').join('')+'</div>';
     return h}
   function idCard(){const pre=lsGet('mn-fid-pre');if(pre)lsSet('mn-fid-pre','');
-    return '<div class="card"><b>'+icon('idcard')+' أضف برقم الـ ID</b><p class="fine">اكتب رقم حساب صديقك (تلقاه في بطاقته) ونرسل له دعوة. توصله في التنبيهات، وعنده 24 ساعة يرد.</p><div class="inline-in"><input class="inp" id="fidIn" type="text" dir="ltr" placeholder="MN-123456" maxlength="9" value="'+esc(pre||'')+'" style="text-transform:uppercase"><button type="button" class="btn-brand" id="fidGo">'+icon('send')+'<span>أرسل دعوة</span></button></div><p class="fine" id="fidMsg"></p></div>'}
+    return '<div class="card"><b>'+icon('idcard')+' أضف برقم الـ ID</b><p class="fine">اكتب رقم حساب صديقك (تلقاه في بطاقته) ونرسل له دعوة. توصله في التنبيهات، وعنده 24 ساعة يرد.</p><div class="irow"><input class="inp" id="fidIn" type="text" dir="ltr" placeholder="MN-123456" maxlength="9" value="'+esc(pre||'')+'" style="text-transform:uppercase"><button type="button" class="btn-brand" id="fidGo">'+icon('send')+'<span>أرسل دعوة</span></button></div><p class="fine" id="fidMsg"></p></div>'}
   const _add=SCREENS.chat.add; SCREENS.chat.add=()=>{const h=_add(),cut=h.indexOf('</div></div>')+12;return h.slice(0,cut)+idCard()+invitesHTML()+h.slice(cut)};
   function sendInvite(){const m=$('#fidMsg');let v=($('#fidIn').value||'').trim().toUpperCase().replace(/\s/g,'');if(/^\d{6}$/.test(v))v='MN-'+v;const F=finv();
     const say=(t,c)=>{m.style.color=c||'var(--warn)';m.textContent=t};
